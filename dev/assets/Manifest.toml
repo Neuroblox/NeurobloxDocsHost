@@ -1933,7 +1933,7 @@ version = "1.2.0"
 deps = ["AbstractFFTs", "CSV", "ChainRules", "Combinatorics", "DSP", "DataFrames", "DelayDiffEq", "DelimitedFiles", "DiffEqBase", "DifferentialEquations", "Distributions", "ExponentialUtilities", "FFTW", "ForwardDiff", "Glob", "Graphs", "HypothesisTests", "IfElse", "Interpolations", "JLD2", "LinearAlgebra", "LogExpFunctions", "MAT", "MLJ", "MetaGraphs", "ModelingToolkit", "ModelingToolkitStandardLibrary", "MuladdMacro", "NaNStatistics", "Optim", "Optimization", "OptimizationOptimJL", "OptimizationOptimisers", "OrderedCollections", "OrdinaryDiffEq", "Peaks", "Random", "RecursiveArrayTools", "Reexport", "SafeTestsets", "SignalAnalysis", "SparseArrays", "SpecialFunctions", "StaticArrays", "Statistics", "StatsBase", "StochasticDiffEq", "Symbolics", "Test", "ToeplitzMatrices", "Tracker", "Turing"]
 path = "/home/runner/work/Neuroblox.jl/Neuroblox.jl"
 uuid = "769b91e5-4c60-41ee-bfae-153c84203cb2"
-version = "0.3.0"
+version = "0.3.1"
 
 [[deps.NonlinearSolve]]
 deps = ["ADTypes", "ArrayInterface", "ConcreteStructs", "DiffEqBase", "EnumX", "FastBroadcast", "FiniteDiff", "ForwardDiff", "LineSearches", "LinearAlgebra", "LinearSolve", "PrecompileTools", "RecursiveArrayTools", "Reexport", "SciMLBase", "SciMLOperators", "SimpleNonlinearSolve", "SparseArrays", "SparseDiffTools", "StaticArraysCore", "UnPack"]
