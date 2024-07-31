@@ -1,6 +1,6 @@
 # [Julia Basics and how to model a single neuron](@id beginner_tutorial)
 
-This initial tutorial will introduce Julia's basic structures and how to model the LIF and the Izhikevich models of neuronal spiking.
+This initial tutorial will introduce Julia's basic structures and how to model the Izhikevich model of neuronal spiking.
 
 ## Julia's basic structures
 
@@ -181,7 +181,7 @@ equation = [D(v) ~ 0.04 * v ^ 2 + 5 * v + 140 - u + I
            D(u) ~ a * (b * v - u)]
 ```
 
-Now, we need to create the event that generates the spikes. For this, we create a function continuous event to represent the discontinuity in our functions. Those should be written in the following format:
+Now, we need to create the event that generates the spikes. For this, we create a continuous event to represent the discontinuity in our functions. Those should be written in the following format:
 
 ```julia
 name_of_event = [[event_1] => [effect_1]
