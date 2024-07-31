@@ -1,4 +1,4 @@
-# #Tutorial on building a neural assembly from bottom-up
+# #Tutorial on bottom-up approach to building a neural assembly
 
 
 # ### Single spiking neuron from Hodgkin-Huxley model
