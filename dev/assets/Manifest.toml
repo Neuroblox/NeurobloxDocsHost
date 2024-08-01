@@ -1071,9 +1071,9 @@ version = "0.1.3"
 
 [[deps.Functors]]
 deps = ["LinearAlgebra"]
-git-tree-sha1 = "8a66c07630d6428eaab3506a0eabfcf4a9edea05"
+git-tree-sha1 = "64d8e93700c7a3f28f717d265382d52fac9fa1c1"
 uuid = "d9f16b24-f501-4c13-a1f2-28368ffc5196"
-version = "0.4.11"
+version = "0.4.12"
 
 [[deps.Future]]
 deps = ["Random"]
@@ -2149,7 +2149,7 @@ version = "1.2.0"
 deps = ["AbstractFFTs", "CSV", "ChainRules", "Combinatorics", "DSP", "DataFrames", "DelayDiffEq", "DelimitedFiles", "DiffEqBase", "DifferentialEquations", "Distributions", "ExponentialUtilities", "FFTW", "ForwardDiff", "Glob", "Graphs", "HypothesisTests", "Interpolations", "JLD2", "LinearAlgebra", "LogExpFunctions", "MAT", "MKL", "MLJ", "MetaGraphs", "ModelingToolkit", "ModelingToolkitStandardLibrary", "MuladdMacro", "NaNStatistics", "Optim", "Optimization", "OptimizationOptimJL", "OptimizationOptimisers", "OrderedCollections", "OrdinaryDiffEq", "Peaks", "Random", "RecursiveArrayTools", "Reexport", "SafeTestsets", "Serialization", "SignalAnalysis", "SparseArrays", "SpecialFunctions", "StaticArrays", "Statistics", "StatsBase", "StochasticDiffEq", "Symbolics", "Test", "ToeplitzMatrices", "Tracker", "Turing"]
 path = "/home/runner/work/Neuroblox.jl/Neuroblox.jl"
 uuid = "769b91e5-4c60-41ee-bfae-153c84203cb2"
-version = "0.4.1"
+version = "0.4.2"
 
 [[deps.NonlinearSolve]]
 deps = ["ADTypes", "ArrayInterface", "ConcreteStructs", "DiffEqBase", "FastBroadcast", "FastClosures", "FiniteDiff", "ForwardDiff", "LazyArrays", "LineSearches", "LinearAlgebra", "LinearSolve", "MaybeInplace", "PrecompileTools", "Preferences", "Printf", "RecursiveArrayTools", "Reexport", "SciMLBase", "SimpleNonlinearSolve", "SparseArrays", "SparseDiffTools", "StaticArraysCore", "SymbolicIndexingInterface", "TimerOutputs"]
@@ -2456,9 +2456,9 @@ version = "0.2.4"
 
 [[deps.PreallocationTools]]
 deps = ["Adapt", "ArrayInterface", "ForwardDiff"]
-git-tree-sha1 = "406c29a7f46706d379a3bce45671b4e3a39ddfbc"
+git-tree-sha1 = "d7f3f63331c7c8c81245b4ee2815b7d496365833"
 uuid = "d236fae5-4411-538c-8e31-a6e3d9e00b46"
-version = "0.4.22"
+version = "0.4.23"
 
     [deps.PreallocationTools.extensions]
     PreallocationToolsReverseDiffExt = "ReverseDiff"
@@ -2721,9 +2721,9 @@ version = "0.1.0"
 
 [[deps.SciMLBase]]
 deps = ["ADTypes", "Accessors", "ArrayInterface", "CommonSolve", "ConstructionBase", "Distributed", "DocStringExtensions", "EnumX", "Expronicon", "FunctionWrappersWrappers", "IteratorInterfaceExtensions", "LinearAlgebra", "Logging", "Markdown", "PrecompileTools", "Preferences", "Printf", "RecipesBase", "RecursiveArrayTools", "Reexport", "RuntimeGeneratedFunctions", "SciMLOperators", "SciMLStructures", "StaticArraysCore", "Statistics", "SymbolicIndexingInterface", "Tables"]
-git-tree-sha1 = "b316ed5e5e71a6414b0c0e0c9f334afcc701ebf8"
+git-tree-sha1 = "7f0e208db50f5fee2386b6d8dc9608d580059331"
 uuid = "0bca4576-84f4-4d90-8ffe-ffa030f20462"
-version = "2.48.0"
+version = "2.48.1"
 
     [deps.SciMLBase.extensions]
     SciMLBaseChainRulesCoreExt = "ChainRulesCore"
@@ -3100,9 +3100,9 @@ version = "2.1.2"
 
 [[deps.Symbolics]]
 deps = ["ADTypes", "ArrayInterface", "Bijections", "CommonWorldInvalidations", "ConstructionBase", "DataStructures", "DiffRules", "Distributions", "DocStringExtensions", "DomainSets", "DynamicPolynomials", "ForwardDiff", "IfElse", "LaTeXStrings", "LambertW", "Latexify", "Libdl", "LinearAlgebra", "LogExpFunctions", "MacroTools", "Markdown", "NaNMath", "PrecompileTools", "RecipesBase", "Reexport", "Requires", "RuntimeGeneratedFunctions", "SciMLBase", "Setfield", "SparseArrays", "SpecialFunctions", "StaticArraysCore", "SymbolicIndexingInterface", "SymbolicLimits", "SymbolicUtils", "TermInterface"]
-git-tree-sha1 = "d92fc9253d0070db98fd1bb410cccce9c1096922"
+git-tree-sha1 = "653f8337e6605b4a84e5da15add78f1de8f4bae5"
 uuid = "0c5d862f-8b57-4792-8d23-62f2024744c7"
-version = "5.35.0"
+version = "5.35.1"
 
     [deps.Symbolics.extensions]
     SymbolicsGroebnerExt = "Groebner"
