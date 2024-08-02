@@ -7,8 +7,18 @@ This tutorial will introduce you to simulating brain dynamics using Neuroblox.
 The Wilson–Cowan model describes the dynamics of interactions between populations of excitatory and inhibitory neurons. Each Wilson-Cowan Blox is described by the follwoing equations:
 
 ```math
-\frac{dE}{dt} = \frac{-E}{\tau_E} + \frac{1}{1 + \text{exp}(-a_E*(c_{EE}*E - c_{IE}*I - \theta_E + \eta*(\sum{jcn}))}\\[10pt]
-\frac{dI}{dt} = \frac{-I}{\tau_I} + \frac{1}{1 + exp(-a_I*(c_{EI}*E - c_{II}*I - \theta_I)}
+\begin{align}
+\nonumber
+\frac{dE}{dt} &= \frac{-E}{\tau_E} + S_E(c_{EE}E - c_{IE}I + \eta\sum{jcn})\\[10pt]
+\nonumber
+\frac{dI}{dt} &= \frac{-I}{\tau_I} + S_I(c_{EI}E - c_{II}I)
+\end{align}
+```
+
+with $S_E$ and $S_I$ sigmoid functions that represent the response of neuronal populations to input stimuli, defined as:
+
+```math
+S_k(x) = \frac{1}{1 + exp(-a_kx - \theta_k)}
 ```
 
 Our first example is to simply combine two Wilson-Cowan Blox to build an oscillatory circuit
