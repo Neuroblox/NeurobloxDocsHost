@@ -50,7 +50,7 @@ g = MetaDiGraph()
 add_blox!.(Ref(g), [WC1, WC2])
 
 # Define the connectivity between the neural masses
-adj = [-1 6; 6 -1]
+adj = [-1 7; 4 -1]
 create_adjacency_edges!(g, adj)
 
 ```
