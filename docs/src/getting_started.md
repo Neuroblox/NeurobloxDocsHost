@@ -2,16 +2,37 @@
 
 This tutorial will introduce you to simulating brain dynamics using Neuroblox.
 
-## Example 1 : Building an oscillating circuit from two Wilson-Cowan Neural Mass Models
+## Example 1: Creating a Simple Neural Circuit
 
-The Wilson–Cowan model describes the dynamics of interactions between populations of excitatory and inhibitory neurons. Each Wilson-Cowan Blox is described by the follwoing equations:
+In this example, we'll create a simple oscillating circuit using two Wilson-Cowan neural mass models [1]. The Wilson-Cowan model is one of the most influential models in computational neuroscience [2], describing the dynamics of interactions between populations of excitatory and inhibitory neurons.
+
+### The Wilson-Cowan Model
+
+Each Wilson-Cowan neural mass is described by the following equations:
+
 
 ```math
-\frac{dE}{dt} = \frac{-E}{\tau_E} + \frac{1}{1 + \text{exp}(-a_E*(c_{EE}*E - c_{IE}*I - \theta_E + \eta*(\sum{jcn}))}\\[10pt]
-\frac{dI}{dt} = \frac{-I}{\tau_I} + \frac{1}{1 + exp(-a_I*(c_{EI}*E - c_{II}*I - \theta_I)}
+\begin{align}
+\nonumber
+\frac{dE}{dt} &= \frac{-E}{\tau_E} + S_E(c_{EE}E - c_{IE}I + \eta\sum{jcn})\\[10pt]
+\nonumber
+\frac{dI}{dt} &= \frac{-I}{\tau_I} + S_I(c_{EI}E - c_{II}I)
+\end{align}
 ```
 
-Our first example is to simply combine two Wilson-Cowan Blox to build an oscillatory circuit
+where $E$ and $I$ denote the activity levels of the excitatory and inhibitory populations, respectively. The terms $\frac{dE}{dt}$ and $\frac{dI}{dt}$ describe the rate of change of these activity levels over time. The parameters $\tau_E$ and $\tau_I$ are time constants analogous to membrane time constants in single neuron models, determining how quickly the excitatory and inhibitory populations respond to changes. The coefficients $c_{EE}$ and $c_{II}$ represent self-interaction (or feedback) within excitatory and inhibitory populations, while $c_{IE}$ and $c_{EI}$ represent the cross-interactions between the two populations. The term $\eta\sum{jcn}$ represents external input to the excitatory population from other brain regions or external stimuli, with $\eta$ acting as a scaling factor. While $S_E$ and $S_I$ are sigmoid functions that represent the responses of neuronal populations to input stimuli, defined as:
+
+
+```math
+S_k(x) = \frac{1}{1 + exp(-a_kx - \theta_k)}
+```
+
+where $a_k$ and $\theta_k$ determine the steepness and threshold of the response, respectively.
+
+### Building the Circuit
+
+Let's create an oscillating circuit by connecting two Wilson-Cowan neural masses:
+
 
 ```@example Wilson-Cowan
 using Neuroblox
@@ -20,33 +41,54 @@ using Graphs
 using MetaGraphs
 using Plots
 
+# Create two Wilson-Cowan blox
 @named WC1 = WilsonCowan()
 @named WC2 = WilsonCowan()
 
+# Create a graph to represent our circuit
 g = MetaDiGraph()
 add_blox!.(Ref(g), [WC1, WC2])
 
+# Define the connectivity between the neural masses
 adj = [-1 6; 6 -1]
 create_adjacency_edges!(g, adj)
 
 ```
 
-First, we create the two Wilson-Cowan Blox: WC1 and WC2. Next, we add the two Blox into a directed graph as nodes and then we are creating weighted edges between the two nodes using an adjacency matrix.
+Here, we've created two Wilson-Cowan Blox and connected them as nodes in a directed graph. The `adj` matrix defines the weighted edges between these nodes. Each entry `adj[i,j]` represents how the output of blox `j` influences the input of blox `i`:
 
-Now we are ready to build the ModelingToolkit System.  Structural simplify creates the final set of equations in which all substiutions are made.
+- Diagonal elements (`adj[1,1]` and `adj[2,2]`): Self-connections, adding feedback to each blox.
+- Off-diagonal elements (`adj[1,2]` and `adj[2,1]`): Inter-blox connections, determining how each blox influences the other.
+
+By default, the output of each Wilson-Cowan blox is its excitatory activity (E). The negative self-connections (-1) provide inhibitory feedback, while the positive inter-blox connections (6) provide strong excitatory coupling. This setup creates an oscillatory dynamic between the two Wilson-Cowan units.
+
+
+### Creating the Model
+Now, let's build the complete model:
 
 ```@example Wilson-Cowan
 @named sys = system_from_graph(g)
 sys = structural_simplify(sys)
 ```
 
-To solve the system, we first create an ODEProblem and then solve it over the tspan of (0,100) using a stiff solver.  The solution is saved every 0.1ms. The unit of time in Neuroblox is 1ms.
+This creates a differential equations system from our graph representation using ModelingToolkit and symbolically simplifies it for efficient computation.
+
+### Simulating the Model
+
+Finally, let's simulate our model. The following code creates and solves an `ODEProblem` for our system, simulating 100 time units of activity. In Neuroblox, the default time unit is milliseconds. We use `Rodas4`, a solver efficient for stiff problems. The solution is saved every 0.1 ms, allowing us to observe the detailed evolution of the system's behavior.
 
 ```@example Wilson-Cowan
 prob = ODEProblem(sys, [], (0.0, 100), [])
 sol = solve(prob, Rodas4(), saveat=0.1)
 plot(sol)
 ```
+
+
+[[1] Wilson, H. R., & Cowan, J. D. (1972). Excitatory and inhibitory interactions in localized populations of model neurons. Biophysical journal, 12(1), 1-24.](https://www.cell.com/biophysj/fulltext/S0006-3495(72)86068-5)
+
+[[2] Destexhe, A., & Sejnowski, T. J. (2009). The Wilson–Cowan model, 36 years later. Biological cybernetics, 101(1), 1-2.](https://link.springer.com/article/10.1007/s00422-009-0328-3)
+
+
 
 ## Example 2 : Building a Brain Circuit from literature using Neural Mass Models
 
