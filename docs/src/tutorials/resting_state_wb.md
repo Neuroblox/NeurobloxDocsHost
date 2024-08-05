@@ -50,12 +50,12 @@ sys = structural_simplify(sys)
 length(unknowns(sys))
 ```
 
-To solve the system, we first create an Stochastic Differential Equation Problem and then solve it over the tspan of (0,6e) using a EulerHeun solver.  The solution is saved every 0.5ms. The unit of time in Neuroblox is 1ms.
+To solve the system, we first create an Stochastic Differential Equation Problem and then solve it over the tspan of (0,60000) using a EulerHeun solver.  The solution is saved every 0.5ms. The unit of time in Neuroblox is 1ms.
 
 ```@example resting-state-circuit
 prob = SDEProblem(sys,rand(-2:0.1:4,76*2), (0.0, 6e5), [])
 sol = solve(prob, EulerHeun(), dt=0.5, saveat=5)
-plot(sol.t,sol[5,:],xlims=(0,10000))
+plot(sol.t,sol[5,:],xlims=(1000,10000))
 ```
 To evaluate the connectivity of our simulated resting state network, we calculate the statistically significant correlations
 
