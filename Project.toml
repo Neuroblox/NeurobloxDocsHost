@@ -1,4 +1,5 @@
 name = "NeurobloxDocsHost"
+uuid = "1bb98921-23b1-4067-a5f0-d1e925508412"
 
 [deps]
 CSV = "336ed68f-0bac-5ca0-87d4-7b16caf5d00b"
