@@ -21,6 +21,10 @@ jobs:
       - uses: julia-actions/setup-julia@latest
         with:
           version: '1'
+      - name: "Start SSH agent"
+        uses: "webfactory/ssh-agent@d4b9b8ff72958532804b70bbe600ad43b36d5f2e" # v0.8.0
+        with:
+          ssh-private-key: "${{ secrets.DOCUMENTER_KEY }}"
       - name: Install dependencies
         run: julia --project=docs/ -e 'using Pkg; Pkg.develop(PackageSpec(url="git@github.com:Neuroblox/Neuroblox.jl.git")); Pkg.instantiate()'
       - name: Build and deploy
