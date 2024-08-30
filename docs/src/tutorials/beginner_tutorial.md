@@ -163,7 +163,7 @@ with the auxiliary after-spike resetting
 
 ```math
 \begin{align}
-\text{if }v \geq 30\text{ mV, then }\begin{cases}v\leftarrow c, u\leftarrow u + d.\end{cases}
+\text{if }v \geq 30\text{ mV, then }\begin{cases}v\rightarrow c\\ u \rightarrow u + d \end{cases}
 \end{align}
 ```
 
