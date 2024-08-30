@@ -24,9 +24,9 @@ modulus = 3 % 2
 To define a function in Julia, we first write `function` followed by the function's name, its arguments, the commands and `end`:
 
 ```@example beginner_tutorial
-function tutorial(parameter)
+function tutorial(argument)
     # Your code goes here
-    println("The input was $parameter.")
+    println("The input was ", argument,  ".")
 end
 ```
 
