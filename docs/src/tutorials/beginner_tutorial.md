@@ -21,12 +21,12 @@ power = 3 ^ 2
 modulus = 3 % 2
 ```
 
-To define a function in Julia, we first write `function` followed by the function's name, its parameters, the commands and `end`:
+To define a function in Julia, we first write `function` followed by the function's name, its arguments, the commands and `end`:
 
 ```@example beginner_tutorial
-function tutorial(parameter)
+function tutorial(argument)
     # Your code goes here
-    println("The input was $parameter.")
+    println("The input was ", argument,  ".")
 end
 ```
 
@@ -163,7 +163,7 @@ with the auxiliary after-spike resetting
 
 ```math
 \begin{align}
-\text{if }v \geq 30\text{ mV, then }\begin{cases}v\leftarrow c, u\leftarrow u + d.\end{cases}
+\text{if }v \geq 30\text{ mV, then }\begin{cases}v\rightarrow c\\ u \rightarrow u + d \end{cases}
 \end{align}
 ```
 
