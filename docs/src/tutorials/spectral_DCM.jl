@@ -10,13 +10,24 @@ using CairoMakie
 
 ########## Assemble model ##########
 # In this tutorial we will define a circuit of three linear neuronal mass models, all driven by an Ornstein-Uhlenbeck process.
-# Additionally, we will model fMRI data by a balloon model and BOLD signal on top. 
-# Step 1: define the graph, add blocks. Note that spectral DCM (as is implemented in SPM12) requires an input blocks
+# We will model fMRI data by a balloon model and BOLD signal on top.
+# After simulation of this simple model we will use spectral Dynamic Causal Modeling to infer some of the model parameters from the simulation time series. 
+# Step 1: define the graph, add blocks
 # Step 2: simulate the model
-# Step 3: compute cross spectral density
+# Step 3: compute the cross spectral density
 # Step 4: setup the DCM
 # Step 5: estimate
+# Step 5: plot the results
 
+# #Define the model
+# We will define a model of 3 regions. This means first of all to define a graph.
+# To this graph we will add three linear neuronal mass models which constitute the (hidden) neuronal dynamics.
+# These constitute three nodes of the graph.
+# Next we will also need some input that stimulates the activity, we use simple Ornstein-Uhlenbeck blocks to create stochastic inputs.
+# One per region.
+# We want to simulate fMRI signals thus we will need to also add a BalloonModel per region.
+# Note that the Ornstein-Uhlenbeck block will feed into the linear neural mass which in turn will feed into the BalloonModel blox.
+# This needs to be represented by the way we define the edges.
 nr = 3             # number of regions
 g = MetaDiGraph()
 regions = Dict()   # this dictionary is used to keep track of the neural mass block index to more easily connect to other blocks
