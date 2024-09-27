@@ -6,7 +6,7 @@ using DifferentialEquations
 using DataFrames
 using OrderedCollections
 using CairoMakie
-
+using ModelingToolkit
 
 ########## Assemble model ##########
 # In this tutorial we will define a circuit of three linear neuronal mass models, all driven by an Ornstein-Uhlenbeck process.
@@ -19,7 +19,7 @@ using CairoMakie
 # Step 5: estimate
 # Step 5: plot the results
 
-# #Define the model
+# ## Define the model
 # We will define a model of 3 regions. This means first of all to define a graph.
 # To this graph we will add three linear neuronal mass models which constitute the (hidden) neuronal dynamics.
 # These constitute three nodes of the graph.
@@ -30,46 +30,40 @@ using CairoMakie
 # This needs to be represented by the way we define the edges.
 nr = 3             # number of regions
 g = MetaDiGraph()
-regions = Dict()   # this dictionary is used to keep track of the neural mass block index to more easily connect to other blocks
+regions = []   # list of neural mass blocks to then connect them to each other with an adjacency matrix
 
-# decay parameter for hemodynamics lnκ and ratio of intra- to extra-vascular components lnϵ is shared across brain regions 
-@parameters lnκ=0.0 lnϵ=0.0 
-@parameters C=1/16   # note that C=1/16 is taken from SPM12 and stabilizes the balloon model simulation. Alternatively the noise or the weight of the edge connecting neuronal activity and balloon model can be reduced.
+# The following parameters are shared accross regions, which is why we define them here. 
+@parameters lnκ=0.0 lnϵ=0.0   # lnκ: decay parameter for hemodynamics and lnϵ: ratio of intra- to extra-vascular components
+@parameters C=1/16            # weight of input
+# Note that 1/16 is taken from SPM12, this stabilizes the balloon model simulation. Alternatively the noise of the Ornstein-Uhlenbeck block or the weight of the edge connecting neuronal activity and balloon model could be reduced to guarantee numerical stability.
+# Now add the different blocks to each region and connect the blocks within each region:
 for i = 1:nr
     region = LinearNeuralMass(;name=Symbol("r$(i)₊lm"))
-    add_blox!(g, region)
-    regions[i] = nv(g)         # store index of neural mass model
+    push!(regions, region)          # store neural mass model for connection of regions
+
+    ## add Ornstein-Uhlenbeck block as noisy input to the current region
     input = OUBlox(;name=Symbol("r$(i)₊ou"), σ=0.1)
-    add_blox!(g, input)
-    add_edge!(g, nv(g), regions[i], Dict(:weight => C))
+    add_edge!(g, input => region; :weight => C)
 
-    # add hemodynamic response model and observation model (BOLD signal)
+    ## simulate fMRI signal with BalloonModel which includes the BOLD signal on top of the balloon model dynamics
     measurement = BalloonModel(;name=Symbol("r$(i)₊bm"), lnκ=lnκ, lnϵ=lnϵ)
-    add_blox!(g, measurement)
-    # connect measurement with neuronal signal
-    add_edge!(g, regions[i], nv(g), Dict(:weight => 1.0))
+    add_edge!(g, region => measurement; :weight => 1.0)
 end
-
+# Next we define the between-region connectivity matrix and make sure that it is diagonally dominant to guarantee numerical stability.
 A_true = randn(nr, nr)
 A_true -= diagm(map(a -> sum(abs, a), eachrow(A_true)))    # ensure diagonal dominance of matrix
-# add symbolic weights
-@parameters A[1:nr^2] = vec(A_true) [tunable = true]
-for (i, idx) in enumerate(CartesianIndices(A_true))
-    if idx[1] == idx[2]
-        add_edge!(g, regions[idx[1]], regions[idx[2]], :weight, A[i])  # -exp(A[i])/2: treatement of diagonal elements in SPM12 to make diagonal dominance (see Gershgorin Theorem) more likely but it is not guaranteed
-    else
-        add_edge!(g, regions[idx[2]], regions[idx[1]], :weight, A[i])
-    end
+for idx in CartesianIndices(A_true)
+    add_edge!(g, regions[idx[1]] => regions[idx[2]]; :weight => A_true[idx[1], idx[2]])
 end
 
-# compose model
+# finally we compose the simulation model
 @named simmodel = system_from_graph(g)
 simmodel = structural_simplify(simmodel, split=false)
 
-# simulate model
+# setup simulation of the model, time in seconds
 tspan = (0.0, 512.0)
 prob = SDEProblem(simmodel, [], tspan)
-dt = 2.0
+dt = 2.0   # two seconds as measurement interval for fMRI
 sol = solve(prob, saveat=dt);
 
 ### plot simulation results ###
@@ -78,7 +72,7 @@ using Plots
 # plot bold signal time series
 idx_m = get_idx_tagged_vars(simmodel, "measurement")    # get index of bold signal
 Plots.plot(sol, idxs=idx_m)
-
+# tosymbol(x; escape=false)
 # estimate and plot cross-spectrum
 dfsol = DataFrame(sol)
 data = Matrix(dfsol[:, idx_m])
@@ -107,16 +101,17 @@ for i = 1:nr
     add_blox!(g, input)
     add_edge!(g, nv(g), regions[i], Dict(:weight => C))
 
-    # add hemodynamic response model and observation model (BOLD signal)
+    ## add hemodynamic response model and observation model (BOLD signal)
     measurement = BalloonModel(;name=Symbol("r$(i)₊bm"), lnτ=lnτ, lnκ=lnκ, lnϵ=lnϵ)
     add_blox!(g, measurement)
-    # connect measurement with neuronal signal
+    ## connect measurement with neuronal signal
     add_edge!(g, regions[i], nv(g), Dict(:weight => 1.0))
 end
 
 A_prior = 0.01*randn(nr, nr)
 A_prior -= diagm(diag(A_prior))    # ensure diagonal dominance of matrix
-# add symbolic weights
+# Since we want to optimize these weights we turn them into symbolic parameters:
+# Add the symbolic weights to the edges and connect reegions.
 @parameters A[1:nr^2] = vec(A_prior) [tunable = true]
 for (i, idx) in enumerate(CartesianIndices(A_prior))
     if idx[1] == idx[2]
@@ -233,3 +228,7 @@ fig
 
 ## TODO: need to implement a ecbarplot! to be able to replace it with effectiveconnectivity! above.
 ecbarplot(state, setup, A_true)
+
+
+using Literate
+Literate.markdown("./docs/src/tutorials/spectral_DCM.jl", "./docs/src/tutorials/")
