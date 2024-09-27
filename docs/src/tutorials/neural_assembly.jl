@@ -112,7 +112,7 @@ prob = ODEProblem(sys, [], (0.0, 1000), [])
 sol = solve(prob, Vern7(), saveat=0.1)
 voltage_stack(n_excis,sol)
 
-# ## Creating a single lateral inhibition "winner-take-all" circuit (WTA) from the inbuilt block and connecting two WTA circuits
+# ## Creating lateral inhibition "winner-take-all" circuit (WTA) blocks from the inbuilt functions and connecting two WTA circuit blocks
 
 
 global_namespace=:g
