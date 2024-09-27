@@ -32,10 +32,6 @@ nr = 3             # number of regions
 g = MetaDiGraph()
 regions = []   # list of neural mass blocks to then connect them to each other with an adjacency matrix
 
-# The following parameters are shared accross regions, which is why we define them here. 
-@parameters lnκ=0.0 lnϵ=0.0   # lnκ: decay parameter for hemodynamics and lnϵ: ratio of intra- to extra-vascular components
-@parameters C=1/16            # weight of input
-# Note that 1/16 is taken from SPM12, this stabilizes the balloon model simulation. Alternatively the noise of the Ornstein-Uhlenbeck block or the weight of the edge connecting neuronal activity and balloon model could be reduced to guarantee numerical stability.
 # Now add the different blocks to each region and connect the blocks within each region:
 for i = 1:nr
     region = LinearNeuralMass(;name=Symbol("r$(i)₊lm"))
@@ -43,13 +39,13 @@ for i = 1:nr
 
     ## add Ornstein-Uhlenbeck block as noisy input to the current region
     input = OUBlox(;name=Symbol("r$(i)₊ou"), σ=0.1)
-    add_edge!(g, input => region; :weight => C)
+    add_edge!(g, input => region; :weight => 1/16)   # Note that 1/16 is taken from SPM12, this stabilizes the balloon model simulation. Alternatively the noise of the Ornstein-Uhlenbeck block or the weight of the edge connecting neuronal activity and balloon model could be reduced to guarantee numerical stability.
 
     ## simulate fMRI signal with BalloonModel which includes the BOLD signal on top of the balloon model dynamics
-    measurement = BalloonModel(;name=Symbol("r$(i)₊bm"), lnκ=lnκ, lnϵ=lnϵ)
+    measurement = BalloonModel(;name=Symbol("r$(i)₊bm"))
     add_edge!(g, region => measurement; :weight => 1.0)
 end
-# Next we define the between-region connectivity matrix and make sure that it is diagonally dominant to guarantee numerical stability.
+# Next we define the between-region connectivity matrix and make sure that it is diagonally dominant to guarantee numerical stability (see Gershgorin theorem).
 A_true = randn(nr, nr)
 A_true -= diagm(map(a -> sum(abs, a), eachrow(A_true)))    # ensure diagonal dominance of matrix
 for idx in CartesianIndices(A_true)
@@ -66,46 +62,68 @@ prob = SDEProblem(simmodel, [], tspan)
 dt = 2.0   # two seconds as measurement interval for fMRI
 sol = solve(prob, saveat=dt);
 
-### plot simulation results ###
-using Plots
+# ##Plot simulation results
 
 # plot bold signal time series
 idx_m = get_idx_tagged_vars(simmodel, "measurement")    # get index of bold signal
-Plots.plot(sol, idxs=idx_m)
-# tosymbol(x; escape=false)
-# estimate and plot cross-spectrum
+f = Figure()
+ax = Axis(f[1, 1],
+    title = "fMRI time series",
+    xlabel = "Time [s]",
+    ylabel = "BOLD",
+)
+lines!(ax, sol, idxs=idx_m)
+f
+## (Note to self: tosymbol(x; escape=false)
+
+# ##Estimate and plot cross-spectrum
 dfsol = DataFrame(sol)
 data = Matrix(dfsol[:, idx_m])
+# We compute the cross-spectral density by fitting a linear model of order `p` and then compute the csd analytically from the parameters of the multivariate autoregressive model
 p = 8
-mar = mar_ml(data, p)
+mar = mar_ml(data, p)   # maximum likelihood estimation of the MAR coefficients and noise covariance matrix
 ns = size(data, 1)
 freq = range(min(128, ns*dt)^-1, max(8, 2*dt)^-1, 32)
 csd = mar2csd(mar, freq, dt^-1)
-Plots.plot(freq, real.(csd[:, 2, 2]))
+# Now plot the cross-spectrum:
+fig = Figure(size=(1200, 800))
+grid = fig[1, 1] = GridLayout()
+for i = 1:nr
+    for j = 1:nr
+        ax = Axis(grid[i, j])
+        lines!(ax, freq, real.(csd[:, i, j]))
+        if (i==1) && (j==2)
+            ax.title = "Cross spectral density"
+        end
+        if (i==3) && (j==2)
+            ax.xlabel = "Frequency [Hz]"
+        end
+    end
+end
+fig
 
 
-########## fit model ##########
+# #Model inference
 
-# assemble model for fitting
+# We will now assemble a new model that is used for fitting the previous simulations.
+# This procedure is similar to before with the difference that we will define global parameters and use tags such as [tunable=false/true] to define which parameters we will want to estimate.
+# Note that parameters are tunable by default.
 g = MetaDiGraph()
-regions = Dict()   # this dictionary is used to keep track of the neural mass block index to more easily connect to other blocks
+regions = []   # list of neural mass blocks to then connect them to each other with an adjacency matrix
 
-# decay parameter for hemodynamics lnκ and ratio of intra- to extra-vascular components lnϵ is shared across brain regions 
-@parameters lnκ=0.0 [tunable=false] lnϵ=0.0 [tunable=false] lnτ=0.0 [tunable=false] 
-@parameters C=1/16 [tunable=false]   # note that C=1/16 is taken from SPM12 and stabilizes the balloon model simulation. Alternatively the noise or the weight of the edge connecting neuronal activity and balloon model can be reduced.
+# The following parameters are shared accross regions, which is why we define them here. 
+@parameters lnκ=0.0 [tunable=false] lnϵ=0.0 [tunable=false] lnτ=0.0 [tunable=false]   # lnκ: decay parameter for hemodynamics; lnϵ: ratio of intra- to extra-vascular components, lnτ: transit time scale
+@parameters C=1/16 [tunable=false]   # note that C=1/16 is taken from SPM12 and stabilizes the balloon model simulation. See also comment above.
+
 for i = 1:nr
     region = LinearNeuralMass(;name=Symbol("r$(i)₊lm"))
-    add_blox!(g, region)
-    regions[i] = nv(g)         # store index of neural mass model
+    push!(regions, region)
     input = ExternalInput(;name=Symbol("r$(i)₊ei"))
-    add_blox!(g, input)
-    add_edge!(g, nv(g), regions[i], Dict(:weight => C))
+    add_edge!(g, input => region; :weight => C)
 
-    ## add hemodynamic response model and observation model (BOLD signal)
+    ## we assume fMRI signal and model them with a BalloonModel
     measurement = BalloonModel(;name=Symbol("r$(i)₊bm"), lnτ=lnτ, lnκ=lnκ, lnϵ=lnϵ)
-    add_blox!(g, measurement)
-    ## connect measurement with neuronal signal
-    add_edge!(g, regions[i], nv(g), Dict(:weight => 1.0))
+    add_edge!(g, region => measurement; :weight => 1.0)
 end
 
 A_prior = 0.01*randn(nr, nr)
@@ -115,26 +133,20 @@ A_prior -= diagm(diag(A_prior))    # ensure diagonal dominance of matrix
 @parameters A[1:nr^2] = vec(A_prior) [tunable = true]
 for (i, idx) in enumerate(CartesianIndices(A_prior))
     if idx[1] == idx[2]
-        add_edge!(g, regions[idx[1]], regions[idx[2]], :weight, -exp(A[i])/2)  # -exp(A[i])/2: treatement of diagonal elements in SPM12 to make diagonal dominance (see Gershgorin Theorem) more likely but it is not guaranteed
+        add_edge!(g, regions[idx[1]] => regions[idx[2]]; :weight => -exp(A[i])/2)  # -exp(A[i])/2: treatement of diagonal elements in SPM12 to make diagonal dominance (see Gershgorin Theorem) more likely but it is not guaranteed
     else
-        add_edge!(g, regions[idx[2]], regions[idx[1]], :weight, A[i])
+        add_edge!(g, regions[idx[2]] => regions[idx[1]]; :weight => A[i])
     end
 end
 
-# compose model
 @named fitmodel = system_from_graph(g)
 fitmodel = structural_simplify(fitmodel, split=false)
 
 
+# #Setup DCM
 max_iter = 128            # maximum number of iterations
 
-# set which parameters to fit of simmodel, instead of building a wholly new model 
-# pars = tunable_parameters(simmodel)
-# settunable = (p, tag) -> setmetadata(p, ModelingToolkit.VariableTunable, tag)
-# p_new = map(p -> settunable(p, ~occursin("₊ou₊", string(p))), pars)
-# @named fullmodel_infer = System(equations(simmodel), ModelingToolkit.get_iv(simmodel), unknowns(simmodel), addnontunableparams(p_new, simmodel))
-# fullmodel_infer = structural_simplify(fullmodel_infer, split=false)
-
+# TODO: Place all this part into a helper function that defines the priors until `csdsetup`.
 # attribute initial conditions to states
 sts, idx_sts = get_dynamic_states(fitmodel)
 idx_u = get_idx_tagged_vars(fitmodel, "ext_input")         # get index of external input state
@@ -211,23 +223,15 @@ with_stack(5_000_000) do  # 5MB of stack space
 end
 
 # ##Plot Results
-# First we create a figure and a layout in the usual [Makie-style](https://docs.makie.org/stable/tutorials/layout-tutorial)
+# Later place all into one figure using [Makie-style layouts](https://docs.makie.org/stable/tutorials/layout-tutorial)
+# Plot the free energy evolution:
+freeenergy(state)
 
-fig = Figure(size=(800, 600))
-ga = fig[1, 1] = GridLayout()
-gb = fig[2, 1] = GridLayout()
-aa = Axis(ga[1, 1])
-ab = Axis(gb[1, 1])
-# Now we can populate the figure with a plot of the Free Energy evolution over optimization iterations:
-freeenergy!(aa, state)
-# and we add the estimated posterior of the effective connectivity and compare that to the true parameter values.
-# bar hight are given by the posterior mean and error bars are the standard deviation of the posterior.
-effectiveconnectivity!(ab, state, setup, A_true)
-# show the figure:
-fig
+# Plot the estimated posterior of the effective connectivity and compare that to the true parameter values.
+# Bar hight are the posterior mean and error bars are the standard deviation of the posterior.
 
-## TODO: need to implement a ecbarplot! to be able to replace it with effectiveconnectivity! above.
 ecbarplot(state, setup, A_true)
+## TODO: need to implement a ecbarplot! to be able to integrate into one figure
 
 
 using Literate
