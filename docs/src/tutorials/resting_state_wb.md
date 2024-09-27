@@ -22,12 +22,12 @@ using DataFrames
 using MetaGraphs
 using DifferentialEquations
 using Random
-using Plots
+using CairoMakie
 using Statistics
 using HypothesisTests
 
 # read connection matrix from file
-weights = CSV.read("../data/weights.csv",DataFrame)
+weights = CSV.read("data/weights.csv",DataFrame)
 region_names = names(weights)
 
 wm = Array(weights)
@@ -55,7 +55,14 @@ To solve the system, we first create an Stochastic Differential Equation Problem
 ```@example resting-state-circuit
 prob = SDEProblem(sys,rand(-2:0.1:4,76*2), (0.0, 6e5), [])
 sol = solve(prob, EulerHeun(), dt=0.5, saveat=5)
-plot(sol.t,sol[5,:],xlims=(1000,10000))
+
+# show time series of one of the neural mass models
+fig1 = Figure()
+ax1 = Axis(fig1[1,1], xlabel="time in ms", ylabel="FH NMM #5")
+xlims!(5000,10000)
+ylims!(-0.5,0.2)
+lines!(sol.t,sol[5,:])
+fig1
 ```
 To evaluate the connectivity of our simulated resting state network, we calculate the statistically significant correlations
 
@@ -73,10 +80,16 @@ for i in 1:76
         p[i,j] = pvalue(OneSampleTTest(css[i,j,:]))
     end
 end
-heatmap(log10.(p) .* (p .< 0.05),aspect_ratio = :equal)
+fig2 = Figure()
+ax2 = Axis(fig2[1,1], xlabel="regions", ylabel="regions",title="Simulated correlations")
+heatmap!(log10.(p) .* (p .< 0.05),aspect_ratio = :equal)
+fig2
 ```
 Fig.: log10(p value) displaying statistally significant correlation between time series
 ```@example resting-state-circuit
-heatmap(wm,aspect_ratio = :equal)
+fig3 = Figure()
+ax3 = Axis(fig3[1,1], xlabel="regions", ylabel="regions",title="HCP connection strength")
+heatmap!(wm,aspect_ratio = :equal)
+fig3
 ```
 Fig.: Connection Adjacency Matrix that was used to connect the neural mass models
