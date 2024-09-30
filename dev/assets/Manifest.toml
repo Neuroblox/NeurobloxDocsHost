@@ -417,6 +417,11 @@ weakdeps = ["InverseFunctions", "Test"]
     ChangesOfVariablesInverseFunctionsExt = "InverseFunctions"
     ChangesOfVariablesTestExt = "Test"
 
+[[deps.ChunkSplitters]]
+git-tree-sha1 = "397b871ff701290cc122cca06af61c5bdf9f5605"
+uuid = "ae650224-84b6-46f8-82ea-d812ca08434e"
+version = "3.1.0"
+
 [[deps.CloseOpenIntervals]]
 deps = ["Static", "StaticArrayInterface"]
 git-tree-sha1 = "05ba0d07cd4fd8b7a39541e31a7b0254704ea581"
@@ -1166,6 +1171,16 @@ version = "2.80.2+0"
 git-tree-sha1 = "97285bbd5230dd766e9ef6749b80fc617126d496"
 uuid = "c27321d9-0574-5035-807b-f59d2c89b15c"
 version = "1.3.1"
+
+[[deps.GraphDynamics]]
+deps = ["Accessors", "ConstructionBase", "OhMyThreads", "RecursiveArrayTools", "SciMLBase", "SparseArrays", "SymbolicIndexingInterface"]
+git-tree-sha1 = "89f979d46889de64e5abe662c5c9112a9660f496"
+uuid = "bcd5d0fe-e6b7-4ef1-9848-780c183c7f4c"
+version = "0.1.3"
+weakdeps = ["ModelingToolkit", "Symbolics"]
+
+    [deps.GraphDynamics.extensions]
+    MTKExt = ["Symbolics", "ModelingToolkit"]
 
 [[deps.Graphite2_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl", "Pkg"]
@@ -2188,7 +2203,7 @@ uuid = "ca575930-c2e3-43a9-ace4-1e988b2c1908"
 version = "1.2.0"
 
 [[deps.Neuroblox]]
-deps = ["CSV", "ChainRules", "Combinatorics", "DSP", "DataFrames", "DelayDiffEq", "DelimitedFiles", "DiffEqBase", "DifferentialEquations", "Distributions", "ExponentialUtilities", "ForwardDiff", "Glob", "Graphs", "HypothesisTests", "Interpolations", "JLD2", "LinearAlgebra", "LogExpFunctions", "MAT", "MKL", "MLJ", "MetaGraphs", "ModelingToolkit", "ModelingToolkitStandardLibrary", "MuladdMacro", "NaNStatistics", "Optim", "Optimization", "OptimizationOptimJL", "OptimizationOptimisers", "OrderedCollections", "OrdinaryDiffEq", "Peaks", "Random", "RecursiveArrayTools", "Reexport", "Requires", "SafeTestsets", "SciMLBase", "Serialization", "SignalAnalysis", "SparseArrays", "SpecialFunctions", "StaticArrays", "Statistics", "StatsBase", "StochasticDiffEq", "Symbolics", "Test", "ToeplitzMatrices", "Tracker", "Turing"]
+deps = ["Accessors", "CSV", "ChainRules", "Combinatorics", "DSP", "DataFrames", "DelayDiffEq", "DelimitedFiles", "DiffEqBase", "DifferentialEquations", "Distributions", "ExponentialUtilities", "ForwardDiff", "Glob", "GraphDynamics", "Graphs", "HypothesisTests", "Interpolations", "JLD2", "LinearAlgebra", "LogExpFunctions", "MAT", "MKL", "MLJ", "MetaGraphs", "ModelingToolkit", "ModelingToolkitStandardLibrary", "MuladdMacro", "NaNStatistics", "Optim", "Optimization", "OptimizationOptimJL", "OptimizationOptimisers", "OrderedCollections", "OrdinaryDiffEq", "Peaks", "Random", "RecursiveArrayTools", "Reexport", "Requires", "SafeTestsets", "SciMLBase", "Serialization", "SignalAnalysis", "SparseArrays", "SpecialFunctions", "StaticArrays", "Statistics", "StatsBase", "StochasticDiffEq", "Symbolics", "Test", "ToeplitzMatrices", "Tracker", "Turing"]
 path = "/home/runner/work/Neuroblox.jl/Neuroblox.jl"
 uuid = "769b91e5-4c60-41ee-bfae-153c84203cb2"
 version = "0.5.0"
@@ -2245,6 +2260,12 @@ deps = ["Artifacts", "JLLWrappers", "Libdl", "Pkg"]
 git-tree-sha1 = "887579a3eb005446d514ab7aeac5d1d027658b8f"
 uuid = "e7412a2a-1a6e-54c0-be00-318e2571c051"
 version = "1.3.5+1"
+
+[[deps.OhMyThreads]]
+deps = ["BangBang", "ChunkSplitters", "StableTasks", "TaskLocalValues"]
+git-tree-sha1 = "5f81bdb937fd857bac9548fa8ab9390a06864bb5"
+uuid = "67456a42-1dca-4109-a031-0a68de7e3ad5"
+version = "0.7.0"
 
 [[deps.OpenBLAS_jll]]
 deps = ["Artifacts", "CompilerSupportLibraries_jll", "Libdl"]
@@ -2998,6 +3019,11 @@ git-tree-sha1 = "83e6cce8324d49dfaf9ef059227f91ed4441a8e5"
 uuid = "860ef19b-820b-49d6-a774-d7a799459cd3"
 version = "1.0.2"
 
+[[deps.StableTasks]]
+git-tree-sha1 = "073d5c20d44129b20fe954720b97069579fa403b"
+uuid = "91464d47-22a1-43fe-8b7f-2d57ee82463f"
+version = "0.1.5"
+
 [[deps.Static]]
 deps = ["IfElse"]
 git-tree-sha1 = "d2fdac9ff3906e27f7a618d47b676941baa6c80c"
@@ -3218,6 +3244,11 @@ version = "1.12.0"
 deps = ["ArgTools", "SHA"]
 uuid = "a4e569a6-e804-4fa4-b0f3-eef7a1d5b13e"
 version = "1.10.0"
+
+[[deps.TaskLocalValues]]
+git-tree-sha1 = "d155450e6dff2a8bc2fcb81dcb194bd98b0aeb46"
+uuid = "ed4db957-447d-4319-bfb6-7fa9ae7ecf34"
+version = "0.1.2"
 
 [[deps.TensorCore]]
 deps = ["LinearAlgebra"]
