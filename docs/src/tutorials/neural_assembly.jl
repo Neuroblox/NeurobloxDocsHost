@@ -5,14 +5,14 @@
 
 # Hodgkin-Huxley (HH) formalism to describe membrane potential of a single neuron
 
- #md ```math
- #md   \begin{align}
- #md   C_m\frac{dV}{dt} &= -g_L(V-V_L) - {g}_{Na}m^3h(V-V_{Na}) -{g}_Kn^4(V-V_K) + I_{in} - I_{syn} \\
- #md   \frac{dm}{dt} &= \alpha_{m}(V)(1-m) + \beta_{m}(V)m \\ 
- #md   \frac{dh}{dt} &= \alpha_{h}(V)(1-h) + \beta_{h}(V)h \\
- #md   \frac{dn}{dt} &= \alpha_{n}(V)(1-n) + \beta_{n}(V)n 
- #md   \end{align}
- #md ```
+ # ```math
+ #   \begin{align}
+ #   C_m\frac{dV}{dt} &= -g_L(V-V_L) - {g}_{Na}m^3h(V-V_{Na}) -{g}_Kn^4(V-V_K) + I_{in} - I_{syn} \\
+ #   \frac{dm}{dt} &= \alpha_{m}(V)(1-m) + \beta_{m}(V)m \\ 
+ #   \frac{dh}{dt} &= \alpha_{h}(V)(1-h) + \beta_{h}(V)h \\
+ #   \frac{dn}{dt} &= \alpha_{n}(V)(1-n) + \beta_{n}(V)n 
+ #   \end{align}
+ # ```
 
 
 using Neuroblox
@@ -46,7 +46,6 @@ sol = solve(prob, Vern7(), saveat=0.1)
 # acessing the voltage timeseries from the neuron block and plotting the voltage
 v = voltage_timeseries(n_inh,sol)
 Plots.plot(sol.t,v,xlims=(0,1000),xlabel="time (ms)",ylabel="mV")
-# ```
 
 
 # ## Connecting three neurons through synapses to make a small local circuit
