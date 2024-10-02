@@ -52,25 +52,25 @@ t: 1001-element Vector{Float64}:
  100.0
 u: 1001-element Vector{Vector{Float64}}:
  [1.0, 1.0, 1.0, 1.0]
- [0.949325763556704, 0.9999972275493642, 0.9968352574059597, 0.999998361407238]
- [0.8972980729625414, 0.9999897131895403, 0.9922642579101326, 0.9999967482029593]
- [0.8440391811254516, 0.999968172326061, 0.9854388758936965, 0.9999950763076972]
- [0.7898349351175413, 0.9999082303982423, 0.9750726533317169, 0.9999931987811799]
- [0.7351468545606799, 0.9997317040505838, 0.9591819783643024, 0.9999908111737833]
- [0.6805567621179917, 0.9991470438995514, 0.9353051118430262, 0.9999870244685964]
- [0.6267161118972019, 0.9976995169546413, 0.9005839696081576, 0.9999806570871376]
- [0.5745445542606127, 0.9931773366450882, 0.8545965250635106, 0.999963704852591]
- [0.5248014014419827, 0.9822251892336896, 0.7986897070010573, 0.9999118449159944]
+ [0.9493257635566694, 0.999997227549365, 0.9968352574060094, 0.9999983614072379]
+ [0.8972980729622233, 0.9999897131895668, 0.9922642579108254, 0.9999967482029593]
+ [0.8440391811260224, 0.9999681723259077, 0.9854388758920339, 0.999995076307697]
+ [0.7898349351204718, 0.9999082303969463, 0.9750726533220467, 0.9999931987811771]
+ [0.7351468545581609, 0.9997317040527284, 0.9591819783728336, 0.9999908111737857]
+ [0.6805567621151224, 0.9991470439203527, 0.935305111809087, 0.9999870244687021]
+ [0.6267161119236285, 0.9976995168547573, 0.9005839697835868, 0.9999806570865177]
+ [0.5745445542818777, 0.9931773367481966, 0.8545965249603411, 0.999963704854196]
+ [0.5248014014410012, 0.982225189364037, 0.7986897069679073, 0.9999118449005674]
  ⋮
- [0.2827951837976614, 0.23241952859520773, 0.3170636168184031, 0.34718384466983115]
- [0.27817794406352114, 0.2232837135397916, 0.3127979249873201, 0.3332261045439758]
- [0.27448088514708935, 0.2143054001426585, 0.3098099242833093, 0.31991542182651556]
- [0.2718187846684288, 0.20567350873813078, 0.3082072863965651, 0.30756838667310105]
- [0.27027557844827965, 0.19759133788934483, 0.3080567596745964, 0.2965051676618344]
- [0.2698099047162798, 0.19023716639767463, 0.3092832691565165, 0.2869262013220514]
- [0.27050297509449794, 0.18373150768649255, 0.3119234632896127, 0.2790718640842631]
- [0.2723876529251488, 0.17825467309214857, 0.3159222630418153, 0.27326609283492115]
- [0.27549680155044676, 0.17398697395099608, 0.32122458938105297, 0.26983282446048074]</code></pre><h2 id="Plotting-simulation-results"><a class="docs-heading-anchor" href="#Plotting-simulation-results">Plotting simulation results</a><a id="Plotting-simulation-results-1"></a><a class="docs-heading-anchor-permalink" href="#Plotting-simulation-results" title="Permalink"></a></h2><p>Finally, let us plot the <code>E</code> and <code>I</code> states of the first component, <code>WC1</code>.</p><pre><code class="language-julia hljs">E1 = state_timeseries(WC1, sol, &quot;E&quot;)
+ [0.282795184078143, 0.23241952858753737, 0.31706361706204916, 0.34718384492028037]
+ [0.2781779445853354, 0.223283713239714, 0.3127979255978302, 0.333226104524646]
+ [0.2744808855343151, 0.2143054000860175, 0.309809924834832, 0.31991542188730493]
+ [0.2718187843252274, 0.20567350914429744, 0.30820728607794295, 0.30756838680054055]
+ [0.2702755783998263, 0.197591337906259, 0.3080567597089096, 0.2965051674103938]
+ [0.26980990466787586, 0.19023716680060623, 0.3092832688009168, 0.28692620197481017]
+ [0.270502975159042, 0.18373150816970268, 0.31192346297068396, 0.27907186507315135]
+ [0.27238765304621, 0.17825467342000434, 0.3159222629184537, 0.27326609360839627]
+ [0.2754968015022642, 0.17398697395797083, 0.3212245893444669, 0.2698328244835279]</code></pre><h2 id="Plotting-simulation-results"><a class="docs-heading-anchor" href="#Plotting-simulation-results">Plotting simulation results</a><a id="Plotting-simulation-results-1"></a><a class="docs-heading-anchor-permalink" href="#Plotting-simulation-results" title="Permalink"></a></h2><p>Finally, let us plot the <code>E</code> and <code>I</code> states of the first component, <code>WC1</code>.</p><pre><code class="language-julia hljs">E1 = state_timeseries(WC1, sol, &quot;E&quot;)
 I1 = state_timeseries(WC1, sol, &quot;I&quot;)
 
 fig = Figure()
@@ -78,4 +78,4 @@ ax = Axis(fig[1,1]; xlabel = &quot;time (ms)&quot;)
 lines!(ax, sol.t, E1, label = &quot;E&quot;)
 lines!(ax, sol.t, I1, label = &quot;I&quot;)
 Legend(fig[1,2], ax)
-fig</code></pre><img src="c028dbce.png" alt="Example block output"/><p><a href="https://www.sciencedirect.com/science/article/pii/S0006349572860685">[1] Wilson, H. R., &amp; Cowan, J. D. (1972). Excitatory and inhibitory interactions in localized populations of model neurons. Biophysical journal, 12(1), 1-24.</a></p><p><a href="https://link.springer.com/article/10.1007/s00422-009-0328-3">[2] Destexhe, A., &amp; Sejnowski, T. J. (2009). The Wilson–Cowan model, 36 years later. Biological cybernetics, 101(1), 1-2.</a></p><hr/><p><em>This page was generated using <a href="https://github.com/fredrikekre/Literate.jl">Literate.jl</a>.</em></p></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../">« Neuroblox</a><a class="docs-footer-nextpage" href="../tutorials/resting_state/">Resting state simulation using neural mass models »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.7.0 on <span class="colophon-date" title="Wednesday 2 October 2024 15:42">Wednesday 2 October 2024</span>. Using Julia version 1.10.5.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
+fig</code></pre><img src="c028dbce.png" alt="Example block output"/><p><a href="https://www.sciencedirect.com/science/article/pii/S0006349572860685">[1] Wilson, H. R., &amp; Cowan, J. D. (1972). Excitatory and inhibitory interactions in localized populations of model neurons. Biophysical journal, 12(1), 1-24.</a></p><p><a href="https://link.springer.com/article/10.1007/s00422-009-0328-3">[2] Destexhe, A., &amp; Sejnowski, T. J. (2009). The Wilson–Cowan model, 36 years later. Biological cybernetics, 101(1), 1-2.</a></p><hr/><p><em>This page was generated using <a href="https://github.com/fredrikekre/Literate.jl">Literate.jl</a>.</em></p></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../">« Neuroblox</a><a class="docs-footer-nextpage" href="../tutorials/resting_state/">Resting state simulation using neural mass models »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.7.0 on <span class="colophon-date" title="Wednesday 2 October 2024 15:57">Wednesday 2 October 2024</span>. Using Julia version 1.10.5.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
