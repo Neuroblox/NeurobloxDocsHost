@@ -1,8 +1,5 @@
 # # Spectral Dynamic Causal Modeling Tutorial
 # # Introduction
-# <table style="width:100%">
-# <tr>
-# <td style="width:60%">
 #
 # In this tutorial we will introduce how to perform a spectral Dynamic Causal Modeling analysis on simulated data [1,2].
 # To do so we roughly resemble the procedure in the [SPM12](https://www.fil.ion.ucl.ac.uk/spm/software/spm12/) script `DEM_demo_induced_fMRI.m` in [Neuroblox](https://www.neuroblox.org/).
@@ -12,6 +9,8 @@
 # We will model fMRI data by a balloon model and BOLD signal on top.
 # After simulation of this simple model we will use spectral Dynamic Causal Modeling to infer some of the model parameters from the simulation time series.
 # 
+# ![Workflow illustration](../assets/spectral_DCM_illustration.png)
+# 
 # A brief outline of the procedure we will pursue:
 # - define the graph, add blocks -> section A, B and C in the figure
 # - simulate the model -> instead we could also use actual data, section D in figure
@@ -19,16 +18,6 @@
 # - setup the DCM
 # - estimate parameters
 # - plot the results
-#
-# </td>
-# <td>
-#
-# <img src="./docs/src/assets/spectral_DCM_illustration.png" width="350" height="470" />
-#
-#
-# </td>
-# </tr>
-# </table>
 
 using Neuroblox
 using LinearAlgebra
@@ -50,8 +39,7 @@ using ModelingToolkit
 # This needs to be represented by the way we define the edges.
 nr = 3             # number of regions
 g = MetaDiGraph()
-regions = []   # list of neural mass blocks to then connect them to each other with an adjacency matrix
-
+regions = [];   # list of neural mass blocks to then connect them to each other with an adjacency matrix `A_true`
 # Now add the different blocks to each region and connect the blocks within each region:
 for i = 1:nr
     region = LinearNeuralMass(;name=Symbol("r$(i)₊lm"))
@@ -124,8 +112,7 @@ fig
 # This procedure is similar to before with the difference that we will define global parameters and use tags such as [tunable=false/true] to define which parameters we will want to estimate.
 # Note that parameters are tunable by default.
 g = MetaDiGraph()
-regions = [];   # list of neural mass blocks to then connect them to each other with an adjacency matrix
-
+regions = [];   # list of neural mass blocks to then connect them to each other with an adjacency matrix `A`
 # The following parameters are shared accross regions, which is why we define them here. 
 @parameters lnκ=0.0 [tunable=false] lnϵ=0.0 [tunable=false] lnτ=0.0 [tunable=false]   # lnκ: decay parameter for hemodynamics; lnϵ: ratio of intra- to extra-vascular components, lnτ: transit time scale
 @parameters C=1/16 [tunable=false]   # note that C=1/16 is taken from SPM12 and stabilizes the balloon model simulation. See also comment above.
