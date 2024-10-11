@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><title>Basal Ganglia Model and Parkinson&#39;s Disease Simulation · Neuroblox</title><meta name="title" content="Basal Ganglia Model and Parkinson&#39;s Disease Simulation · Neuroblox"/><meta property="og:title" content="Basal Ganglia Model and Parkinson&#39;s Disease Simulation · Neuroblox"/><meta property="twitter:title" content="Basal Ganglia Model and Parkinson&#39;s Disease Simulation · Neuroblox"/><meta name="description" content="Documentation for Neuroblox."/><meta property="og:description" content="Documentation for Neuroblox."/><meta property="twitter:description" content="Documentation for Neuroblox."/><script data-outdated-warner src="../../assets/warner.js"></script><link href="https://cdnjs.cloudflare.com/ajax/libs/lato-font/3.0.0/css/lato-font.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/juliamono/0.050/juliamono.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/fontawesome.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/solid.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/brands.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.8/katex.min.css" rel="stylesheet" type="text/css"/><script>documenterBaseURL="../.."</script><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" data-main="../../assets/documenter.js"></script><script src="../../search_index.js"></script><script src="../../siteinfo.js"></script><script src="../../../versions.js"></script><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/catppuccin-mocha.css" data-theme-name="catppuccin-mocha"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/catppuccin-macchiato.css" data-theme-name="catppuccin-macchiato"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/catppuccin-frappe.css" data-theme-name="catppuccin-frappe"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/catppuccin-latte.css" data-theme-name="catppuccin-latte"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/documenter-dark.css" data-theme-name="documenter-dark" data-theme-primary-dark/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/documenter-light.css" data-theme-name="documenter-light" data-theme-primary/><script src="../../assets/themeswap.js"></script><link href="../../assets/favicon.ico" rel="icon" type="image/x-icon"/></head><body><div id="documenter"><nav class="docs-sidebar"><a class="docs-logo" href="../../"><img src="../../assets/logo.png" alt="Neuroblox logo"/></a><div class="docs-package-name"><span class="docs-autofit"><a href="../../">Neuroblox</a></span></div><button class="docs-search-query input is-rounded is-small is-clickable my-2 mx-auto py-1 px-2" id="documenter-search-query">Search docs (Ctrl + /)</button><ul class="docs-menu"><li><a class="tocitem" href="../../">Neuroblox</a></li><li><a class="tocitem" href="../../getting_started/">Getting Started</a></li><li><span class="tocitem">Tutorials</span><ul><li><a class="tocitem" href="../resting_state/">Resting state simulation using neural mass models</a></li><li><a class="tocitem" href="../parkinsons/">Building a model of Parkinson&#39;s disease using Neural Mass models</a></li><li><a class="tocitem" href="../neural_assembly/">Tutorial on bottom-up approach to building a neural assembly</a></li><li><a class="tocitem" href="../ping_network/">Pyramidal-Interneuron Gamma network</a></li><li class="is-active"><a class="tocitem" href>Basal Ganglia Model and Parkinson&#39;s Disease Simulation</a><ul class="internal"><li><a class="tocitem" href="#Introduction"><span>Introduction</span></a></li><li><a class="tocitem" href="#Isolated-MSN-network-in-baseline-condition"><span>Isolated MSN network in baseline condition</span></a></li><li><a class="tocitem" href="#Core-striatal-network:-MSN-FSI"><span>Core striatal network: MSN + FSI</span></a></li><li><a class="tocitem" href="#Full-basal-ganglia-model-in-baseline-condition"><span>Full basal ganglia model in baseline condition</span></a></li><li><a class="tocitem" href="#Full-basal-ganglia-model-in-Parkinson&#39;s-condition"><span>Full basal ganglia model in Parkinson&#39;s condition</span></a></li><li><a class="tocitem" href="#References"><span>References</span></a></li></ul></li><li><a class="tocitem" href="../spectralDCM/">Spectral Dynamic Causal Modeling Tutorial</a></li></ul></li><li><a class="tocitem" href="../../api/">API</a></li><li><a class="tocitem" href="../../release_notes/">Release Notes</a></li></ul><div class="docs-version-selector field has-addons"><div class="control"><span class="docs-label button is-static is-size-7">Version</span></div><div class="docs-selector control is-expanded"><div class="select is-fullwidth is-size-7"><select id="documenter-version-selector"></select></div></div></div></nav><div class="docs-main"><header class="docs-navbar"><a class="docs-sidebar-button docs-navbar-link fa-solid fa-bars is-hidden-desktop" id="documenter-sidebar-button" href="#"></a><nav class="breadcrumb"><ul class="is-hidden-mobile"><li><a class="is-disabled">Tutorials</a></li><li class="is-active"><a href>Basal Ganglia Model and Parkinson&#39;s Disease Simulation</a></li></ul><ul class="is-hidden-tablet"><li class="is-active"><a href>Basal Ganglia Model and Parkinson&#39;s Disease Simulation</a></li></ul></nav><div class="docs-right"><a class="docs-navbar-link" href="https://github.com/Neuroblox/Neuroblox.jl" title="View the repository on GitHub"><span class="docs-icon fa-brands"></span><span class="docs-label is-hidden-touch">GitHub</span></a><a class="docs-navbar-link" href="https://github.com/Neuroblox/Neuroblox.jl/blob/master/docs/src/tutorials/basal_ganglia.jl" title="Edit source on GitHub"><span class="docs-icon fa-solid"></span></a><a class="docs-settings-button docs-navbar-link fa-solid fa-gear" id="documenter-settings-button" href="#" title="Settings"></a><a class="docs-article-toggle-button fa-solid fa-chevron-up" id="documenter-article-toggle-button" href="javascript:;" title="Collapse all docstrings"></a></div></header><article class="content" id="documenter-page"><h1 id="Basal-Ganglia-Model-and-Parkinson&#39;s-Disease-Simulation"><a class="docs-heading-anchor" href="#Basal-Ganglia-Model-and-Parkinson&#39;s-Disease-Simulation">Basal Ganglia Model and Parkinson&#39;s Disease Simulation</a><a id="Basal-Ganglia-Model-and-Parkinson&#39;s-Disease-Simulation-1"></a><a class="docs-heading-anchor-permalink" href="#Basal-Ganglia-Model-and-Parkinson&#39;s-Disease-Simulation" title="Permalink"></a></h1><h2 id="Introduction"><a class="docs-heading-anchor" href="#Introduction">Introduction</a><a id="Introduction-1"></a><a class="docs-heading-anchor-permalink" href="#Introduction" title="Permalink"></a></h2><p>This tutorial demonstrates how to build and simulate a basal ganglia model using Neuroblox, based on the work of <a href="https://doi.org/10.1073/pnas.2120808119">Adam et al. (2022)</a>. We&#39;ll explore the model&#39;s behavior in both normal and Parkinsonian conditions, showcasing the emergence of pathological beta oscillations characteristic of Parkinson&#39;s disease.</p><p><img src="../../assets/basal_ganglia_baseline.jpg" alt="Full basal ganglia model in baseline condition"/></p><p>We&#39;ll start with simple components and gradually build up to the full basal ganglia circuit, demonstrating how to analyze the results at each stage.</p><pre><code class="language-julia hljs">using Neuroblox
+using StochasticDiffEq ## For building and solving differential equations problems
+using CairoMakie ## For plotting
+using Random ## For setting a random seed
+
+Random.seed!(123) ## Set a random seed for reproducibility</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">Random.TaskLocalRNG()</code></pre><h2 id="Isolated-MSN-network-in-baseline-condition"><a class="docs-heading-anchor" href="#Isolated-MSN-network-in-baseline-condition">Isolated MSN network in baseline condition</a><a id="Isolated-MSN-network-in-baseline-condition-1"></a><a class="docs-heading-anchor-permalink" href="#Isolated-MSN-network-in-baseline-condition" title="Permalink"></a></h2><p>We&#39;ll start by simulating an isolated network of Medium Spiny Neurons (MSNs)</p><p>Blox definition</p><pre><code class="language-julia hljs">N_MSN = 100 ## number of Medium Spiny Neurons
+@named msn = Striatum_MSN_Adam(N_inhib = N_MSN)
+sys = get_system(msn; simplify = true)
+
+# Check the system&#39;s variables (100 neurons, each with associated currents)
+unknowns(sys)</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">600-element Vector{SymbolicUtils.BasicSymbolic{Real}}:
+ inh1₊V(t)
+ inh1₊n(t)
+ inh1₊m(t)
+ inh1₊h(t)
+ inh1₊mM(t)
+ inh1₊G(t)
+ inh2₊V(t)
+ inh2₊n(t)
+ inh2₊m(t)
+ inh2₊h(t)
+ ⋮
+ inh99₊h(t)
+ inh99₊mM(t)
+ inh99₊G(t)
+ inh100₊V(t)
+ inh100₊n(t)
+ inh100₊m(t)
+ inh100₊h(t)
+ inh100₊mM(t)
+ inh100₊G(t)</code></pre><p>Create and solve the SDE problem</p><pre><code class="language-julia hljs"># Define simulation parameters
+tspan = (0.0, 2000.0) ## simulation time span [ms]
+dt = 0.05 ## time step for solving and saving [ms]
+
+# Create a stochastic differential equation problem and use the RKMil method to solve it
+prob = SDEProblem(sys, [], tspan, [])
+sol = solve(prob, RKMil(); dt=dt, saveat=dt, abstol = 1e-2, reltol = 1e-2);</code></pre><p>Plot voltage of a single neuron</p><pre><code class="language-julia hljs">plot(sol, idxs=1, axis = (xlabel = &quot;time (ms)&quot;, ylabel = &quot;membrane potential (mV)&quot;))</code></pre><img src="bcbfda7e.png" alt="Example block output"/><p>Plot mean field</p><pre><code class="language-julia hljs">meanfield(msn, sol, axis = (xlabel = &quot;time (ms)&quot;, ylabel = &quot;membrane potential (mV)&quot;, title = &quot;Mean Field&quot;))</code></pre><img src="b414b303.png" alt="Example block output"/><p>Detect spikes and compute firing rate</p><pre><code class="language-julia hljs">spikes = detect_spikes(msn, sol; threshold=-55)
+t, fr = mean_firing_rate(spikes, sol)</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">(0.0:2000.0:2000.0, [1.545])</code></pre><p>Create a raster plot</p><pre><code class="language-julia hljs">rasterplot(msn, sol, threshold = -55.0, title = &quot;Neuron&#39;s Spikes - Mean Firing Rate: $(round(fr[1], digits=2)) spikes/s&quot;)</code></pre><img src="be9f109d.png" alt="Example block output"/><p>Compute and plot the power spectrum of the GABAa current</p><pre><code class="language-julia hljs">fig = Figure(size = (1500, 600))
+
+powerspectrumplot(fig[1,1], msn, sol; state = &quot;G&quot;,
+                  ylims=(1e-5, 10),
+                  alpha_start = 5,
+                  alpha_label_position = (8.5, 5),
+                  beta_label_position = (22, 5),
+                  gamma_label_position = (60, 5),
+                  title = &quot;FFT with no window&quot;)
+
+powerspectrumplot(fig[1,2], msn, sol; state = &quot;G&quot;,
+                  method=welch_pgram, window=hanning,
+                  ylims=(1e-5, 10),
+                  alpha_start = 5,
+                  alpha_label_position = (8.5, 5),
+                  beta_label_position = (22, 5),
+                  gamma_label_position = (60, 5),
+                  title = &quot;Welch&#39;s method + Hanning window&quot;)
+fig</code></pre><img src="e6217784.png" alt="Example block output"/><p>We can also run multiple simulations in parallel and compute the average power spectrum</p><pre><code class="language-julia hljs">ens_prob = EnsembleProblem(prob)
+ens_sol = solve(ens_prob, RKMil(); dt=dt, saveat=dt, trajectories=3, abstol = 1e-2, reltol = 1e-2);
+
+powerspectrumplot(msn, ens_sol; state = &quot;G&quot;,
+                  method=welch_pgram, window=hanning,
+                  ylims=(1e-5, 10),
+                  alpha_start = 8,
+                  alpha_label_position = (8.5, 4),
+                  beta_label_position = (22, 4),
+                  gamma_label_position = (60, 4),
+                  title = &quot;Welch&#39;s method + Hanning window + Ensemble&quot;)</code></pre><img src="2e55fbb7.png" alt="Example block output"/><h2 id="Core-striatal-network:-MSN-FSI"><a class="docs-heading-anchor" href="#Core-striatal-network:-MSN-FSI">Core striatal network: MSN + FSI</a><a id="Core-striatal-network:-MSN-FSI-1"></a><a class="docs-heading-anchor-permalink" href="#Core-striatal-network:-MSN-FSI" title="Permalink"></a></h2><p>Now we&#39;ll add Fast-Spiking Interneurons (FSIs) to our model</p><pre><code class="language-julia hljs">global_ns = :g ## global name for the circuit. All components should be inside this namespace.
+
+N_FSI = 50 ## number of Fast Spiking Interneurons
+@named msn = Striatum_MSN_Adam(namespace=global_ns, N_inhib = N_MSN)
+@named fsi = Striatum_FSI_Adam(namespace=global_ns, N_inhib = N_FSI)
+
+ḡ_FSI_MSN = 0.6 ## maximal conductance for FSI to MSN synapses [mS/cm^-2]
+density_FSI_MSN = 0.15 ## fraction of FSIs connecting to the MSN population
+weight_FSI_MSN = ḡ_FSI_MSN / (N_FSI * density_FSI_MSN) ## normalized synaptic weight
+
+g = MetaDiGraph()
+add_edge!(g, fsi =&gt; msn; weight = weight_FSI_MSN, density = density_FSI_MSN)
+
+@named sys = system_from_graph(g)
+prob = SDEProblem(sys, [], tspan, [])
+ens_prob = EnsembleProblem(prob)
+ens_sol = solve(ens_prob, RKMil(); dt=dt, saveat=dt, trajectories=3, abstol = 1e-2, reltol = 1e-2);</code></pre><p>Detect spikes and compute firing rates</p><pre><code class="language-julia hljs">spikes_msn = detect_spikes(msn, ens_sol[1]; threshold=-35)
+t, fr_msn = mean_firing_rate(spikes_msn, ens_sol[1])
+
+spikes_fsi = detect_spikes(fsi, ens_sol[1]; threshold=-25)
+t, fr_fsi = mean_firing_rate(spikes_fsi, ens_sol[1])</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">(0.0:2000.0:2000.0, [11.07])</code></pre><p>Let&#39;s see their raster plots and power spectra</p><pre><code class="language-julia hljs">fig = Figure(size = (1000, 800))
+rasterplot(fig[1,1], msn, ens_sol[1], threshold = -35.0, title = &quot;MSN - Mean Firing Rate: $(round(fr_msn[1], digits=2)) spikes/s&quot;)
+rasterplot(fig[1,2], fsi, ens_sol[1], threshold = -35.0, title = &quot;FSI - Mean Firing Rate: $(round(fr_fsi[1], digits=2)) spikes/s&quot;)
+
+powerspectrumplot(fig[2,1], msn, ens_sol; state = &quot;G&quot;,
+                  method=welch_pgram, window=hanning,
+                  ylims=(1e-5, 10),
+                  xlims=(8, 100),
+                  alpha_label_position = (8.5, 3),
+                  beta_label_position = (22, 3),
+                  gamma_label_position = (60, 3))
+
+powerspectrumplot(fig[2,2], fsi, ens_sol; state = &quot;G&quot;,
+                  method=welch_pgram, window=hanning,
+                  ylims=(1e-5, 10),
+                  xlims=(8, 100),
+                  alpha_label_position = (8.5, 3),
+                  beta_label_position = (22, 3),
+                  gamma_label_position = (60, 3))
+fig</code></pre><img src="8cfd5a25.png" alt="Example block output"/><p>FSIs exhibit a peak in gamma frequencies. Their inhibition onto MSNs suppresses the low beta-band activity seen in isolated MSN populations, without reducing MSN firing rates. This spectral shift reflects a change in MSN spiking dynamics under FSI influence, rather than a decrease in overall activity.</p><h2 id="Full-basal-ganglia-model-in-baseline-condition"><a class="docs-heading-anchor" href="#Full-basal-ganglia-model-in-baseline-condition">Full basal ganglia model in baseline condition</a><a id="Full-basal-ganglia-model-in-baseline-condition-1"></a><a class="docs-heading-anchor-permalink" href="#Full-basal-ganglia-model-in-baseline-condition" title="Permalink"></a></h2><p>Now we&#39;ll add the GPe and STN to complete the full basal ganglia model</p><pre><code class="language-julia hljs">N_GPe = 80 ## number of GPe neurons
+N_STN = 40 ## number of STN neurons
+
+@named gpe = GPe_Adam(namespace=global_ns, N_inhib = N_GPe)
+@named stn = STN_Adam(namespace=global_ns, N_exci = N_STN)
+
+ḡ_MSN_GPe = 2.5 ## maximal conductance for MSN to GPe synapses [mS/cm^-2]
+ḡ_GPe_STN = 0.3 ## maximal conductance for GPe to STN synapses [mS/cm^-2]
+ḡ_STN_FSI = 0.165 ## maximal conductance for STN to FSI synapses [mS/cm^-2]
+
+density_MSN_GPe = 0.33 ## fraction of MSNs connecting to the GPe population
+density_GPe_STN = 0.05 ## fraction of GPe neurons connecting to the STN population
+density_STN_FSI = 0.1 ## fraction of STN neurons connecting to the FSI population
+
+weight_MSN_GPe = ḡ_MSN_GPe / (N_MSN * density_MSN_GPe)
+weight_GPe_STN = ḡ_GPe_STN / (N_GPe * density_GPe_STN)
+weight_STN_FSI = ḡ_STN_FSI / (N_STN * density_STN_FSI)
+
+g = MetaDiGraph()
+add_edge!(g, fsi =&gt; msn, weight = weight_FSI_MSN, density = density_FSI_MSN)
+add_edge!(g, msn =&gt; gpe, weight = weight_MSN_GPe, density = density_MSN_GPe)
+add_edge!(g, gpe =&gt; stn, weight = weight_GPe_STN, density = density_GPe_STN)
+add_edge!(g, stn =&gt; fsi, weight = weight_STN_FSI, density = density_STN_FSI)
+
+@named sys = system_from_graph(g)
+prob = SDEProblem(sys, [], tspan, [])
+ens_prob = EnsembleProblem(prob)
+ens_sol = solve(ens_prob, RKMil(); dt=dt, saveat=dt, trajectories=3, abstol = 1e-2, reltol = 1e-2);</code></pre><p>Compute and plot power spectra for all components</p><pre><code class="language-julia hljs">fig = Figure(size = (1500, 600))
+
+powerspectrumplot(fig[1,1], msn, ens_sol; state = &quot;G&quot;,
+                  method=welch_pgram, window=hanning,
+                  ylims=(1e-5, 10),
+                  alpha_label_position = (8.5, 2),
+                  beta_label_position = (22, 2),
+                  gamma_label_position = (60, 2),
+                  title = &quot;MSN (Baseline)&quot;)
+
+powerspectrumplot(fig[1,2], fsi, ens_sol; state = &quot;G&quot;,
+                  method=welch_pgram, window=hanning,
+                  ylims=(1e-5, 10),
+                  alpha_label_position = (8.5, 2),
+                  beta_label_position = (22, 2),
+                  gamma_label_position = (60, 2),
+                  title = &quot;FSI (Baseline)&quot;)
+
+powerspectrumplot(fig[1,3], gpe, ens_sol; state = &quot;G&quot;,
+                  method=welch_pgram, window=hanning,
+                  ylims=(1e-5, 10),
+                  alpha_label_position = (8.5, 2),
+                  beta_label_position = (22, 2),
+                  gamma_label_position = (60, 2),
+                  title = &quot;GPe (Baseline)&quot;)
+
+powerspectrumplot(fig[1,4], stn, ens_sol; state = &quot;G&quot;,
+                  method=welch_pgram, window=hanning,
+                  ylims=(1e-5, 10),
+                  alpha_label_position = (8.5, 2),
+                  beta_label_position = (22, 2),
+                  gamma_label_position = (60, 2),
+                  title = &quot;STN (Baseline)&quot;)
+
+fig</code></pre><img src="4711abaf.png" alt="Example block output"/><h2 id="Full-basal-ganglia-model-in-Parkinson&#39;s-condition"><a class="docs-heading-anchor" href="#Full-basal-ganglia-model-in-Parkinson&#39;s-condition">Full basal ganglia model in Parkinson&#39;s condition</a><a id="Full-basal-ganglia-model-in-Parkinson&#39;s-condition-1"></a><a class="docs-heading-anchor-permalink" href="#Full-basal-ganglia-model-in-Parkinson&#39;s-condition" title="Permalink"></a></h2><p>Finally, we&#39;ll adjust the model parameters to simulate Parkinson&#39;s disease conditions</p><p><img src="../../assets/basal_ganglia_parkinson.jpg" alt="Full basal ganglia model in Parkinsonian conditions"/></p><p>The key changes from baseline to Parkinsonian conditions are:</p><ol><li><p>For MSNs:</p><ul><li>Increased background excitation (<code>I_bg</code>) to 1.2519 μA·cm<span>$^{-2}$</span></li><li>Decreased maximal conductance for M-current (<code>G_M</code>) to 1.2 mS·cm<span>$^{-2}$</span></li></ul></li><li><p>For FSIs:</p><ul><li>Decreased background excitation (<code>I_bg</code>) to 4.511 μA·cm<span>$^{-2}$</span></li><li>Decreased maximal conductance of FSI-MSN projection (<code>ḡ_FSI_MSN</code>) by 20% to 0.48 mS·cm<span>$^{-2}$</span>, due to increased cholinergic tone</li><li>Decreased maximal conductance of FSI-FSI projection (<code>weight</code>) to 0.2 mS·cm<span>$^{-2}$</span></li><li>Decreased electrical conductance (<code>g_elec</code>) to 0.075</li></ul></li></ol><p>These changes reflect the loss of dopamine and increase in cholinergic tone characteristic of Parkinson&#39;s disease.</p><p>Create bloxs with Parkinsonian parameters</p><pre><code class="language-julia hljs">@named msn = Striatum_MSN_Adam(namespace=global_ns, N_inhib = N_MSN, I_bg = 1.2519*ones(N_MSN), G_M = 1.2)
+@named fsi = Striatum_FSI_Adam(namespace=global_ns, N_inhib = N_FSI, I_bg = 4.511*ones(N_FSI), weight = 0.2, g_weight = 0.075)
+
+ḡ_FSI_MSN = 0.48 ## decreased maximal conductance of FSI-MSN projection [mS/cm^-2]
+weight_FSI_MSN = ḡ_FSI_MSN / (N_FSI * density_FSI_MSN) ## normalized synaptic weight
+
+g = MetaDiGraph()
+add_edge!(g, fsi =&gt; msn, weight = weight_FSI_MSN, density = density_FSI_MSN)
+add_edge!(g, msn =&gt; gpe, weight = weight_MSN_GPe, density = density_MSN_GPe)
+add_edge!(g, gpe =&gt; stn, weight = weight_GPe_STN, density = density_GPe_STN)
+add_edge!(g, stn =&gt; fsi, weight = weight_STN_FSI, density = density_STN_FSI)
+
+@named sys = system_from_graph(g)
+
+prob = SDEProblem(sys, [], tspan, [])
+ens_prob = EnsembleProblem(prob)
+ens_sol = solve(ens_prob, RKMil(); dt=dt, saveat=dt, trajectories=3, abstol = 1e-2, reltol = 1e-2);</code></pre><p>Compute and compare power spectra for all neural populations in Parkinsonian condition against their counterparts in baseline conditions.</p><pre><code class="language-julia hljs">powerspectrumplot(fig[2,1], msn, ens_sol; state = &quot;G&quot;,
+                  method=welch_pgram, window=hanning,
+                  ylims=(1e-5, 10),
+                  alpha_label_position = (8.5, 2),
+                  beta_label_position = (22, 2),
+                  gamma_label_position = (60, 2),
+                  title = &quot;MSN (PD)&quot;)
+
+powerspectrumplot(fig[2,2], fsi, ens_sol; state = &quot;G&quot;,
+                  method=welch_pgram, window=hanning,
+                  ylims=(1e-5, 10),
+                  alpha_label_position = (8.5, 2),
+                  beta_label_position = (22, 2),
+                  gamma_label_position = (60, 2),
+                  title = &quot;FSI (PD)&quot;)
+
+powerspectrumplot(fig[2,3], gpe, ens_sol; state = &quot;G&quot;,
+                  method=welch_pgram, window=hanning,
+                  ylims=(1e-5, 10),
+                  alpha_start = 5,
+                  alpha_label_position = (8.5, 2),
+                  beta_label_position = (22, 2),
+                  gamma_label_position = (60, 2),
+                  title = &quot;GPe (PD)&quot;)
+
+powerspectrumplot(fig[2,4], stn, ens_sol; state = &quot;G&quot;,
+                  method=welch_pgram, window=hanning,
+                  ylims=(1e-5, 10),
+                  alpha_label_position = (8.5, 2),
+                  beta_label_position = (22, 2),
+                  gamma_label_position = (60, 2),
+                  title = &quot;STN (PD)&quot;)
+
+fig</code></pre><img src="e9266a22.png" alt="Example block output"/><p>We see the emergence of strong beta oscillations in the Parkinsonian condition compared to the baseline condition for all neural populations. This aligns with the findings of Adam et al. and reflects the pathological synchrony observed in Parkinson&#39;s disease.</p><h2 id="References"><a class="docs-heading-anchor" href="#References">References</a><a id="References-1"></a><a class="docs-heading-anchor-permalink" href="#References" title="Permalink"></a></h2><p><a href="https://doi.org/10.1073/pnas.2120808119">Adam, Elie M., et al. &quot;Deep brain stimulation in the subthalamic nucleus for Parkinson&#39;s disease can restore dynamics of striatal networks.&quot; Proceedings of the National Academy of Sciences 119.19 (2022): e2120808119.</a></p><hr/><p><em>This page was generated using <a href="https://github.com/fredrikekre/Literate.jl">Literate.jl</a>.</em></p></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../ping_network/">« Pyramidal-Interneuron Gamma network</a><a class="docs-footer-nextpage" href="../spectralDCM/">Spectral Dynamic Causal Modeling Tutorial »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.7.0 on <span class="colophon-date" title="Friday 11 October 2024 13:36">Friday 11 October 2024</span>. Using Julia version 1.11.0.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
