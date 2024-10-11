@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><title>Spectral Dynamic Causal Modeling Tutorial · Neuroblox</title><meta name="title" content="Spectral Dynamic Causal Modeling Tutorial · Neuroblox"/><meta property="og:title" content="Spectral Dynamic Causal Modeling Tutorial · Neuroblox"/><meta property="twitter:title" content="Spectral Dynamic Causal Modeling Tutorial · Neuroblox"/><meta name="description" content="Documentation for Neuroblox."/><meta property="og:description" content="Documentation for Neuroblox."/><meta property="twitter:description" content="Documentation for Neuroblox."/><script data-outdated-warner src="../../assets/warner.js"></script><link href="https://cdnjs.cloudflare.com/ajax/libs/lato-font/3.0.0/css/lato-font.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/juliamono/0.050/juliamono.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/fontawesome.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/solid.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/brands.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.8/katex.min.css" rel="stylesheet" type="text/css"/><script>documenterBaseURL="../.."</script><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" data-main="../../assets/documenter.js"></script><script src="../../search_index.js"></script><script src="../../siteinfo.js"></script><script src="../../../versions.js"></script><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/catppuccin-mocha.css" data-theme-name="catppuccin-mocha"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/catppuccin-macchiato.css" data-theme-name="catppuccin-macchiato"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/catppuccin-frappe.css" data-theme-name="catppuccin-frappe"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/catppuccin-latte.css" data-theme-name="catppuccin-latte"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/documenter-dark.css" data-theme-name="documenter-dark" data-theme-primary-dark/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/documenter-light.css" data-theme-name="documenter-light" data-theme-primary/><script src="../../assets/themeswap.js"></script><link href="../../assets/favicon.ico" rel="icon" type="image/x-icon"/></head><body><div id="documenter"><nav class="docs-sidebar"><a class="docs-logo" href="../../"><img src="../../assets/logo.png" alt="Neuroblox logo"/></a><div class="docs-package-name"><span class="docs-autofit"><a href="../../">Neuroblox</a></span></div><button class="docs-search-query input is-rounded is-small is-clickable my-2 mx-auto py-1 px-2" id="documenter-search-query">Search docs (Ctrl + /)</button><ul class="docs-menu"><li><a class="tocitem" href="../../">Neuroblox</a></li><li><a class="tocitem" href="../../getting_started/">Getting Started</a></li><li><span class="tocitem">Tutorials</span><ul><li><a class="tocitem" href="../resting_state/">Resting state simulation using neural mass models</a></li><li><a class="tocitem" href="../parkinsons/">Building a model of Parkinson&#39;s disease using Neural Mass models</a></li><li><a class="tocitem" href="../neural_assembly/">Tutorial on bottom-up approach to building a neural assembly</a></li><li><a class="tocitem" href="../ping_network/">Pyramidal-Interneuron Gamma network</a></li><li><a class="tocitem" href="../basal_ganglia/">Basal Ganglia Model and Parkinson&#39;s Disease Simulation</a></li><li class="is-active"><a class="tocitem" href>Spectral Dynamic Causal Modeling Tutorial</a><ul class="internal"><li class="toplevel"><a class="tocitem" href="#Introduction"><span>Introduction</span></a></li><li class="toplevel"><a class="tocitem" href="#Model-simulation"><span>Model simulation</span></a></li><li><a class="tocitem" href="#Define-the-model"><span>Define the model</span></a></li><li><a class="tocitem" href="#Run-the-simulation-and-plot-the-results"><span>Run the simulation and plot the results</span></a></li><li><a class="tocitem" href="#Estimate-and-plot-the-cross-spectral-densities"><span>Estimate and plot the cross-spectral densities</span></a></li><li class="toplevel"><a class="tocitem" href="#Model-Inference"><span>Model Inference</span></a></li><li><a class="tocitem" href="#Setup-spectral-DCM"><span>Setup spectral DCM</span></a></li><li class="toplevel"><a class="tocitem" href="#Plot-Results"><span>Plot Results</span></a></li><li><a class="tocitem" href="#References"><span>References</span></a></li></ul></li></ul></li><li><a class="tocitem" href="../../api/">API</a></li><li><a class="tocitem" href="../../release_notes/">Release Notes</a></li></ul><div class="docs-version-selector field has-addons"><div class="control"><span class="docs-label button is-static is-size-7">Version</span></div><div class="docs-selector control is-expanded"><div class="select is-fullwidth is-size-7"><select id="documenter-version-selector"></select></div></div></div></nav><div class="docs-main"><header class="docs-navbar"><a class="docs-sidebar-button docs-navbar-link fa-solid fa-bars is-hidden-desktop" id="documenter-sidebar-button" href="#"></a><nav class="breadcrumb"><ul class="is-hidden-mobile"><li><a class="is-disabled">Tutorials</a></li><li class="is-active"><a href>Spectral Dynamic Causal Modeling Tutorial</a></li></ul><ul class="is-hidden-tablet"><li class="is-active"><a href>Spectral Dynamic Causal Modeling Tutorial</a></li></ul></nav><div class="docs-right"><a class="docs-navbar-link" href="https://github.com/Neuroblox/Neuroblox.jl" title="View the repository on GitHub"><span class="docs-icon fa-brands"></span><span class="docs-label is-hidden-touch">GitHub</span></a><a class="docs-navbar-link" href="https://github.com/Neuroblox/Neuroblox.jl/blob/master/docs/src/tutorials/spectralDCM.jl" title="Edit source on GitHub"><span class="docs-icon fa-solid"></span></a><a class="docs-settings-button docs-navbar-link fa-solid fa-gear" id="documenter-settings-button" href="#" title="Settings"></a><a class="docs-article-toggle-button fa-solid fa-chevron-up" id="documenter-article-toggle-button" href="javascript:;" title="Collapse all docstrings"></a></div></header><article class="content" id="documenter-page"><h1 id="Spectral-Dynamic-Causal-Modeling-Tutorial"><a class="docs-heading-anchor" href="#Spectral-Dynamic-Causal-Modeling-Tutorial">Spectral Dynamic Causal Modeling Tutorial</a><a id="Spectral-Dynamic-Causal-Modeling-Tutorial-1"></a><a class="docs-heading-anchor-permalink" href="#Spectral-Dynamic-Causal-Modeling-Tutorial" title="Permalink"></a></h1><h1 id="Introduction"><a class="docs-heading-anchor" href="#Introduction">Introduction</a><a id="Introduction-1"></a><a class="docs-heading-anchor-permalink" href="#Introduction" title="Permalink"></a></h1><p>In this tutorial we will introduce how to perform a spectral Dynamic Causal Modeling analysis on simulated data [1,2]. To do so we roughly resemble the procedure in the <a href="https://www.fil.ion.ucl.ac.uk/spm/software/spm12/">SPM12</a> script <code>DEM_demo_induced_fMRI.m</code> in <a href="https://www.neuroblox.org/">Neuroblox</a>. This work was also presented in Hofmann et al.[2]</p><p>In this tutorial we will define a circuit of three linear neuronal mass models, all driven by an Ornstein-Uhlenbeck process. We will model fMRI data by a balloon model and BOLD signal on top. After simulation of this simple model we will use spectral Dynamic Causal Modeling to infer some of the model parameters from the simulation time series.</p><p><img src="../../assets/spectral_DCM_illustration.png" alt="Workflow illustration"/></p><p>A brief outline of the procedure we will pursue:</p><ul><li>define the graph, add blocks -&gt; section A, B and C in the figure</li><li>simulate the model -&gt; instead we could also use actual data, section D in figure</li><li>compute the cross spectral density</li><li>setup the DCM</li><li>estimate parameters</li><li>plot the results</li></ul><pre><code class="language-julia hljs">using Neuroblox
+using LinearAlgebra
+using StochasticDiffEq
+using DataFrames
+using OrderedCollections
+using CairoMakie
+using ModelingToolkit</code></pre><h1 id="Model-simulation"><a class="docs-heading-anchor" href="#Model-simulation">Model simulation</a><a id="Model-simulation-1"></a><a class="docs-heading-anchor-permalink" href="#Model-simulation" title="Permalink"></a></h1><h2 id="Define-the-model"><a class="docs-heading-anchor" href="#Define-the-model">Define the model</a><a id="Define-the-model-1"></a><a class="docs-heading-anchor-permalink" href="#Define-the-model" title="Permalink"></a></h2><p>We will define a model of 3 regions. This means first of all to define a graph. To this graph we will add three linear neuronal mass models which constitute the (hidden) neuronal dynamics. These constitute three nodes of the graph. Next we will also need some input that stimulates the activity, we use simple Ornstein-Uhlenbeck blocks to create stochastic inputs. One per region. We want to simulate fMRI signals thus we will need to also add a BalloonModel per region. Note that the Ornstein-Uhlenbeck block will feed into the linear neural mass which in turn will feed into the BalloonModel blox. This needs to be represented by the way we define the edges.</p><pre><code class="language-julia hljs">nr = 3             # number of regions
+g = MetaDiGraph()
+regions = [];   # list of neural mass blocks to then connect them to each other with an adjacency matrix `A_true`</code></pre><p>Now add the different blocks to each region and connect the blocks within each region:</p><pre><code class="language-julia hljs">for i = 1:nr
+    region = LinearNeuralMass(;name=Symbol(&quot;r$(i)₊lm&quot;))
+    push!(regions, region)          # store neural mass model for connection of regions
+
+    # add Ornstein-Uhlenbeck block as noisy input to the current region
+    input = OUBlox(;name=Symbol(&quot;r$(i)₊ou&quot;), σ=0.1)
+    add_edge!(g, input =&gt; region; :weight =&gt; 1/16)   # Note that 1/16 is taken from SPM12, this stabilizes the balloon model simulation. Alternatively the noise of the Ornstein-Uhlenbeck block or the weight of the edge connecting neuronal activity and balloon model could be reduced to guarantee numerical stability.
+
+    # simulate fMRI signal with BalloonModel which includes the BOLD signal on top of the balloon model dynamics
+    measurement = BalloonModel(;name=Symbol(&quot;r$(i)₊bm&quot;))
+    add_edge!(g, region =&gt; measurement; :weight =&gt; 1.0)
+end</code></pre><p>Next we define the between-region connectivity matrix and make sure that it is diagonally dominant to guarantee numerical stability (see Gershgorin theorem).</p><pre><code class="language-julia hljs">A_true = 0.1*randn(nr, nr)
+A_true -= diagm(map(a -&gt; sum(abs, a), eachrow(A_true)))    # ensure diagonal dominance of matrix
+for idx in CartesianIndices(A_true)
+    add_edge!(g, regions[idx[1]] =&gt; regions[idx[2]]; :weight =&gt; A_true[idx[1], idx[2]])
+end</code></pre><p>finally we compose the simulation model</p><pre><code class="language-julia hljs">@named simmodel = system_from_graph(g, split=false)</code></pre><p class="math-container">\[ \begin{align}
+\frac{\mathrm{d} r1_{+}ou_{+}x\left( t \right)}{\mathrm{d}t} &amp;= \frac{r1_{+}ou_+\mu - r1_{+}ou_{+}x\left( t \right)}{r1_{+}ou_+\tau} \\
+\frac{\mathrm{d} r1_{+}lm_{+}x\left( t \right)}{\mathrm{d}t} &amp;= w_{r1_{+}lm\_r1_{+}lm} r1_{+}lm_{+}x\left( t \right) + w_{r1_{+}ou\_r1_{+}lm} r1_{+}ou_{+}x\left( t \right) + w_{r2_{+}lm\_r1_{+}lm} r2_{+}lm_{+}x\left( t \right) + w_{r3_{+}lm\_r1_{+}lm} r3_{+}lm_{+}x\left( t \right) \\
+\frac{\mathrm{d} r1_{+}bm_{+}s\left( t \right)}{\mathrm{d}t} &amp;=  - 0.32 \left( -1 + e^{r1_{+}bm_{+}lnu\left( t \right)} \right) + w_{r1_{+}lm\_r1_{+}bm} r1_{+}lm_{+}x\left( t \right) - 0.64 r1_{+}bm_{+}s\left( t \right) e^{r1_{+}bm_{+}ln\kappa} \\
+\frac{\mathrm{d} r1_{+}bm_{+}lnu\left( t \right)}{\mathrm{d}t} &amp;= \frac{r1_{+}bm_{+}s\left( t \right)}{e^{r1_{+}bm_{+}lnu\left( t \right)}} \\
+\frac{\mathrm{d} r1_{+}bm_{+}ln\nu\left( t \right)}{\mathrm{d}t} &amp;= \frac{e^{r1_{+}bm_{+}lnu\left( t \right)} - \left( e^{r1_{+}bm_{+}ln\nu\left( t \right)} \right)^{3.125}}{2 e^{r1_{+}bm_{+}ln\tau} e^{r1_{+}bm_{+}ln\nu\left( t \right)}} \\
+\frac{\mathrm{d} r1_{+}bm_{+}lnq\left( t \right)}{\mathrm{d}t} &amp;= \frac{\frac{2.5 e^{r1_{+}bm_{+}lnu\left( t \right)} \left( 1 - 0.6^{\frac{1}{e^{r1_{+}bm_{+}lnu\left( t \right)}}} \right)}{e^{r1_{+}bm_{+}lnq\left( t \right)}} - \left( e^{r1_{+}bm_{+}ln\nu\left( t \right)} \right)^{2.125}}{2 e^{r1_{+}bm_{+}ln\tau}} \\
+\frac{\mathrm{d} r2_{+}ou_{+}x\left( t \right)}{\mathrm{d}t} &amp;= \frac{r2_{+}ou_+\mu - r2_{+}ou_{+}x\left( t \right)}{r2_{+}ou_+\tau} \\
+\frac{\mathrm{d} r2_{+}lm_{+}x\left( t \right)}{\mathrm{d}t} &amp;= w_{r1_{+}lm\_r2_{+}lm} r1_{+}lm_{+}x\left( t \right) + w_{r2_{+}lm\_r2_{+}lm} r2_{+}lm_{+}x\left( t \right) + w_{r2_{+}ou\_r2_{+}lm} r2_{+}ou_{+}x\left( t \right) + w_{r3_{+}lm\_r2_{+}lm} r3_{+}lm_{+}x\left( t \right) \\
+\frac{\mathrm{d} r2_{+}bm_{+}s\left( t \right)}{\mathrm{d}t} &amp;=  - 0.32 \left( -1 + e^{r2_{+}bm_{+}lnu\left( t \right)} \right) + w_{r2_{+}lm\_r2_{+}bm} r2_{+}lm_{+}x\left( t \right) - 0.64 r2_{+}bm_{+}s\left( t \right) e^{r2_{+}bm_{+}ln\kappa} \\
+\frac{\mathrm{d} r2_{+}bm_{+}lnu\left( t \right)}{\mathrm{d}t} &amp;= \frac{r2_{+}bm_{+}s\left( t \right)}{e^{r2_{+}bm_{+}lnu\left( t \right)}} \\
+\frac{\mathrm{d} r2_{+}bm_{+}ln\nu\left( t \right)}{\mathrm{d}t} &amp;= \frac{e^{r2_{+}bm_{+}lnu\left( t \right)} - \left( e^{r2_{+}bm_{+}ln\nu\left( t \right)} \right)^{3.125}}{2 e^{r2_{+}bm_{+}ln\nu\left( t \right)} e^{r2_{+}bm_{+}ln\tau}} \\
+\frac{\mathrm{d} r2_{+}bm_{+}lnq\left( t \right)}{\mathrm{d}t} &amp;= \frac{\frac{2.5 \left( 1 - 0.6^{\frac{1}{e^{r2_{+}bm_{+}lnu\left( t \right)}}} \right) e^{r2_{+}bm_{+}lnu\left( t \right)}}{e^{r2_{+}bm_{+}lnq\left( t \right)}} - \left( e^{r2_{+}bm_{+}ln\nu\left( t \right)} \right)^{2.125}}{2 e^{r2_{+}bm_{+}ln\tau}} \\
+\frac{\mathrm{d} r3_{+}ou_{+}x\left( t \right)}{\mathrm{d}t} &amp;= \frac{r3_{+}ou_+\mu - r3_{+}ou_{+}x\left( t \right)}{r3_{+}ou_+\tau} \\
+\frac{\mathrm{d} r3_{+}lm_{+}x\left( t \right)}{\mathrm{d}t} &amp;= w_{r1_{+}lm\_r3_{+}lm} r1_{+}lm_{+}x\left( t \right) + w_{r2_{+}lm\_r3_{+}lm} r2_{+}lm_{+}x\left( t \right) + w_{r3_{+}lm\_r3_{+}lm} r3_{+}lm_{+}x\left( t \right) + w_{r3_{+}ou\_r3_{+}lm} r3_{+}ou_{+}x\left( t \right) \\
+\frac{\mathrm{d} r3_{+}bm_{+}s\left( t \right)}{\mathrm{d}t} &amp;=  - 0.32 \left( -1 + e^{r3_{+}bm_{+}lnu\left( t \right)} \right) + w_{r3_{+}lm\_r3_{+}bm} r3_{+}lm_{+}x\left( t \right) - 0.64 e^{r3_{+}bm_{+}ln\kappa} r3_{+}bm_{+}s\left( t \right) \\
+\frac{\mathrm{d} r3_{+}bm_{+}lnu\left( t \right)}{\mathrm{d}t} &amp;= \frac{r3_{+}bm_{+}s\left( t \right)}{e^{r3_{+}bm_{+}lnu\left( t \right)}} \\
+\frac{\mathrm{d} r3_{+}bm_{+}ln\nu\left( t \right)}{\mathrm{d}t} &amp;= \frac{e^{r3_{+}bm_{+}lnu\left( t \right)} - \left( e^{r3_{+}bm_{+}ln\nu\left( t \right)} \right)^{3.125}}{2 e^{r3_{+}bm_{+}ln\nu\left( t \right)} e^{r3_{+}bm_{+}ln\tau}} \\
+\frac{\mathrm{d} r3_{+}bm_{+}lnq\left( t \right)}{\mathrm{d}t} &amp;= \frac{\frac{2.5 \left( 1 - 0.6^{\frac{1}{e^{r3_{+}bm_{+}lnu\left( t \right)}}} \right) e^{r3_{+}bm_{+}lnu\left( t \right)}}{e^{r3_{+}bm_{+}lnq\left( t \right)}} - \left( e^{r3_{+}bm_{+}ln\nu\left( t \right)} \right)^{2.125}}{2 e^{r3_{+}bm_{+}ln\tau}} \\
+0 &amp;=  - r1_{+}bm_{+}bold\left( t \right) + 4 \left( 3.7726 + \frac{ - 0.4 e^{r1_{+}bm_{+}ln\epsilon} e^{r1_{+}bm_{+}lnq\left( t \right)}}{e^{r1_{+}bm_{+}ln\nu\left( t \right)}} - 0.6 e^{r1_{+}bm_{+}ln\epsilon} - 2.7726 e^{r1_{+}bm_{+}lnq\left( t \right)} + \left( -1 + e^{r1_{+}bm_{+}ln\epsilon} \right) e^{r1_{+}bm_{+}ln\nu\left( t \right)} \right) \\
+0 &amp;=  - r2_{+}bm_{+}bold\left( t \right) + 4 \left( 3.7726 - 0.6 e^{r2_{+}bm_{+}ln\epsilon} - 2.7726 e^{r2_{+}bm_{+}lnq\left( t \right)} + \frac{ - 0.4 e^{r2_{+}bm_{+}ln\epsilon} e^{r2_{+}bm_{+}lnq\left( t \right)}}{e^{r2_{+}bm_{+}ln\nu\left( t \right)}} + \left( -1 + e^{r2_{+}bm_{+}ln\epsilon} \right) e^{r2_{+}bm_{+}ln\nu\left( t \right)} \right) \\
+0 &amp;=  - r3_{+}bm_{+}bold\left( t \right) + 4 \left( 3.7726 - 0.6 e^{r3_{+}bm_{+}ln\epsilon} - 2.7726 e^{r3_{+}bm_{+}lnq\left( t \right)} + \frac{ - 0.4 e^{r3_{+}bm_{+}ln\epsilon} e^{r3_{+}bm_{+}lnq\left( t \right)}}{e^{r3_{+}bm_{+}ln\nu\left( t \right)}} + e^{r3_{+}bm_{+}ln\nu\left( t \right)} \left( -1 + e^{r3_{+}bm_{+}ln\epsilon} \right) \right)
+\end{align}
+ \]</p><h2 id="Run-the-simulation-and-plot-the-results"><a class="docs-heading-anchor" href="#Run-the-simulation-and-plot-the-results">Run the simulation and plot the results</a><a id="Run-the-simulation-and-plot-the-results-1"></a><a class="docs-heading-anchor-permalink" href="#Run-the-simulation-and-plot-the-results" title="Permalink"></a></h2><p>setup simulation of the model, time in seconds</p><pre><code class="language-julia hljs">tspan = (0.0, 612.0)
+prob = SDEProblem(simmodel, [], tspan)
+dt = 2.0   # two seconds as measurement interval for fMRI
+sol = solve(prob, ImplicitRKMil(), saveat=dt);</code></pre><p>plot bold signal time series</p><pre><code class="language-julia hljs">idx_m = get_idx_tagged_vars(simmodel, &quot;measurement&quot;)    # get index of bold signal
+f = Figure()
+ax = Axis(f[1, 1],
+    title = &quot;fMRI time series&quot;,
+    xlabel = &quot;Time [s]&quot;,
+    ylabel = &quot;BOLD&quot;,
+)
+lines!(ax, sol, idxs=idx_m)
+f</code></pre><img src="373b121a.png" alt="Example block output"/><p>We note that the initial spike is not meaningful and a result of the equilibration of the stochastic process thus we remove it.</p><pre><code class="language-julia hljs">dfsol = DataFrame(sol[ceil(Int, 101/dt):end]);</code></pre><h2 id="Estimate-and-plot-the-cross-spectral-densities"><a class="docs-heading-anchor" href="#Estimate-and-plot-the-cross-spectral-densities">Estimate and plot the cross-spectral densities</a><a id="Estimate-and-plot-the-cross-spectral-densities-1"></a><a class="docs-heading-anchor-permalink" href="#Estimate-and-plot-the-cross-spectral-densities" title="Permalink"></a></h2><pre><code class="language-julia hljs">nameswitht = [n * &quot;(t)&quot; for n in names(dfsol)]  # this will hopefully soon become obsolete once https://github.com/SciML/SciMLBase.jl/issues/798 is fixed
+rename!(dfsol, nameswitht)
+data = Matrix(dfsol[:, idx_m]);</code></pre><p>We compute the cross-spectral density by fitting a linear model of order <code>p</code> and then compute the csd analytically from the parameters of the multivariate autoregressive model</p><pre><code class="language-julia hljs">p = 8
+mar = mar_ml(data, p)   # maximum likelihood estimation of the MAR coefficients and noise covariance matrix
+ns = size(data, 1)
+freq = range(min(128, ns*dt)^-1, max(8, 2*dt)^-1, 32)
+csd = mar2csd(mar, freq, dt^-1);</code></pre><p>Now plot the cross-spectrum:</p><pre><code class="language-julia hljs">fig = Figure(size=(1200, 800))
+grid = fig[1, 1] = GridLayout()
+for i = 1:nr
+    for j = 1:nr
+        ax = Axis(grid[i, j])
+        lines!(ax, freq, real.(csd[:, i, j]))
+    end
+end
+fig</code></pre><img src="df4b5775.png" alt="Example block output"/><h1 id="Model-Inference"><a class="docs-heading-anchor" href="#Model-Inference">Model Inference</a><a id="Model-Inference-1"></a><a class="docs-heading-anchor-permalink" href="#Model-Inference" title="Permalink"></a></h1><p>We will now assemble a new model that is used for fitting the previous simulations. This procedure is similar to before with the difference that we will define global parameters and use tags such as [tunable=false/true] to define which parameters we will want to estimate. Note that parameters are tunable by default.</p><pre><code class="language-julia hljs">g = MetaDiGraph()
+regions = [];   # list of neural mass blocks to then connect them to each other with an adjacency matrix `A`</code></pre><p>The following parameters are shared accross regions, which is why we define them here.</p><pre><code class="language-julia hljs">@parameters lnκ=0.0 [tunable=false] lnϵ=0.0 [tunable=false] lnτ=0.0 [tunable=false]   # lnκ: decay parameter for hemodynamics; lnϵ: ratio of intra- to extra-vascular components, lnτ: transit time scale
+@parameters C=1/16 [tunable=false]   # note that C=1/16 is taken from SPM12 and stabilizes the balloon model simulation. See also comment above.
+
+for i = 1:nr
+    region = LinearNeuralMass(;name=Symbol(&quot;r$(i)₊lm&quot;))
+    push!(regions, region)
+    input = ExternalInput(;name=Symbol(&quot;r$(i)₊ei&quot;))
+    add_edge!(g, input =&gt; region; :weight =&gt; C)
+
+    # we assume fMRI signal and model them with a BalloonModel
+    measurement = BalloonModel(;name=Symbol(&quot;r$(i)₊bm&quot;), lnτ=lnτ, lnκ=lnκ, lnϵ=lnϵ)
+    add_edge!(g, region =&gt; measurement; :weight =&gt; 1.0)
+end
+
+A_prior = 0.01*randn(nr, nr)
+A_prior -= diagm(diag(A_prior))    # ensure diagonal dominance of matrix</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">3×3 Matrix{Float64}:
+  0.0         -0.0135428   0.0101309
+  0.00237516   0.0         0.0161712
+ -0.0161905    0.00246018  0.0</code></pre><p>Since we want to optimize these weights we turn them into symbolic parameters: Add the symbolic weights to the edges and connect reegions.</p><pre><code class="language-julia hljs">@parameters A[1:nr^2] = vec(A_prior) [tunable = true]
+for (i, idx) in enumerate(CartesianIndices(A_prior))
+    if idx[1] == idx[2]
+        add_edge!(g, regions[idx[1]] =&gt; regions[idx[2]]; :weight =&gt; -exp(A[i])/2)  # -exp(A[i])/2: treatement of diagonal elements in SPM12 to make diagonal dominance (see Gershgorin Theorem) more likely but it is not guaranteed
+    else
+        add_edge!(g, regions[idx[2]] =&gt; regions[idx[1]]; :weight =&gt; A[i])
+    end
+end
+
+@named fitmodel = system_from_graph(g, split=false)</code></pre><p class="math-container">\[ \begin{align}
+\frac{\mathrm{d} r1_{+}lm_{+}x\left( t \right)}{\mathrm{d}t} &amp;= r1_{+}lm_{+}jcn\left( t \right) \\
+\frac{\mathrm{d} r1_{+}bm_{+}s\left( t \right)}{\mathrm{d}t} &amp;= r1_{+}bm_{+}jcn\left( t \right) - 0.32 \left( -1 + e^{r1_{+}bm_{+}lnu\left( t \right)} \right) - 0.64 e^{ln\kappa} r1_{+}bm_{+}s\left( t \right) \\
+\frac{\mathrm{d} r1_{+}bm_{+}lnu\left( t \right)}{\mathrm{d}t} &amp;= \frac{r1_{+}bm_{+}s\left( t \right)}{e^{r1_{+}bm_{+}lnu\left( t \right)}} \\
+\frac{\mathrm{d} r1_{+}bm_{+}ln\nu\left( t \right)}{\mathrm{d}t} &amp;= \frac{e^{r1_{+}bm_{+}lnu\left( t \right)} - \left( e^{r1_{+}bm_{+}ln\nu\left( t \right)} \right)^{3.125}}{2 e^{ln\tau} e^{r1_{+}bm_{+}ln\nu\left( t \right)}} \\
+\frac{\mathrm{d} r1_{+}bm_{+}lnq\left( t \right)}{\mathrm{d}t} &amp;= \frac{\frac{2.5 e^{r1_{+}bm_{+}lnu\left( t \right)} \left( 1 - 0.6^{\frac{1}{e^{r1_{+}bm_{+}lnu\left( t \right)}}} \right)}{e^{r1_{+}bm_{+}lnq\left( t \right)}} - \left( e^{r1_{+}bm_{+}ln\nu\left( t \right)} \right)^{2.125}}{2 e^{ln\tau}} \\
+\frac{\mathrm{d} r2_{+}lm_{+}x\left( t \right)}{\mathrm{d}t} &amp;= r2_{+}lm_{+}jcn\left( t \right) \\
+\frac{\mathrm{d} r2_{+}bm_{+}s\left( t \right)}{\mathrm{d}t} &amp;=  - 0.32 \left( -1 + e^{r2_{+}bm_{+}lnu\left( t \right)} \right) + r2_{+}bm_{+}jcn\left( t \right) - 0.64 e^{ln\kappa} r2_{+}bm_{+}s\left( t \right) \\
+\frac{\mathrm{d} r2_{+}bm_{+}lnu\left( t \right)}{\mathrm{d}t} &amp;= \frac{r2_{+}bm_{+}s\left( t \right)}{e^{r2_{+}bm_{+}lnu\left( t \right)}} \\
+\frac{\mathrm{d} r2_{+}bm_{+}ln\nu\left( t \right)}{\mathrm{d}t} &amp;= \frac{e^{r2_{+}bm_{+}lnu\left( t \right)} - \left( e^{r2_{+}bm_{+}ln\nu\left( t \right)} \right)^{3.125}}{2 e^{ln\tau} e^{r2_{+}bm_{+}ln\nu\left( t \right)}} \\
+\frac{\mathrm{d} r2_{+}bm_{+}lnq\left( t \right)}{\mathrm{d}t} &amp;= \frac{\frac{2.5 \left( 1 - 0.6^{\frac{1}{e^{r2_{+}bm_{+}lnu\left( t \right)}}} \right) e^{r2_{+}bm_{+}lnu\left( t \right)}}{e^{r2_{+}bm_{+}lnq\left( t \right)}} - \left( e^{r2_{+}bm_{+}ln\nu\left( t \right)} \right)^{2.125}}{2 e^{ln\tau}} \\
+\frac{\mathrm{d} r3_{+}lm_{+}x\left( t \right)}{\mathrm{d}t} &amp;= r3_{+}lm_{+}jcn\left( t \right) \\
+\frac{\mathrm{d} r3_{+}bm_{+}s\left( t \right)}{\mathrm{d}t} &amp;=  - 0.32 \left( -1 + e^{r3_{+}bm_{+}lnu\left( t \right)} \right) + r3_{+}bm_{+}jcn\left( t \right) - 0.64 e^{ln\kappa} r3_{+}bm_{+}s\left( t \right) \\
+\frac{\mathrm{d} r3_{+}bm_{+}lnu\left( t \right)}{\mathrm{d}t} &amp;= \frac{r3_{+}bm_{+}s\left( t \right)}{e^{r3_{+}bm_{+}lnu\left( t \right)}} \\
+\frac{\mathrm{d} r3_{+}bm_{+}ln\nu\left( t \right)}{\mathrm{d}t} &amp;= \frac{e^{r3_{+}bm_{+}lnu\left( t \right)} - \left( e^{r3_{+}bm_{+}ln\nu\left( t \right)} \right)^{3.125}}{2 e^{ln\tau} e^{r3_{+}bm_{+}ln\nu\left( t \right)}} \\
+\frac{\mathrm{d} r3_{+}bm_{+}lnq\left( t \right)}{\mathrm{d}t} &amp;= \frac{\frac{2.5 \left( 1 - 0.6^{\frac{1}{e^{r3_{+}bm_{+}lnu\left( t \right)}}} \right) e^{r3_{+}bm_{+}lnu\left( t \right)}}{e^{r3_{+}bm_{+}lnq\left( t \right)}} - \left( e^{r3_{+}bm_{+}ln\nu\left( t \right)} \right)^{2.125}}{2 e^{ln\tau}} \\
+0 &amp;= 1 - r1_{+}ei_{+}u\left( t \right) \\
+0 &amp;=  - r1_{+}bm_{+}bold\left( t \right) + 4 \left( 3.7726 + \frac{ - 0.4 e^{ln\epsilon} e^{r1_{+}bm_{+}lnq\left( t \right)}}{e^{r1_{+}bm_{+}ln\nu\left( t \right)}} - 0.6 e^{ln\epsilon} - 2.7726 e^{r1_{+}bm_{+}lnq\left( t \right)} + \left( -1 + e^{ln\epsilon} \right) e^{r1_{+}bm_{+}ln\nu\left( t \right)} \right) \\
+0 &amp;= 1 - r2_{+}ei_{+}u\left( t \right) \\
+0 &amp;=  - r2_{+}bm_{+}bold\left( t \right) + 4 \left( 3.7726 + \frac{ - 0.4 e^{r2_{+}bm_{+}lnq\left( t \right)} e^{ln\epsilon}}{e^{r2_{+}bm_{+}ln\nu\left( t \right)}} - 2.7726 e^{r2_{+}bm_{+}lnq\left( t \right)} - 0.6 e^{ln\epsilon} + e^{r2_{+}bm_{+}ln\nu\left( t \right)} \left( -1 + e^{ln\epsilon} \right) \right) \\
+0 &amp;= 1 - r3_{+}ei_{+}u\left( t \right) \\
+0 &amp;=  - r3_{+}bm_{+}bold\left( t \right) + 4 \left( 3.7726 - 2.7726 e^{r3_{+}bm_{+}lnq\left( t \right)} - 0.6 e^{ln\epsilon} + \frac{ - 0.4 e^{r3_{+}bm_{+}lnq\left( t \right)} e^{ln\epsilon}}{e^{r3_{+}bm_{+}ln\nu\left( t \right)}} + e^{r3_{+}bm_{+}ln\nu\left( t \right)} \left( -1 + e^{ln\epsilon} \right) \right)
+\end{align}
+ \]</p><h2 id="Setup-spectral-DCM"><a class="docs-heading-anchor" href="#Setup-spectral-DCM">Setup spectral DCM</a><a id="Setup-spectral-DCM-1"></a><a class="docs-heading-anchor-permalink" href="#Setup-spectral-DCM" title="Permalink"></a></h2><pre><code class="language-julia hljs">max_iter = 128;            # maximum number of iterations
+# attribute initial conditions to states
+sts, _ = get_dynamic_states(fitmodel);</code></pre><p>the following step is needed if the model&#39;s Jacobian would give degenerate eigenvalues if expanded around 0 (which is the default expansion)</p><pre><code class="language-julia hljs">perturbedfp = Dict(sts .=&gt; abs.(0.001*rand(length(sts))))     # slight noise to avoid issues with Automatic Differentiation. TODO: find different solution, this is hacky.</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">Dict{SymbolicUtils.BasicSymbolic{Real}, Float64} with 15 entries:
+  r3₊lm₊x(t)   =&gt; 0.000320354
+  r3₊bm₊lnq(t) =&gt; 0.000296555
+  r2₊bm₊lnq(t) =&gt; 8.23972e-5
+  r1₊bm₊lnν(t) =&gt; 0.000982133
+  r2₊bm₊s(t)   =&gt; 0.000313262
+  r3₊bm₊lnu(t) =&gt; 0.00044396
+  r2₊bm₊lnν(t) =&gt; 0.000776471
+  r1₊bm₊s(t)   =&gt; 0.000368616
+  r3₊bm₊lnν(t) =&gt; 9.85969e-5
+  r1₊lm₊x(t)   =&gt; 0.000691248
+  r1₊bm₊lnu(t) =&gt; 0.000339698
+  r3₊bm₊s(t)   =&gt; 0.000818032
+  r2₊lm₊x(t)   =&gt; 9.50033e-5
+  r2₊bm₊lnu(t) =&gt; 0.000202519
+  r1₊bm₊lnq(t) =&gt; 0.000377449</code></pre><p>We can use the default prior function to use standardized prior values as given in SPM12.</p><pre><code class="language-julia hljs">pmean, pcovariance, indices = defaultprior(fitmodel, nr)
+
+priors = (μθ_pr = pmean,
+          Σθ_pr = pcovariance
+         );</code></pre><p>Setup hyper parameter prior as well:</p><pre><code class="language-julia hljs">hyperpriors = Dict(:Πλ_pr =&gt; 128.0*ones(1, 1),   # prior metaparameter precision, needs to be a matrix
+                   :μλ_pr =&gt; [8.0]               # prior metaparameter mean, needs to be a vector
+                  );</code></pre><p>To compute the cross spectral densities we need to provide the sampling interval of the time series, the frequency axis and the order of the multivariate autoregressive model:</p><pre><code class="language-julia hljs">csdsetup = (mar_order = p, freq = freq, dt = dt);
+
+_, s_bold = get_eqidx_tagged_vars(fitmodel, &quot;measurement&quot;);    # get bold signal variables</code></pre><p>Prepare the DCM:</p><pre><code class="language-julia hljs">(state, setup) = setup_sDCM(dfsol[:, String.(Symbol.(s_bold))], fitmodel, perturbedfp, csdsetup, priors, hyperpriors, indices, pmean, &quot;fMRI&quot;);
+
+# HACK: on machines with very small amounts of RAM, Julia can run out of stack space while compiling the code called in this loop
+# this should be rewritten to abuse the compiler less, but for now, an easy solution is just to run it with more allocated stack space.
+with_stack(f, n) = fetch(schedule(Task(f, n)));</code></pre><p>We are ready to run the optimization procedure! :)</p><pre><code class="language-julia hljs">with_stack(5_000_000) do  # 5MB of stack space
+    for iter in 1:max_iter
+        state.iter = iter
+        run_sDCM_iteration!(state, setup)
+        print(&quot;iteration: &quot;, iter, &quot; - F:&quot;, state.F[end] - state.F[2], &quot; - dF predicted:&quot;, state.dF[end], &quot;\n&quot;)
+        if iter &gt;= 4
+            criterion = state.dF[end-3:end] .&lt; setup.tolerance
+            if all(criterion)
+                print(&quot;convergence\n&quot;)
+                break
+            end
+        end
+    end
+end</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">iteration: 1 - F:0.0 - dF predicted:46.314660080761
+iteration: 2 - F:52.59303117054492 - dF predicted:105.69252313140873
+iteration: 3 - F:137.23916233341288 - dF predicted:102.38827975750348
+iteration: 4 - F:203.882881219439 - dF predicted:65.64015911968778
+iteration: 5 - F:229.75633170424817 - dF predicted:103.87733058748931
+iteration: 6 - F:307.56629740572316 - dF predicted:119.230475843334
+iteration: 7 - F:374.00592310791126 - dF predicted:59.54472359933822
+iteration: 8 - F:400.9496637148359 - dF predicted:28.959236672203552
+iteration: 9 - F:412.5928594385929 - dF predicted:14.986539993082697
+iteration: 10 - F:424.9085519125198 - dF predicted:12.261180328128589
+iteration: 11 - F:430.4893380600987 - dF predicted:10.898299318584714
+iteration: 12 - F:438.5634903112508 - dF predicted:7.382012534857363
+iteration: 13 - F:438.5634903112508 - dF predicted:0.045027326010157964
+iteration: 14 - F:438.58709564248113 - dF predicted:0.04956894340689884
+iteration: 15 - F:438.6271630051192 - dF predicted:0.07197544929761497
+iteration: 16 - F:438.69275598372747 - dF predicted:0.11317656700688038
+iteration: 17 - F:438.79987379990484 - dF predicted:0.1816909813109755
+iteration: 18 - F:438.9714332106514 - dF predicted:0.29031266725772986
+iteration: 19 - F:439.24217889154943 - dF predicted:0.45656550906592086
+iteration: 20 - F:439.47037761222805 - dF predicted:0.6995448820998417
+iteration: 21 - F:439.62763921024043 - dF predicted:1.0271790149639954
+iteration: 22 - F:440.2020791161044 - dF predicted:1.4029907118277367
+iteration: 23 - F:440.3001109485416 - dF predicted:1.723807961065628
+iteration: 24 - F:441.5962931629433 - dF predicted:1.7778430987937002
+iteration: 25 - F:441.5962931629433 - dF predicted:0.011169719763209445
+iteration: 26 - F:441.60046163460436 - dF predicted:0.014909851262424247
+iteration: 27 - F:441.6125182427677 - dF predicted:0.023692652609255654
+iteration: 28 - F:441.633311380813 - dF predicted:0.038242149593463746
+convergence</code></pre><h1 id="Plot-Results"><a class="docs-heading-anchor" href="#Plot-Results">Plot Results</a><a id="Plot-Results-1"></a><a class="docs-heading-anchor-permalink" href="#Plot-Results" title="Permalink"></a></h1><p>Plot the free energy evolution over optimization iterations:</p><pre><code class="language-julia hljs">freeenergy(state)</code></pre><img src="69944300.png" alt="Example block output"/><p>Plot the estimated posterior of the effective connectivity and compare that to the true parameter values. Bar hight are the posterior mean and error bars are the standard deviation of the posterior.</p><pre><code class="language-julia hljs">ecbarplot(state, setup, A_true)</code></pre><img src="344e8227.png" alt="Example block output"/><h2 id="References"><a class="docs-heading-anchor" href="#References">References</a><a id="References-1"></a><a class="docs-heading-anchor-permalink" href="#References" title="Permalink"></a></h2><p>[1] <a href="https://doi.org/10.1162/netn_a_00348">Novelli, Leonardo, Karl Friston, and Adeel Razi. “Spectral Dynamic Causal Modeling: A Didactic Introduction and Its Relationship with Functional Connectivity.” Network Neuroscience 8, no. 1 (April 1, 2024): 178–202.</a> <br/>[2] <a href="https://doi.org/10.1101/2023.10.27.564407">Hofmann, David, Anthony G. Chesebro, Chris Rackauckas, Lilianne R. Mujica-Parodi, Karl J. Friston, Alan Edelman, and Helmut H. Strey. “Leveraging Julia’s Automated Differentiation and Symbolic Computation to Increase Spectral DCM Flexibility and Speed.” bioRxiv: The Preprint Server for Biology, 2023.</a></p><hr/><p><em>This page was generated using <a href="https://github.com/fredrikekre/Literate.jl">Literate.jl</a>.</em></p></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../basal_ganglia/">« Basal Ganglia Model and Parkinson&#39;s Disease Simulation</a><a class="docs-footer-nextpage" href="../../api/">API »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.7.0 on <span class="colophon-date" title="Friday 11 October 2024 15:52">Friday 11 October 2024</span>. Using Julia version 1.11.0.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
