@@ -525,9 +525,9 @@ version = "1.15.1"
 
 [[deps.DifferentiationInterface]]
 deps = ["ADTypes", "LinearAlgebra"]
-git-tree-sha1 = "c7fcd1d8b86dfd883eebd7a7ca31093e92d73ba2"
+git-tree-sha1 = "16611777adf4a818f18c33210895947814180964"
 uuid = "a0c0ee7d-e4b9-4e03-894e-1c5f64a51d63"
-version = "0.6.15"
+version = "0.6.16"
 
     [deps.DifferentiationInterface.extensions]
     DifferentiationInterfaceChainRulesCoreExt = "ChainRulesCore"
