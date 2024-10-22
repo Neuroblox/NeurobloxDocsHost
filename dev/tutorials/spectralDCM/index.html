@@ -87,7 +87,11 @@ A_prior = 0.01*randn(nr, nr)
 A_prior -= diagm(diag(A_prior))    # ensure diagonal dominance of matrix</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">3×3 Matrix{Float64}:
   0.0         -0.0135428   0.0101309
   0.00237516   0.0         0.0161712
- -0.0161905    0.00246018  0.0</code></pre><p>Since we want to optimize these weights we turn them into symbolic parameters: Add the symbolic weights to the edges and connect reegions.</p><pre><code class="language-julia hljs">@parameters A[1:nr^2] = vec(A_prior) [tunable = true]
+ -0.0161905    0.00246018  0.0</code></pre><p>Since we want to optimize these weights we turn them into symbolic parameters: Add the symbolic weights to the edges and connect regions.</p><pre><code class="language-julia hljs">A = []
+for (i, a) in enumerate(vec(A_prior))
+    symb = Symbol(&quot;A$(i)&quot;)
+    push!(A, only(@parameters $symb = a))
+end</code></pre><p>With the function <code>untune!</code>` we can list indices of parameters whose tunable flag should be set to false. For instance the first element in the second row:</p><pre><code class="language-julia hljs">untune!(A, [4])
 for (i, idx) in enumerate(CartesianIndices(A_prior))
     if idx[1] == idx[2]
         add_edge!(g, regions[idx[1]] =&gt; regions[idx[2]]; :weight =&gt; -exp(A[i])/2)  # -exp(A[i])/2: treatement of diagonal elements in SPM12 to make diagonal dominance (see Gershgorin Theorem) more likely but it is not guaranteed
@@ -161,32 +165,23 @@ with_stack(f, n) = fetch(schedule(Task(f, n)));</code></pre><p>We are ready to r
             end
         end
     end
-end</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">iteration: 1 - F:0.0 - dF predicted:46.31465366162848
-iteration: 2 - F:52.59302537815347 - dF predicted:105.69252073672274
-iteration: 3 - F:137.2392093663974 - dF predicted:102.38825167115803
-iteration: 4 - F:203.88270515942872 - dF predicted:65.64021302930581
-iteration: 5 - F:229.75614330821372 - dF predicted:103.87744947523308
-iteration: 6 - F:307.56620050250194 - dF predicted:119.23056170061601
-iteration: 7 - F:374.00615775266215 - dF predicted:59.54464138570962
-iteration: 8 - F:400.9498776246752 - dF predicted:28.95920896755706
-iteration: 9 - F:412.59249358004547 - dF predicted:14.986578612451922
-iteration: 10 - F:424.90821893465 - dF predicted:12.26121382553011
-iteration: 11 - F:430.4900625822456 - dF predicted:10.898277385655426
-iteration: 12 - F:438.5622359527954 - dF predicted:7.382083850664879
-iteration: 13 - F:438.5622359527954 - dF predicted:0.04502754868087836
-iteration: 14 - F:438.5858416257639 - dF predicted:0.04956942146232343
-iteration: 15 - F:438.6259095046587 - dF predicted:0.07197619759910796
-iteration: 16 - F:438.6915032678937 - dF predicted:0.1131777530152187
-iteration: 17 - F:438.7986223051737 - dF predicted:0.18169286404818122
-iteration: 18 - F:438.9701836304064 - dF predicted:0.290315640206022
-iteration: 19 - F:439.2409323107048 - dF predicted:0.456570117378177
-iteration: 20 - F:439.47290867308175 - dF predicted:0.6995347470351336
-iteration: 21 - F:439.62286694897057 - dF predicted:1.027213816721019
-iteration: 22 - F:440.21139495461955 - dF predicted:1.4029029454603772
-iteration: 23 - F:440.28222890358643 - dF predicted:1.7240426213855016
-iteration: 24 - F:441.63051731692474 - dF predicted:1.7773247423161445
-iteration: 25 - F:441.63051731692474 - dF predicted:0.011167734737706353
-iteration: 26 - F:441.63468178523226 - dF predicted:0.014905605080111857
-iteration: 27 - F:441.6467330703722 - dF predicted:0.02368565634811271
-iteration: 28 - F:441.66751795270807 - dF predicted:0.03823073938097775
-convergence</code></pre><h1 id="Plot-Results"><a class="docs-heading-anchor" href="#Plot-Results">Plot Results</a><a id="Plot-Results-1"></a><a class="docs-heading-anchor-permalink" href="#Plot-Results" title="Permalink"></a></h1><p>Plot the free energy evolution over optimization iterations:</p><pre><code class="language-julia hljs">freeenergy(state)</code></pre><img src="472eab26.png" alt="Example block output"/><p>Plot the estimated posterior of the effective connectivity and compare that to the true parameter values. Bar hight are the posterior mean and error bars are the standard deviation of the posterior.</p><pre><code class="language-julia hljs">ecbarplot(state, setup, A_true)</code></pre><img src="a09da4c1.png" alt="Example block output"/><h2 id="References"><a class="docs-heading-anchor" href="#References">References</a><a id="References-1"></a><a class="docs-heading-anchor-permalink" href="#References" title="Permalink"></a></h2><p>[1] <a href="https://doi.org/10.1162/netn_a_00348">Novelli, Leonardo, Karl Friston, and Adeel Razi. “Spectral Dynamic Causal Modeling: A Didactic Introduction and Its Relationship with Functional Connectivity.” Network Neuroscience 8, no. 1 (April 1, 2024): 178–202.</a> <br/>[2] <a href="https://doi.org/10.1101/2023.10.27.564407">Hofmann, David, Anthony G. Chesebro, Chris Rackauckas, Lilianne R. Mujica-Parodi, Karl J. Friston, Alan Edelman, and Helmut H. Strey. “Leveraging Julia’s Automated Differentiation and Symbolic Computation to Increase Spectral DCM Flexibility and Speed.” bioRxiv: The Preprint Server for Biology, 2023.</a></p><hr/><p><em>This page was generated using <a href="https://github.com/fredrikekre/Literate.jl">Literate.jl</a>.</em></p></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../neural_assembly/">« Bottom-up construction of a neural assembly</a><a class="docs-footer-nextpage" href="../../api/">API »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.7.0 on <span class="colophon-date" title="Tuesday 22 October 2024 16:18">Tuesday 22 October 2024</span>. Using Julia version 1.11.1.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
+end</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">iteration: 1 - F:0.0 - dF predicted:41.496894500770026
+iteration: 2 - F:45.672616840494356 - dF predicted:87.08472597815467
+iteration: 3 - F:101.75852250333423 - dF predicted:142.71608306409524
+iteration: 4 - F:187.39147802545835 - dF predicted:74.50480537534438
+iteration: 5 - F:203.07026424299465 - dF predicted:75.94903403858223
+iteration: 6 - F:277.3887820432667 - dF predicted:85.4431028865897
+iteration: 7 - F:328.4914526587545 - dF predicted:87.55617662163354
+iteration: 8 - F:374.59485229824554 - dF predicted:44.33188595333116
+iteration: 9 - F:388.3048480140246 - dF predicted:24.943267149775245
+iteration: 10 - F:407.16740484496404 - dF predicted:13.820248656240414
+iteration: 11 - F:411.64043132036295 - dF predicted:10.402039313497038
+iteration: 12 - F:419.75896071550426 - dF predicted:6.395905306349707
+iteration: 13 - F:421.3834967525428 - dF predicted:2.727103144030361
+iteration: 14 - F:422.9741864175478 - dF predicted:0.6776407918733588
+iteration: 15 - F:423.2199151123216 - dF predicted:0.10019566692171461
+iteration: 16 - F:423.2199151123216 - dF predicted:0.0014394362032528582
+iteration: 17 - F:423.2199151123216 - dF predicted:0.0002928544499066327
+iteration: 18 - F:423.2199151123216 - dF predicted:4.345028180977916e-5
+iteration: 19 - F:423.2199151123216 - dF predicted:5.959555760614576e-6
+convergence</code></pre><h1 id="Plot-Results"><a class="docs-heading-anchor" href="#Plot-Results">Plot Results</a><a id="Plot-Results-1"></a><a class="docs-heading-anchor-permalink" href="#Plot-Results" title="Permalink"></a></h1><p>Plot the free energy evolution over optimization iterations:</p><pre><code class="language-julia hljs">freeenergy(state)</code></pre><img src="e676dcd8.png" alt="Example block output"/><p>Plot the estimated posterior of the effective connectivity and compare that to the true parameter values. Bar hight are the posterior mean and error bars are the standard deviation of the posterior.</p><pre><code class="language-julia hljs">ecbarplot(state, setup, A_true)</code></pre><img src="d479a4e4.png" alt="Example block output"/><h2 id="References"><a class="docs-heading-anchor" href="#References">References</a><a id="References-1"></a><a class="docs-heading-anchor-permalink" href="#References" title="Permalink"></a></h2><p>[1] <a href="https://doi.org/10.1162/netn_a_00348">Novelli, Leonardo, Karl Friston, and Adeel Razi. “Spectral Dynamic Causal Modeling: A Didactic Introduction and Its Relationship with Functional Connectivity.” Network Neuroscience 8, no. 1 (April 1, 2024): 178–202.</a> <br/>[2] <a href="https://doi.org/10.1101/2023.10.27.564407">Hofmann, David, Anthony G. Chesebro, Chris Rackauckas, Lilianne R. Mujica-Parodi, Karl J. Friston, Alan Edelman, and Helmut H. Strey. “Leveraging Julia’s Automated Differentiation and Symbolic Computation to Increase Spectral DCM Flexibility and Speed.” bioRxiv: The Preprint Server for Biology, 2023.</a></p><hr/><p><em>This page was generated using <a href="https://github.com/fredrikekre/Literate.jl">Literate.jl</a>.</em></p></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../neural_assembly/">« Bottom-up construction of a neural assembly</a><a class="docs-footer-nextpage" href="../../api/">API »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.7.0 on <span class="colophon-date" title="Tuesday 22 October 2024 16:19">Tuesday 22 October 2024</span>. Using Julia version 1.11.1.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
