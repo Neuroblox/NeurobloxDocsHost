@@ -1608,28 +1608,30 @@ uuid = "a63ad114-7e13-5084-954f-fe012c677804"
 version = "1.11.0"
 
 [[deps.ModelingToolkit]]
-deps = ["AbstractTrees", "ArrayInterface", "BlockArrays", "Combinatorics", "Compat", "ConstructionBase", "DataStructures", "DiffEqBase", "DiffEqCallbacks", "DiffEqNoiseProcess", "DiffRules", "Distributed", "Distributions", "DocStringExtensions", "DomainSets", "DynamicQuantities", "ExprTools", "Expronicon", "FindFirstFunctions", "ForwardDiff", "FunctionWrappers", "FunctionWrappersWrappers", "Graphs", "InteractiveUtils", "JuliaFormatter", "JumpProcesses", "Latexify", "Libdl", "LinearAlgebra", "MLStyle", "NaNMath", "NonlinearSolve", "OffsetArrays", "OrderedCollections", "PrecompileTools", "RecursiveArrayTools", "Reexport", "RuntimeGeneratedFunctions", "SciMLBase", "SciMLStructures", "Serialization", "Setfield", "SimpleNonlinearSolve", "SparseArrays", "SpecialFunctions", "StaticArrays", "SymbolicIndexingInterface", "SymbolicUtils", "Symbolics", "URIs", "UnPack", "Unitful"]
-git-tree-sha1 = "0d145af02e12be68c04412f31abfdadc69a2e173"
+deps = ["AbstractTrees", "ArrayInterface", "BlockArrays", "Combinatorics", "CommonSolve", "Compat", "ConstructionBase", "DataStructures", "DiffEqBase", "DiffEqCallbacks", "DiffEqNoiseProcess", "DiffRules", "Distributed", "Distributions", "DocStringExtensions", "DomainSets", "DynamicQuantities", "ExprTools", "Expronicon", "FindFirstFunctions", "ForwardDiff", "FunctionWrappers", "FunctionWrappersWrappers", "Graphs", "InteractiveUtils", "JuliaFormatter", "JumpProcesses", "Latexify", "Libdl", "LinearAlgebra", "MLStyle", "NaNMath", "NonlinearSolve", "OffsetArrays", "OrderedCollections", "PrecompileTools", "RecursiveArrayTools", "Reexport", "RuntimeGeneratedFunctions", "SciMLBase", "SciMLStructures", "Serialization", "Setfield", "SimpleNonlinearSolve", "SparseArrays", "SpecialFunctions", "StaticArrays", "SymbolicIndexingInterface", "SymbolicUtils", "Symbolics", "URIs", "UnPack", "Unitful"]
+git-tree-sha1 = "db309b354ade7fe3deb97d95ca241ed8f1096e91"
 uuid = "961ee093-0014-501f-94e3-6117800e7a78"
-version = "9.46.1"
+version = "9.49.0"
 
     [deps.ModelingToolkit.extensions]
     MTKBifurcationKitExt = "BifurcationKit"
     MTKChainRulesCoreExt = "ChainRulesCore"
     MTKDeepDiffsExt = "DeepDiffs"
+    MTKHomotopyContinuationExt = "HomotopyContinuation"
     MTKLabelledArraysExt = "LabelledArrays"
 
     [deps.ModelingToolkit.weakdeps]
     BifurcationKit = "0f109fa4-8a5d-4b75-95aa-f515264e7665"
     ChainRulesCore = "d360d2e6-b24c-11e9-a2a3-2a2ae2dbcce4"
     DeepDiffs = "ab62b9b5-e342-54a8-a765-a90f495de1a6"
+    HomotopyContinuation = "f213a82b-91d6-5c5d-acf7-10f1c761b327"
     LabelledArrays = "2ee39098-c373-598a-b85f-a56591580800"
 
 [[deps.ModelingToolkitStandardLibrary]]
-deps = ["ChainRulesCore", "DiffEqBase", "IfElse", "LinearAlgebra", "ModelingToolkit", "Symbolics"]
-git-tree-sha1 = "96af992214d934f6bb5a966b28039b5d9c2fe97e"
+deps = ["ChainRulesCore", "DiffEqBase", "IfElse", "LinearAlgebra", "ModelingToolkit", "PreallocationTools", "Symbolics"]
+git-tree-sha1 = "39380e3a37e18848c7f4a1f14ebb9701e416277a"
 uuid = "16a59e39-deab-5bd0-87e4-056b12336739"
-version = "2.16.0"
+version = "2.17.0"
 
 [[deps.MosaicViews]]
 deps = ["MappedArrays", "OffsetArrays", "PaddedViews", "StackViews"]
