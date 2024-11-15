@@ -1000,9 +1000,9 @@ version = "1.3.1"
 
 [[deps.GraphDynamics]]
 deps = ["Accessors", "ConstructionBase", "OhMyThreads", "OrderedCollections", "RecursiveArrayTools", "SciMLBase", "SparseArrays", "SymbolicIndexingInterface"]
-git-tree-sha1 = "4f0daef7e0a3f43de291a14d56ba3b7f8f608439"
+git-tree-sha1 = "69a50e106a03330962975940a70b9ca330c7de30"
 uuid = "bcd5d0fe-e6b7-4ef1-9848-780c183c7f4c"
-version = "0.2.1"
+version = "0.2.2"
 weakdeps = ["ModelingToolkit", "Symbolics"]
 
     [deps.GraphDynamics.extensions]
