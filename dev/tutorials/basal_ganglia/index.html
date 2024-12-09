@@ -40,33 +40,18 @@ fig = Figure()
 ax = Axis(fig[1,1]; xlabel = &quot;Time (ms)&quot;, ylabel = &quot;Voltage (mv)&quot;)
 lines!(ax, sol.t, v[:, 1])
 fig ## to display the figure</code></pre><img src="705b0f24.png" alt="Example block output"/><p>Plot mean field</p><pre><code class="language-julia hljs">meanfield(msn, sol, title = &quot;Mean Field Potential&quot;)</code></pre><img src="97245269.png" alt="Example block output"/><p>Compute firing rate, discarding the first 200 ms</p><pre><code class="language-julia hljs">fr = firing_rate(msn, sol, threshold=-35, transient=200)</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">1-element Vector{Float64}:
- 1.2666666666666666</code></pre><p>Create a raster plot</p><pre><code class="language-julia hljs">rasterplot(msn, sol, threshold = -35, title = &quot;Neuron&#39;s Spikes - Mean Firing Rate: $(round(fr[1], digits=2)) spikes/s&quot;)</code></pre><img src="2c137396.png" alt="Example block output"/><p>Compute and plot the power spectrum of the GABAa current</p><pre><code class="language-julia hljs">fig = Figure(size = (1500, 600))
+ 1.2666666666666666</code></pre><p>Create a raster plot</p><pre><code class="language-julia hljs">rasterplot(msn, sol, threshold = -35, title = &quot;Neuron&#39;s Spikes - Mean Firing Rate: $(round(fr[1], digits=2)) spikes/s&quot;)</code></pre><img src="2c137396.png" alt="Example block output"/><p>Compute and plot the power spectrum of the GABAa current</p><pre><code class="language-julia hljs">fig = Figure(size = (1500, 500))
 
 powerspectrumplot(fig[1,1], msn, sol, state = &quot;G&quot;,
-                  ylims = (1e-5, 10),
-                  alpha_start = 5,
-                  alpha_label_position = (8.5, 5),
-                  beta_label_position = (22, 5),
-                  gamma_label_position = (60, 5),
                   title = &quot;FFT with no window&quot;)
 
 powerspectrumplot(fig[1,2], msn, sol, state = &quot;G&quot;,
                   method = welch_pgram, window = hanning,
-                  ylims = (1e-5, 10),
-                  alpha_start = 5,
-                  alpha_label_position = (8.5, 5),
-                  beta_label_position = (22, 5),
-                  gamma_label_position = (60, 5),
                   title = &quot;Welch&#39;s method + Hanning window&quot;)
-fig</code></pre><img src="c9d000bd.png" alt="Example block output"/><p>We can leverage parallel computing using <code>EnsembleProblem()</code> to run multiple simulations simultaneously. This allows us to evaluate model outputs with multiple realizations of random physiological noise while utilizing all available computational threads (default) or processes.</p><pre><code class="language-julia hljs">ens_prob = EnsembleProblem(prob)
+fig</code></pre><img src="1c67edaf.png" alt="Example block output"/><p>We can leverage parallel computing using <code>EnsembleProblem()</code> to run multiple simulations simultaneously. This allows us to evaluate model outputs with multiple realizations of random physiological noise while utilizing all available computational threads (default) or processes.</p><pre><code class="language-julia hljs">ens_prob = EnsembleProblem(prob)
 ens_sol = solve(ens_prob, RKMil(), dt=dt, saveat=dt, trajectories = 3);</code></pre><p>Compute average power spectrum</p><pre><code class="language-julia hljs">powerspectrumplot(msn, ens_sol, state = &quot;G&quot;,
                   method = welch_pgram, window = hanning,
-                  ylims = (1e-5, 10),
-                  alpha_start = 8,
-                  alpha_label_position = (8.5, 4),
-                  beta_label_position = (22, 4),
-                  gamma_label_position = (60, 4),
-                  title = &quot;Welch&#39;s method + Hanning window + Ensemble&quot;)</code></pre><img src="7176f3ac.png" alt="Example block output"/><p>Note the peak at ~12 Hz in the MSN population&#39;s activity, representing an emergent beta-band oscillation characteristic of this circuit. We&#39;ll explore how this rhythm is altered by FSI inhibition next.</p><h2 id="Core-striatal-network:-MSN-FSI"><a class="docs-heading-anchor" href="#Core-striatal-network:-MSN-FSI">Core striatal network: MSN + FSI</a><a id="Core-striatal-network:-MSN-FSI-1"></a><a class="docs-heading-anchor-permalink" href="#Core-striatal-network:-MSN-FSI" title="Permalink"></a></h2><p>Now we&#39;ll add Fast-Spiking Interneurons (FSIs) to our model</p><pre><code class="language-julia hljs">global_ns = :g ## global name for the circuit. All components should be inside this namespace.
+                  title = &quot;Welch&#39;s method + Hanning window + Ensemble&quot;)</code></pre><img src="e369769a.png" alt="Example block output"/><p>Note the peak at ~12 Hz in the MSN population&#39;s activity, representing an emergent beta-band oscillation characteristic of this circuit. We&#39;ll explore how this rhythm is altered by FSI inhibition next.</p><h2 id="Core-striatal-network:-MSN-FSI"><a class="docs-heading-anchor" href="#Core-striatal-network:-MSN-FSI">Core striatal network: MSN + FSI</a><a id="Core-striatal-network:-MSN-FSI-1"></a><a class="docs-heading-anchor-permalink" href="#Core-striatal-network:-MSN-FSI" title="Permalink"></a></h2><p>Now we&#39;ll add Fast-Spiking Interneurons (FSIs) to our model</p><pre><code class="language-julia hljs">global_ns = :g ## global name for the circuit. All components should be inside this namespace.
 
 N_FSI = 50 ## number of Fast Spiking Interneurons
 @named msn = Striatum_MSN_Adam(namespace = global_ns, N_inhib = N_MSN)
@@ -90,20 +75,14 @@ rasterplot(fig[1,2], fsi, ens_sol[1], threshold = -35, title = &quot;FSI - Mean 
 
 powerspectrumplot(fig[2,1], msn, ens_sol, state = &quot;G&quot;,
                   method = welch_pgram, window = hanning,
-                  ylims= (1e-5, 10),
-                  xlims= (8, 100),
-                  alpha_label_position = (8.5, 3),
-                  beta_label_position = (22, 3),
-                  gamma_label_position = (60, 3))
+                  ylims= (-35, 15),
+                  xlims= (8, 100))
 
 powerspectrumplot(fig[2,2], fsi, ens_sol, state = &quot;G&quot;,
                   method=welch_pgram, window=hanning,
-                  ylims= (1e-5, 10),
-                  xlims= (8, 100),
-                  alpha_label_position = (8.5, 3),
-                  beta_label_position = (22, 3),
-                  gamma_label_position = (60, 3))
-fig</code></pre><img src="01fc3461.png" alt="Example block output"/><p>FSIs exhibit a peak in gamma frequencies. Their inhibition onto MSNs suppresses the low beta-band activity seen in isolated MSN populations, without reducing MSN firing rates. This spectral shift reflects a change in MSN spiking dynamics under FSI influence, rather than a decrease in overall activity.</p><h2 id="Full-basal-ganglia-model-in-baseline-condition"><a class="docs-heading-anchor" href="#Full-basal-ganglia-model-in-baseline-condition">Full basal ganglia model in baseline condition</a><a id="Full-basal-ganglia-model-in-baseline-condition-1"></a><a class="docs-heading-anchor-permalink" href="#Full-basal-ganglia-model-in-baseline-condition" title="Permalink"></a></h2><p>Now we&#39;ll add the GPe and STN to complete the full basal ganglia model</p><pre><code class="language-julia hljs">N_GPe = 80 ## number of GPe neurons
+                  ylims= (-35, 15),
+                  xlims= (8, 100))
+fig</code></pre><img src="a443de3e.png" alt="Example block output"/><p>FSIs exhibit a peak in gamma frequencies. Their inhibition onto MSNs suppresses the low beta-band activity seen in isolated MSN populations, without reducing MSN firing rates. This spectral shift reflects a change in MSN spiking dynamics under FSI influence, rather than a decrease in overall activity.</p><h2 id="Full-basal-ganglia-model-in-baseline-condition"><a class="docs-heading-anchor" href="#Full-basal-ganglia-model-in-baseline-condition">Full basal ganglia model in baseline condition</a><a id="Full-basal-ganglia-model-in-baseline-condition-1"></a><a class="docs-heading-anchor-permalink" href="#Full-basal-ganglia-model-in-baseline-condition" title="Permalink"></a></h2><p>Now we&#39;ll add the GPe and STN to complete the full basal ganglia model</p><pre><code class="language-julia hljs">N_GPe = 80 ## number of GPe neurons
 N_STN = 40 ## number of STN neurons
 
 @named gpe = GPe_Adam(namespace = global_ns, N_inhib = N_GPe)
@@ -130,41 +109,29 @@ add_edge!(g, stn =&gt; fsi, weight = weight_STN_FSI, density = density_STN_FSI)
 @named sys = system_from_graph(g)
 prob = SDEProblem(sys, [], tspan, [])
 ens_prob = EnsembleProblem(prob)
-ens_sol = solve(ens_prob, RKMil(), dt=dt, saveat = dt, trajectories = 3);</code></pre><p>Compute and plot power spectra for all components</p><pre><code class="language-julia hljs">fig = Figure(size = (1500, 600))
+ens_sol = solve(ens_prob, RKMil(), dt=dt, saveat = dt, trajectories = 3);</code></pre><p>Compute and plot power spectra for all components</p><pre><code class="language-julia hljs">fig = Figure(size = (1600, 450))
 
 powerspectrumplot(fig[1,1], msn, ens_sol, state = &quot;G&quot;,
                   method = welch_pgram, window = hanning,
-                  ylims=(1e-5, 10),
-                  alpha_label_position = (8.5, 2),
-                  beta_label_position = (22, 2),
-                  gamma_label_position = (60, 2),
+                  ylims=(-40, 25),
                   title = &quot;MSN (Baseline)&quot;)
 
 powerspectrumplot(fig[1,2], fsi, ens_sol, state = &quot;G&quot;,
                   method = welch_pgram, window = hanning,
-                  ylims = (1e-5, 10),
-                  alpha_label_position = (8.5, 2),
-                  beta_label_position = (22, 2),
-                  gamma_label_position = (60, 2),
+                  ylims=(-40, 25),
                   title = &quot;FSI (Baseline)&quot;)
 
 powerspectrumplot(fig[1,3], gpe, ens_sol, state = &quot;G&quot;,
                   method = welch_pgram, window = hanning,
-                  ylims = (1e-5, 10),
-                  alpha_label_position = (8.5, 2),
-                  beta_label_position = (22, 2),
-                  gamma_label_position = (60, 2),
+                  ylims=(-40, 25),
                   title = &quot;GPe (Baseline)&quot;)
 
 powerspectrumplot(fig[1,4], stn, ens_sol, state = &quot;G&quot;,
                   method = welch_pgram, window = hanning,
-                  ylims = (1e-5, 10),
-                  alpha_label_position = (8.5, 2),
-                  beta_label_position = (22, 2),
-                  gamma_label_position = (60, 2),
+                  ylims=(-40, 25),
                   title = &quot;STN (Baseline)&quot;)
 
-fig</code></pre><img src="b6edef5d.png" alt="Example block output"/><h2 id="Full-basal-ganglia-model-in-Parkinson&#39;s-condition"><a class="docs-heading-anchor" href="#Full-basal-ganglia-model-in-Parkinson&#39;s-condition">Full basal ganglia model in Parkinson&#39;s condition</a><a id="Full-basal-ganglia-model-in-Parkinson&#39;s-condition-1"></a><a class="docs-heading-anchor-permalink" href="#Full-basal-ganglia-model-in-Parkinson&#39;s-condition" title="Permalink"></a></h2><p>Finally, we&#39;ll adjust the model parameters to simulate Parkinson&#39;s disease conditions</p><p><img src="../../assets/basal_ganglia_parkinson.jpg" alt="Full basal ganglia model in Parkinsonian conditions"/></p><p>The key changes from baseline to Parkinsonian conditions are:</p><ol><li><p>For MSNs:</p><ul><li>Increased background excitation (<code>I_bg</code>) to 1.2519 μA·cm<span>$^{-2}$</span></li><li>Decreased maximal conductance for M-current (<code>G_M</code>) to 1.2 mS·cm<span>$^{-2}$</span></li></ul></li><li><p>For FSIs:</p><ul><li>Decreased background excitation (<code>I_bg</code>) to 4.511 μA·cm<span>$^{-2}$</span></li><li>Decreased maximal conductance of FSI-MSN projection (<code>ḡ_FSI_MSN</code>) by 20% to 0.48 mS·cm<span>$^{-2}$</span>, due to increased cholinergic tone</li><li>Decreased maximal conductance of FSI-FSI projection (<code>weight</code>) to 0.2 mS·cm<span>$^{-2}$</span></li><li>Decreased electrical conductance (<code>g_elec</code>) to 0.075</li></ul></li></ol><p>These changes reflect the loss of dopamine and increase in cholinergic tone characteristic of Parkinson&#39;s disease.</p><p>Create bloxs with Parkinsonian parameters</p><pre><code class="language-julia hljs">@named msn = Striatum_MSN_Adam(namespace = global_ns, N_inhib = N_MSN, I_bg = 1.2519*ones(N_MSN), G_M = 1.2)
+fig</code></pre><img src="9d1baef8.png" alt="Example block output"/><h2 id="Full-basal-ganglia-model-in-Parkinson&#39;s-condition"><a class="docs-heading-anchor" href="#Full-basal-ganglia-model-in-Parkinson&#39;s-condition">Full basal ganglia model in Parkinson&#39;s condition</a><a id="Full-basal-ganglia-model-in-Parkinson&#39;s-condition-1"></a><a class="docs-heading-anchor-permalink" href="#Full-basal-ganglia-model-in-Parkinson&#39;s-condition" title="Permalink"></a></h2><p>Finally, we&#39;ll adjust the model parameters to simulate Parkinson&#39;s disease conditions</p><p><img src="../../assets/basal_ganglia_parkinson.jpg" alt="Full basal ganglia model in Parkinsonian conditions"/></p><p>The key changes from baseline to Parkinsonian conditions are:</p><ol><li><p>For MSNs:</p><ul><li>Increased background excitation (<code>I_bg</code>) to 1.2519 μA·cm<span>$^{-2}$</span></li><li>Decreased maximal conductance for M-current (<code>G_M</code>) to 1.2 mS·cm<span>$^{-2}$</span></li></ul></li><li><p>For FSIs:</p><ul><li>Decreased background excitation (<code>I_bg</code>) to 4.511 μA·cm<span>$^{-2}$</span></li><li>Decreased maximal conductance of FSI-MSN projection (<code>ḡ_FSI_MSN</code>) by 20% to 0.48 mS·cm<span>$^{-2}$</span>, due to increased cholinergic tone</li><li>Decreased maximal conductance of FSI-FSI projection (<code>weight</code>) to 0.2 mS·cm<span>$^{-2}$</span></li><li>Decreased electrical conductance (<code>g_elec</code>) to 0.075</li></ul></li></ol><p>These changes reflect the loss of dopamine and increase in cholinergic tone characteristic of Parkinson&#39;s disease.</p><p>Create bloxs with Parkinsonian parameters</p><pre><code class="language-julia hljs">@named msn = Striatum_MSN_Adam(namespace = global_ns, N_inhib = N_MSN, I_bg = 1.2519*ones(N_MSN), G_M = 1.2)
 @named fsi = Striatum_FSI_Adam(namespace = global_ns, N_inhib = N_FSI, I_bg = 4.511*ones(N_FSI), weight = 0.2, g_weight = 0.075)
 
 ḡ_FSI_MSN = 0.48 ## decreased maximal conductance of FSI-MSN projection [mS/cm^-2]
@@ -182,35 +149,23 @@ prob = SDEProblem(sys, [], tspan, [])
 ens_prob = EnsembleProblem(prob)
 ens_sol = solve(ens_prob, RKMil(), dt = dt, saveat = dt, trajectories = 3);</code></pre><p>Compute and compare power spectra for all neural populations in Parkinsonian condition against their counterparts in baseline conditions.</p><pre><code class="language-julia hljs">powerspectrumplot(fig[2,1], msn, ens_sol, state = &quot;G&quot;,
                   method = welch_pgram, window = hanning,
-                  ylims = (1e-5, 10),
-                  alpha_label_position = (8.5, 2),
-                  beta_label_position = (22, 2),
-                  gamma_label_position = (60, 2),
+                  ylims=(-40, 25),
                   title = &quot;MSN (PD)&quot;)
 
 powerspectrumplot(fig[2,2], fsi, ens_sol, state = &quot;G&quot;,
                   method = welch_pgram, window = hanning,
-                  ylims = (1e-5, 10),
-                  alpha_label_position = (8.5, 2),
-                  beta_label_position = (22, 2),
-                  gamma_label_position = (60, 2),
+                  ylims=(-40, 25),
                   title = &quot;FSI (PD)&quot;)
 
 powerspectrumplot(fig[2,3], gpe, ens_sol, state = &quot;G&quot;,
                   method = welch_pgram, window = hanning,
-                  ylims = (1e-5, 10),
-                  alpha_start = 5,
-                  alpha_label_position = (8.5, 2),
-                  beta_label_position = (22, 2),
-                  gamma_label_position = (60, 2),
+                  ylims=(-40, 25),
                   title = &quot;GPe (PD)&quot;)
 
 powerspectrumplot(fig[2,4], stn, ens_sol, state = &quot;G&quot;,
                   method = welch_pgram, window = hanning,
-                  ylims = (1e-5, 10),
-                  alpha_label_position = (8.5, 2),
-                  beta_label_position = (22, 2),
-                  gamma_label_position = (60, 2),
+                  ylims=(-40, 25),
                   title = &quot;STN (PD)&quot;)
 
-fig</code></pre><img src="348c7640.png" alt="Example block output"/><p>We see the emergence of strong beta oscillations in the Parkinsonian condition compared to the baseline condition for all neural populations. This aligns with the findings of Adam et al. and reflects the pathological synchrony observed in Parkinson&#39;s disease.</p><h2 id="References"><a class="docs-heading-anchor" href="#References">References</a><a id="References-1"></a><a class="docs-heading-anchor-permalink" href="#References" title="Permalink"></a></h2><p><a href="https://doi.org/10.1073/pnas.2120808119">Adam, Elie M., et al. &quot;Deep brain stimulation in the subthalamic nucleus for Parkinson&#39;s disease can restore dynamics of striatal networks.&quot; Proceedings of the National Academy of Sciences 119.19 (2022): e2120808119.</a></p><hr/><p><em>This page was generated using <a href="https://github.com/fredrikekre/Literate.jl">Literate.jl</a>.</em></p></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../parkinsons/">« Building a model of the Basal Ganglia using Neural Mass models</a><a class="docs-footer-nextpage" href="../neural_assembly/">Bottom-up construction of a neural assembly »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.8.0 on <span class="colophon-date" title="Friday 6 December 2024 20:00">Friday 6 December 2024</span>. Using Julia version 1.11.2.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
+resize!(fig.scene, (1600, 900))
+fig</code></pre><img src="8d172607.png" alt="Example block output"/><p>We see the emergence of strong beta oscillations in the Parkinsonian condition compared to the baseline condition for all neural populations. This aligns with the findings of Adam et al. and reflects the pathological synchrony observed in Parkinson&#39;s disease.</p><h2 id="References"><a class="docs-heading-anchor" href="#References">References</a><a id="References-1"></a><a class="docs-heading-anchor-permalink" href="#References" title="Permalink"></a></h2><p><a href="https://doi.org/10.1073/pnas.2120808119">Adam, Elie M., et al. &quot;Deep brain stimulation in the subthalamic nucleus for Parkinson&#39;s disease can restore dynamics of striatal networks.&quot; Proceedings of the National Academy of Sciences 119.19 (2022): e2120808119.</a></p><hr/><p><em>This page was generated using <a href="https://github.com/fredrikekre/Literate.jl">Literate.jl</a>.</em></p></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../parkinsons/">« Building a model of the Basal Ganglia using Neural Mass models</a><a class="docs-footer-nextpage" href="../neural_assembly/">Bottom-up construction of a neural assembly »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.8.0 on <span class="colophon-date" title="Monday 9 December 2024 12:05">Monday 9 December 2024</span>. Using Julia version 1.11.2.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
