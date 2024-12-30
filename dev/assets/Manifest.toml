@@ -972,9 +972,9 @@ version = "0.21.0+0"
 
 [[deps.Giflib_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl"]
-git-tree-sha1 = "0224cce99284d997f6880a42ef715a37c99338d1"
+git-tree-sha1 = "6570366d757b50fabae9f4315ad74d2e40c0560a"
 uuid = "59f7168a-df46-5410-90c8-f2779963d0ec"
-version = "5.2.2+2"
+version = "5.2.3+0"
 
 [[deps.Git]]
 deps = ["Git_jll"]
@@ -1249,9 +1249,9 @@ version = "0.1.5"
 
 [[deps.JpegTurbo_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl"]
-git-tree-sha1 = "ef10afc9f4b942bcd75f4c3bc9d9e8d802944c23"
+git-tree-sha1 = "eac1206917768cb54957c65a615460d87b455fc1"
 uuid = "aacddb02-875f-59d6-b918-886e6ef4fbf8"
-version = "3.1.0+2"
+version = "3.1.1+0"
 
 [[deps.JuliaFormatter]]
 deps = ["CSTParser", "CommonMark", "DataStructures", "Glob", "PrecompileTools", "TOML", "Tokenize"]
@@ -1292,9 +1292,9 @@ version = "3.100.2+0"
 
 [[deps.LERC_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl"]
-git-tree-sha1 = "4ec1e8fac04150b570e315baaa68950e368a803d"
+git-tree-sha1 = "aaafe88dccbd957a8d82f7d05be9b69172e0cee3"
 uuid = "88015f11-f218-50d7-93a8-a6af411a945d"
-version = "4.0.0+3"
+version = "4.0.1+0"
 
 [[deps.LLVMOpenMP_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl"]
@@ -1862,10 +1862,10 @@ uuid = "458c3c95-2e84-50aa-8efc-19380b2a3a95"
 version = "3.0.15+3"
 
 [[deps.OpenSpecFun_jll]]
-deps = ["Artifacts", "CompilerSupportLibraries_jll", "JLLWrappers", "Libdl", "Pkg"]
-git-tree-sha1 = "13652491f6856acfd2db29360e1bbcd4565d04f1"
+deps = ["Artifacts", "CompilerSupportLibraries_jll", "JLLWrappers", "Libdl"]
+git-tree-sha1 = "1346c9208249809840c91b26703912dff463d335"
 uuid = "efe28fd5-8261-553b-a9e1-b2916fc3738e"
-version = "0.5.5+2"
+version = "0.5.6+0"
 
 [[deps.Optim]]
 deps = ["Compat", "FillArrays", "ForwardDiff", "LineSearches", "LinearAlgebra", "NLSolversBase", "NaNMath", "Parameters", "PositiveFactorizations", "Printf", "SparseArrays", "StatsBase"]
@@ -3131,9 +3131,9 @@ version = "2.0.3+0"
 
 [[deps.libpng_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl", "Zlib_jll"]
-git-tree-sha1 = "b70c870239dc3d7bc094eb2d6be9b73d27bef280"
+git-tree-sha1 = "b7bfd3ab9d2c58c3829684142f5804e4c6499abc"
 uuid = "b53b4c65-9356-5827-b1ea-8c7a1a84506f"
-version = "1.6.44+2"
+version = "1.6.45+0"
 
 [[deps.libsixel_jll]]
 deps = ["Artifacts", "JLLWrappers", "JpegTurbo_jll", "Libdl", "Pkg", "libpng_jll"]
