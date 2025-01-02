@@ -1719,7 +1719,7 @@ version = "1.2.0"
 deps = ["Accessors", "CSV", "ChainRules", "Combinatorics", "DSP", "DataFrames", "Distributions", "ExponentialUtilities", "ForwardDiff", "GraphDynamics", "Graphs", "Interpolations", "LinearAlgebra", "LogExpFunctions", "MetaGraphs", "ModelingToolkit", "ModelingToolkitStandardLibrary", "MuladdMacro", "OhMyThreads", "OrderedCollections", "Peaks", "Random", "RecursiveArrayTools", "Reexport", "SciMLBase", "SparseArrays", "Statistics", "StatsBase", "StochasticDiffEq", "Symbolics", "ToeplitzMatrices"]
 path = "/home/runner/work/Neuroblox.jl/Neuroblox.jl"
 uuid = "769b91e5-4c60-41ee-bfae-153c84203cb2"
-version = "0.5.0"
+version = "0.5.2"
 weakdeps = ["CairoMakie", "Makie"]
 
     [deps.Neuroblox.extensions]
