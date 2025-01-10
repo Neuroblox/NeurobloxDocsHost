@@ -29,23 +29,23 @@ end</code></pre><p>finally we compose the simulation model</p><pre><code class="
 \frac{\mathrm{d} \mathtt{r1.lm.x}\left( t \right)}{\mathrm{d}t} &amp;= \mathtt{w\_r1.lm\_r1.lm} \mathtt{r1.lm.x}\left( t \right) + \mathtt{w\_r1.ou\_r1.lm} \mathtt{r1.ou.x}\left( t \right) + \mathtt{w\_r2.lm\_r1.lm} \mathtt{r2.lm.x}\left( t \right) + \mathtt{w\_r3.lm\_r1.lm} \mathtt{r3.lm.x}\left( t \right) \\
 \frac{\mathrm{d} \mathtt{r1.bm.s}\left( t \right)}{\mathrm{d}t} &amp;=  - 0.32 \left( -1 + e^{\mathtt{r1.bm.lnu}\left( t \right)} \right) + \mathtt{w\_r1.lm\_r1.bm} \mathtt{r1.lm.x}\left( t \right) - 0.64 \mathtt{r1.bm.s}\left( t \right) e^{\mathtt{r1.bm.ln\kappa}} \\
 \frac{\mathrm{d} \mathtt{r1.bm.lnu}\left( t \right)}{\mathrm{d}t} &amp;= \frac{\mathtt{r1.bm.s}\left( t \right)}{e^{\mathtt{r1.bm.lnu}\left( t \right)}} \\
-\frac{\mathrm{d} \mathtt{r1.bm.ln\nu}\left( t \right)}{\mathrm{d}t} &amp;= \frac{e^{\mathtt{r1.bm.lnu}\left( t \right)} - \left( e^{\mathtt{r1.bm.ln\nu}\left( t \right)} \right)^{3.125}}{2 e^{\mathtt{r1.bm.ln\tau}} e^{\mathtt{r1.bm.ln\nu}\left( t \right)}} \\
+\frac{\mathrm{d} \mathtt{r1.bm.ln\nu}\left( t \right)}{\mathrm{d}t} &amp;= \frac{e^{\mathtt{r1.bm.lnu}\left( t \right)} - \left( e^{\mathtt{r1.bm.ln\nu}\left( t \right)} \right)^{3.125}}{2 e^{\mathtt{r1.bm.ln\nu}\left( t \right)} e^{\mathtt{r1.bm.ln\tau}}} \\
 \frac{\mathrm{d} \mathtt{r1.bm.lnq}\left( t \right)}{\mathrm{d}t} &amp;= \frac{\frac{2.5 e^{\mathtt{r1.bm.lnu}\left( t \right)} \left( 1 - 0.6^{\frac{1}{e^{\mathtt{r1.bm.lnu}\left( t \right)}}} \right)}{e^{\mathtt{r1.bm.lnq}\left( t \right)}} - \left( e^{\mathtt{r1.bm.ln\nu}\left( t \right)} \right)^{2.125}}{2 e^{\mathtt{r1.bm.ln\tau}}} \\
 \frac{\mathrm{d} \mathtt{r2.ou.x}\left( t \right)}{\mathrm{d}t} &amp;= \frac{\mathtt{r2.ou.\mu} - \mathtt{r2.ou.x}\left( t \right)}{\mathtt{r2.ou.\tau}} \\
 \frac{\mathrm{d} \mathtt{r2.lm.x}\left( t \right)}{\mathrm{d}t} &amp;= \mathtt{w\_r1.lm\_r2.lm} \mathtt{r1.lm.x}\left( t \right) + \mathtt{w\_r2.lm\_r2.lm} \mathtt{r2.lm.x}\left( t \right) + \mathtt{w\_r2.ou\_r2.lm} \mathtt{r2.ou.x}\left( t \right) + \mathtt{w\_r3.lm\_r2.lm} \mathtt{r3.lm.x}\left( t \right) \\
 \frac{\mathrm{d} \mathtt{r2.bm.s}\left( t \right)}{\mathrm{d}t} &amp;=  - 0.32 \left( -1 + e^{\mathtt{r2.bm.lnu}\left( t \right)} \right) + \mathtt{w\_r2.lm\_r2.bm} \mathtt{r2.lm.x}\left( t \right) - 0.64 \mathtt{r2.bm.s}\left( t \right) e^{\mathtt{r2.bm.ln\kappa}} \\
 \frac{\mathrm{d} \mathtt{r2.bm.lnu}\left( t \right)}{\mathrm{d}t} &amp;= \frac{\mathtt{r2.bm.s}\left( t \right)}{e^{\mathtt{r2.bm.lnu}\left( t \right)}} \\
 \frac{\mathrm{d} \mathtt{r2.bm.ln\nu}\left( t \right)}{\mathrm{d}t} &amp;= \frac{e^{\mathtt{r2.bm.lnu}\left( t \right)} - \left( e^{\mathtt{r2.bm.ln\nu}\left( t \right)} \right)^{3.125}}{2 e^{\mathtt{r2.bm.ln\nu}\left( t \right)} e^{\mathtt{r2.bm.ln\tau}}} \\
-\frac{\mathrm{d} \mathtt{r2.bm.lnq}\left( t \right)}{\mathrm{d}t} &amp;= \frac{\frac{2.5 \left( 1 - 0.6^{\frac{1}{e^{\mathtt{r2.bm.lnu}\left( t \right)}}} \right) e^{\mathtt{r2.bm.lnu}\left( t \right)}}{e^{\mathtt{r2.bm.lnq}\left( t \right)}} - \left( e^{\mathtt{r2.bm.ln\nu}\left( t \right)} \right)^{2.125}}{2 e^{\mathtt{r2.bm.ln\tau}}} \\
+\frac{\mathrm{d} \mathtt{r2.bm.lnq}\left( t \right)}{\mathrm{d}t} &amp;= \frac{\frac{2.5 e^{\mathtt{r2.bm.lnu}\left( t \right)} \left( 1 - 0.6^{\frac{1}{e^{\mathtt{r2.bm.lnu}\left( t \right)}}} \right)}{e^{\mathtt{r2.bm.lnq}\left( t \right)}} - \left( e^{\mathtt{r2.bm.ln\nu}\left( t \right)} \right)^{2.125}}{2 e^{\mathtt{r2.bm.ln\tau}}} \\
 \frac{\mathrm{d} \mathtt{r3.ou.x}\left( t \right)}{\mathrm{d}t} &amp;= \frac{\mathtt{r3.ou.\mu} - \mathtt{r3.ou.x}\left( t \right)}{\mathtt{r3.ou.\tau}} \\
 \frac{\mathrm{d} \mathtt{r3.lm.x}\left( t \right)}{\mathrm{d}t} &amp;= \mathtt{w\_r1.lm\_r3.lm} \mathtt{r1.lm.x}\left( t \right) + \mathtt{w\_r2.lm\_r3.lm} \mathtt{r2.lm.x}\left( t \right) + \mathtt{w\_r3.lm\_r3.lm} \mathtt{r3.lm.x}\left( t \right) + \mathtt{w\_r3.ou\_r3.lm} \mathtt{r3.ou.x}\left( t \right) \\
 \frac{\mathrm{d} \mathtt{r3.bm.s}\left( t \right)}{\mathrm{d}t} &amp;=  - 0.32 \left( -1 + e^{\mathtt{r3.bm.lnu}\left( t \right)} \right) + \mathtt{w\_r3.lm\_r3.bm} \mathtt{r3.lm.x}\left( t \right) - 0.64 e^{\mathtt{r3.bm.ln\kappa}} \mathtt{r3.bm.s}\left( t \right) \\
 \frac{\mathrm{d} \mathtt{r3.bm.lnu}\left( t \right)}{\mathrm{d}t} &amp;= \frac{\mathtt{r3.bm.s}\left( t \right)}{e^{\mathtt{r3.bm.lnu}\left( t \right)}} \\
 \frac{\mathrm{d} \mathtt{r3.bm.ln\nu}\left( t \right)}{\mathrm{d}t} &amp;= \frac{e^{\mathtt{r3.bm.lnu}\left( t \right)} - \left( e^{\mathtt{r3.bm.ln\nu}\left( t \right)} \right)^{3.125}}{2 e^{\mathtt{r3.bm.ln\nu}\left( t \right)} e^{\mathtt{r3.bm.ln\tau}}} \\
-\frac{\mathrm{d} \mathtt{r3.bm.lnq}\left( t \right)}{\mathrm{d}t} &amp;= \frac{\frac{2.5 \left( 1 - 0.6^{\frac{1}{e^{\mathtt{r3.bm.lnu}\left( t \right)}}} \right) e^{\mathtt{r3.bm.lnu}\left( t \right)}}{e^{\mathtt{r3.bm.lnq}\left( t \right)}} - \left( e^{\mathtt{r3.bm.ln\nu}\left( t \right)} \right)^{2.125}}{2 e^{\mathtt{r3.bm.ln\tau}}} \\
+\frac{\mathrm{d} \mathtt{r3.bm.lnq}\left( t \right)}{\mathrm{d}t} &amp;= \frac{\frac{2.5 e^{\mathtt{r3.bm.lnu}\left( t \right)} \left( 1 - 0.6^{\frac{1}{e^{\mathtt{r3.bm.lnu}\left( t \right)}}} \right)}{e^{\mathtt{r3.bm.lnq}\left( t \right)}} - \left( e^{\mathtt{r3.bm.ln\nu}\left( t \right)} \right)^{2.125}}{2 e^{\mathtt{r3.bm.ln\tau}}} \\
 0 &amp;=  - \mathtt{r1.bm.bold}\left( t \right) + 4 \left( 3.7726 + \frac{ - 0.4 e^{\mathtt{r1.bm.ln\epsilon}} e^{\mathtt{r1.bm.lnq}\left( t \right)}}{e^{\mathtt{r1.bm.ln\nu}\left( t \right)}} - 0.6 e^{\mathtt{r1.bm.ln\epsilon}} - 2.7726 e^{\mathtt{r1.bm.lnq}\left( t \right)} + \left( -1 + e^{\mathtt{r1.bm.ln\epsilon}} \right) e^{\mathtt{r1.bm.ln\nu}\left( t \right)} \right) \\
 0 &amp;=  - \mathtt{r2.bm.bold}\left( t \right) + 4 \left( 3.7726 - 0.6 e^{\mathtt{r2.bm.ln\epsilon}} - 2.7726 e^{\mathtt{r2.bm.lnq}\left( t \right)} + \frac{ - 0.4 e^{\mathtt{r2.bm.ln\epsilon}} e^{\mathtt{r2.bm.lnq}\left( t \right)}}{e^{\mathtt{r2.bm.ln\nu}\left( t \right)}} + \left( -1 + e^{\mathtt{r2.bm.ln\epsilon}} \right) e^{\mathtt{r2.bm.ln\nu}\left( t \right)} \right) \\
-0 &amp;=  - \mathtt{r3.bm.bold}\left( t \right) + 4 \left( 3.7726 - 0.6 e^{\mathtt{r3.bm.ln\epsilon}} - 2.7726 e^{\mathtt{r3.bm.lnq}\left( t \right)} + \frac{ - 0.4 e^{\mathtt{r3.bm.ln\epsilon}} e^{\mathtt{r3.bm.lnq}\left( t \right)}}{e^{\mathtt{r3.bm.ln\nu}\left( t \right)}} + e^{\mathtt{r3.bm.ln\nu}\left( t \right)} \left( -1 + e^{\mathtt{r3.bm.ln\epsilon}} \right) \right)
+0 &amp;=  - \mathtt{r3.bm.bold}\left( t \right) + 4 \left( 3.7726 - 0.6 e^{\mathtt{r3.bm.ln\epsilon}} - 2.7726 e^{\mathtt{r3.bm.lnq}\left( t \right)} + \frac{ - 0.4 e^{\mathtt{r3.bm.ln\epsilon}} e^{\mathtt{r3.bm.lnq}\left( t \right)}}{e^{\mathtt{r3.bm.ln\nu}\left( t \right)}} + \left( -1 + e^{\mathtt{r3.bm.ln\epsilon}} \right) e^{\mathtt{r3.bm.ln\nu}\left( t \right)} \right)
 \end{align}
  \]</p><h2 id="Run-the-simulation-and-plot-the-results"><a class="docs-heading-anchor" href="#Run-the-simulation-and-plot-the-results">Run the simulation and plot the results</a><a id="Run-the-simulation-and-plot-the-results-1"></a><a class="docs-heading-anchor-permalink" href="#Run-the-simulation-and-plot-the-results" title="Permalink"></a></h2><p>setup simulation of the model, time in seconds</p><pre><code class="language-julia hljs">tspan = (0.0, 512.0)
 prob = SDEProblem(simmodel, [], tspan)
@@ -107,11 +107,11 @@ for (i, idx) in enumerate(CartesianIndices(A_prior))
         add_edge!(g, regions[idx[2]] =&gt; regions[idx[1]], weight=A[i])
     end
 end</code></pre><p>Avoid simplification of the model in order to be able to exclude some parameters from fitting</p><pre><code class="language-julia hljs">@named fitmodel = system_from_graph(g, simplify=false)</code></pre><p class="math-container">\[ \begin{align}
-\mathtt{r1.lm.jcn}\left( t \right) &amp;= \mathtt{A4} \mathtt{r2.lm.x}\left( t \right) + \mathtt{A7} \mathtt{r3.lm.x}\left( t \right) + C \mathtt{r1.ei.u}\left( t \right) - \frac{1}{2} e^{\mathtt{A1}} \mathtt{r1.lm.x}\left( t \right) \\
+\mathtt{r1.lm.jcn}\left( t \right) &amp;= \mathtt{A4} \mathtt{r2.lm.x}\left( t \right) + \mathtt{A7} \mathtt{r3.lm.x}\left( t \right) + C \mathtt{r1.ei.u}\left( t \right) - \frac{1}{2} \mathtt{r1.lm.x}\left( t \right) e^{\mathtt{A1}} \\
 \mathtt{r1.bm.jcn}\left( t \right) &amp;= \mathtt{w\_r1.lm\_r1.bm} \mathtt{r1.lm.x}\left( t \right) \\
 \mathtt{r2.lm.jcn}\left( t \right) &amp;= \mathtt{A2} \mathtt{r1.lm.x}\left( t \right) + \mathtt{A8} \mathtt{r3.lm.x}\left( t \right) + C \mathtt{r2.ei.u}\left( t \right) - \frac{1}{2} \mathtt{r2.lm.x}\left( t \right) e^{\mathtt{A5}} \\
 \mathtt{r2.bm.jcn}\left( t \right) &amp;= \mathtt{w\_r2.lm\_r2.bm} \mathtt{r2.lm.x}\left( t \right) \\
-\mathtt{r3.lm.jcn}\left( t \right) &amp;= \mathtt{A3} \mathtt{r1.lm.x}\left( t \right) + \mathtt{A6} \mathtt{r2.lm.x}\left( t \right) + C \mathtt{r3.ei.u}\left( t \right) - \frac{1}{2} e^{\mathtt{A9}} \mathtt{r3.lm.x}\left( t \right) \\
+\mathtt{r3.lm.jcn}\left( t \right) &amp;= \mathtt{A3} \mathtt{r1.lm.x}\left( t \right) + \mathtt{A6} \mathtt{r2.lm.x}\left( t \right) + C \mathtt{r3.ei.u}\left( t \right) - \frac{1}{2} \mathtt{r3.lm.x}\left( t \right) e^{\mathtt{A9}} \\
 \mathtt{r3.bm.jcn}\left( t \right) &amp;= \mathtt{w\_r3.lm\_r3.bm} \mathtt{r3.lm.x}\left( t \right) \\
 \mathtt{r1.ei.u}\left( t \right) &amp;= 1 \\
 \frac{\mathrm{d} \mathtt{r1.lm.x}\left( t \right)}{\mathrm{d}t} &amp;= \mathtt{r1.lm.jcn}\left( t \right) \\
@@ -119,21 +119,21 @@ end</code></pre><p>Avoid simplification of the model in order to be able to excl
 \frac{\mathrm{d} \mathtt{r1.bm.lnu}\left( t \right)}{\mathrm{d}t} &amp;= \frac{\mathtt{r1.bm.s}\left( t \right)}{e^{\mathtt{r1.bm.lnu}\left( t \right)}} \\
 \frac{\mathrm{d} \mathtt{r1.bm.ln\nu}\left( t \right)}{\mathrm{d}t} &amp;= \frac{e^{\mathtt{r1.bm.lnu}\left( t \right)} - \left( e^{\mathtt{r1.bm.ln\nu}\left( t \right)} \right)^{3.125}}{2 e^{\mathtt{ln\tau}} e^{\mathtt{r1.bm.ln\nu}\left( t \right)}} \\
 \frac{\mathrm{d} \mathtt{r1.bm.lnq}\left( t \right)}{\mathrm{d}t} &amp;= \frac{\frac{2.5 e^{\mathtt{r1.bm.lnu}\left( t \right)} \left( 1 - 0.6^{\frac{1}{e^{\mathtt{r1.bm.lnu}\left( t \right)}}} \right)}{e^{\mathtt{r1.bm.lnq}\left( t \right)}} - \left( e^{\mathtt{r1.bm.ln\nu}\left( t \right)} \right)^{2.125}}{2 e^{\mathtt{ln\tau}}} \\
-\mathtt{r1.bm.bold}\left( t \right) &amp;= 4 \left( 3.7726 + \frac{ - 0.4 e^{\mathtt{ln\epsilon}} e^{\mathtt{r1.bm.lnq}\left( t \right)}}{e^{\mathtt{r1.bm.ln\nu}\left( t \right)}} - 0.6 e^{\mathtt{ln\epsilon}} - 2.7726 e^{\mathtt{r1.bm.lnq}\left( t \right)} + \left( -1 + e^{\mathtt{ln\epsilon}} \right) e^{\mathtt{r1.bm.ln\nu}\left( t \right)} \right) \\
+\mathtt{r1.bm.bold}\left( t \right) &amp;= 4 \left( 3.7726 + \frac{ - 0.4 e^{\mathtt{r1.bm.lnq}\left( t \right)} e^{\mathtt{ln\epsilon}}}{e^{\mathtt{r1.bm.ln\nu}\left( t \right)}} - 2.7726 e^{\mathtt{r1.bm.lnq}\left( t \right)} - 0.6 e^{\mathtt{ln\epsilon}} + e^{\mathtt{r1.bm.ln\nu}\left( t \right)} \left( -1 + e^{\mathtt{ln\epsilon}} \right) \right) \\
 \mathtt{r2.ei.u}\left( t \right) &amp;= 1 \\
 \frac{\mathrm{d} \mathtt{r2.lm.x}\left( t \right)}{\mathrm{d}t} &amp;= \mathtt{r2.lm.jcn}\left( t \right) \\
-\frac{\mathrm{d} \mathtt{r2.bm.s}\left( t \right)}{\mathrm{d}t} &amp;=  - 0.32 \left( -1 + e^{\mathtt{r2.bm.lnu}\left( t \right)} \right) + \mathtt{r2.bm.jcn}\left( t \right) - 0.64 e^{\mathtt{ln\kappa}} \mathtt{r2.bm.s}\left( t \right) \\
+\frac{\mathrm{d} \mathtt{r2.bm.s}\left( t \right)}{\mathrm{d}t} &amp;= \mathtt{r2.bm.jcn}\left( t \right) - 0.32 \left( -1 + e^{\mathtt{r2.bm.lnu}\left( t \right)} \right) - 0.64 e^{\mathtt{ln\kappa}} \mathtt{r2.bm.s}\left( t \right) \\
 \frac{\mathrm{d} \mathtt{r2.bm.lnu}\left( t \right)}{\mathrm{d}t} &amp;= \frac{\mathtt{r2.bm.s}\left( t \right)}{e^{\mathtt{r2.bm.lnu}\left( t \right)}} \\
 \frac{\mathrm{d} \mathtt{r2.bm.ln\nu}\left( t \right)}{\mathrm{d}t} &amp;= \frac{e^{\mathtt{r2.bm.lnu}\left( t \right)} - \left( e^{\mathtt{r2.bm.ln\nu}\left( t \right)} \right)^{3.125}}{2 e^{\mathtt{ln\tau}} e^{\mathtt{r2.bm.ln\nu}\left( t \right)}} \\
-\frac{\mathrm{d} \mathtt{r2.bm.lnq}\left( t \right)}{\mathrm{d}t} &amp;= \frac{\frac{2.5 \left( 1 - 0.6^{\frac{1}{e^{\mathtt{r2.bm.lnu}\left( t \right)}}} \right) e^{\mathtt{r2.bm.lnu}\left( t \right)}}{e^{\mathtt{r2.bm.lnq}\left( t \right)}} - \left( e^{\mathtt{r2.bm.ln\nu}\left( t \right)} \right)^{2.125}}{2 e^{\mathtt{ln\tau}}} \\
+\frac{\mathrm{d} \mathtt{r2.bm.lnq}\left( t \right)}{\mathrm{d}t} &amp;= \frac{\frac{2.5 e^{\mathtt{r2.bm.lnu}\left( t \right)} \left( 1 - 0.6^{\frac{1}{e^{\mathtt{r2.bm.lnu}\left( t \right)}}} \right)}{e^{\mathtt{r2.bm.lnq}\left( t \right)}} - \left( e^{\mathtt{r2.bm.ln\nu}\left( t \right)} \right)^{2.125}}{2 e^{\mathtt{ln\tau}}} \\
 \mathtt{r2.bm.bold}\left( t \right) &amp;= 4 \left( 3.7726 + \frac{ - 0.4 e^{\mathtt{r2.bm.lnq}\left( t \right)} e^{\mathtt{ln\epsilon}}}{e^{\mathtt{r2.bm.ln\nu}\left( t \right)}} - 2.7726 e^{\mathtt{r2.bm.lnq}\left( t \right)} - 0.6 e^{\mathtt{ln\epsilon}} + e^{\mathtt{r2.bm.ln\nu}\left( t \right)} \left( -1 + e^{\mathtt{ln\epsilon}} \right) \right) \\
 \mathtt{r3.ei.u}\left( t \right) &amp;= 1 \\
 \frac{\mathrm{d} \mathtt{r3.lm.x}\left( t \right)}{\mathrm{d}t} &amp;= \mathtt{r3.lm.jcn}\left( t \right) \\
-\frac{\mathrm{d} \mathtt{r3.bm.s}\left( t \right)}{\mathrm{d}t} &amp;=  - 0.32 \left( -1 + e^{\mathtt{r3.bm.lnu}\left( t \right)} \right) + \mathtt{r3.bm.jcn}\left( t \right) - 0.64 e^{\mathtt{ln\kappa}} \mathtt{r3.bm.s}\left( t \right) \\
+\frac{\mathrm{d} \mathtt{r3.bm.s}\left( t \right)}{\mathrm{d}t} &amp;= \mathtt{r3.bm.jcn}\left( t \right) - 0.32 \left( -1 + e^{\mathtt{r3.bm.lnu}\left( t \right)} \right) - 0.64 e^{\mathtt{ln\kappa}} \mathtt{r3.bm.s}\left( t \right) \\
 \frac{\mathrm{d} \mathtt{r3.bm.lnu}\left( t \right)}{\mathrm{d}t} &amp;= \frac{\mathtt{r3.bm.s}\left( t \right)}{e^{\mathtt{r3.bm.lnu}\left( t \right)}} \\
 \frac{\mathrm{d} \mathtt{r3.bm.ln\nu}\left( t \right)}{\mathrm{d}t} &amp;= \frac{e^{\mathtt{r3.bm.lnu}\left( t \right)} - \left( e^{\mathtt{r3.bm.ln\nu}\left( t \right)} \right)^{3.125}}{2 e^{\mathtt{ln\tau}} e^{\mathtt{r3.bm.ln\nu}\left( t \right)}} \\
-\frac{\mathrm{d} \mathtt{r3.bm.lnq}\left( t \right)}{\mathrm{d}t} &amp;= \frac{\frac{2.5 \left( 1 - 0.6^{\frac{1}{e^{\mathtt{r3.bm.lnu}\left( t \right)}}} \right) e^{\mathtt{r3.bm.lnu}\left( t \right)}}{e^{\mathtt{r3.bm.lnq}\left( t \right)}} - \left( e^{\mathtt{r3.bm.ln\nu}\left( t \right)} \right)^{2.125}}{2 e^{\mathtt{ln\tau}}} \\
-\mathtt{r3.bm.bold}\left( t \right) &amp;= 4 \left( 3.7726 - 2.7726 e^{\mathtt{r3.bm.lnq}\left( t \right)} - 0.6 e^{\mathtt{ln\epsilon}} + \frac{ - 0.4 e^{\mathtt{r3.bm.lnq}\left( t \right)} e^{\mathtt{ln\epsilon}}}{e^{\mathtt{r3.bm.ln\nu}\left( t \right)}} + e^{\mathtt{r3.bm.ln\nu}\left( t \right)} \left( -1 + e^{\mathtt{ln\epsilon}} \right) \right)
+\frac{\mathrm{d} \mathtt{r3.bm.lnq}\left( t \right)}{\mathrm{d}t} &amp;= \frac{\frac{2.5 e^{\mathtt{r3.bm.lnu}\left( t \right)} \left( 1 - 0.6^{\frac{1}{e^{\mathtt{r3.bm.lnu}\left( t \right)}}} \right)}{e^{\mathtt{r3.bm.lnq}\left( t \right)}} - \left( e^{\mathtt{r3.bm.ln\nu}\left( t \right)} \right)^{2.125}}{2 e^{\mathtt{ln\tau}}} \\
+\mathtt{r3.bm.bold}\left( t \right) &amp;= 4 \left( 3.7726 + \frac{ - 0.4 e^{\mathtt{r3.bm.lnq}\left( t \right)} e^{\mathtt{ln\epsilon}}}{e^{\mathtt{r3.bm.ln\nu}\left( t \right)}} - 2.7726 e^{\mathtt{r3.bm.lnq}\left( t \right)} - 0.6 e^{\mathtt{ln\epsilon}} + e^{\mathtt{r3.bm.ln\nu}\left( t \right)} \left( -1 + e^{\mathtt{ln\epsilon}} \right) \right)
 \end{align}
  \]</p><p>With the function <code>changetune</code>` we can provide a dictionary of parameters whose tunable flag should be changed, for instance set to false to exclude them from the optimizatoin procedure. For instance the the effective connections that are set to zero in the simulation:</p><pre><code class="language-julia hljs">untune = Dict(A[3] =&gt; false, A[7] =&gt; false)
 fitmodel = changetune(fitmodel, untune)                 # 3 and 7 are not present in the simulation model
@@ -144,40 +144,40 @@ fitmodel = structural_simplify(fitmodel, split=false)   # and now simplify the e
 \frac{\mathrm{d} \mathtt{r1.bm.ln\nu}\left( t \right)}{\mathrm{d}t} &amp;= \frac{e^{\mathtt{r1.bm.lnu}\left( t \right)} - \left( e^{\mathtt{r1.bm.ln\nu}\left( t \right)} \right)^{3.125}}{2 e^{\mathtt{ln\tau}} e^{\mathtt{r1.bm.ln\nu}\left( t \right)}} \\
 \frac{\mathrm{d} \mathtt{r1.bm.lnq}\left( t \right)}{\mathrm{d}t} &amp;= \frac{\frac{2.5 e^{\mathtt{r1.bm.lnu}\left( t \right)} \left( 1 - 0.6^{\frac{1}{e^{\mathtt{r1.bm.lnu}\left( t \right)}}} \right)}{e^{\mathtt{r1.bm.lnq}\left( t \right)}} - \left( e^{\mathtt{r1.bm.ln\nu}\left( t \right)} \right)^{2.125}}{2 e^{\mathtt{ln\tau}}} \\
 \frac{\mathrm{d} \mathtt{r2.lm.x}\left( t \right)}{\mathrm{d}t} &amp;= \mathtt{r2.lm.jcn}\left( t \right) \\
-\frac{\mathrm{d} \mathtt{r2.bm.s}\left( t \right)}{\mathrm{d}t} &amp;=  - 0.32 \left( -1 + e^{\mathtt{r2.bm.lnu}\left( t \right)} \right) + \mathtt{r2.bm.jcn}\left( t \right) - 0.64 e^{\mathtt{ln\kappa}} \mathtt{r2.bm.s}\left( t \right) \\
+\frac{\mathrm{d} \mathtt{r2.bm.s}\left( t \right)}{\mathrm{d}t} &amp;= \mathtt{r2.bm.jcn}\left( t \right) - 0.32 \left( -1 + e^{\mathtt{r2.bm.lnu}\left( t \right)} \right) - 0.64 e^{\mathtt{ln\kappa}} \mathtt{r2.bm.s}\left( t \right) \\
 \frac{\mathrm{d} \mathtt{r2.bm.lnu}\left( t \right)}{\mathrm{d}t} &amp;= \frac{\mathtt{r2.bm.s}\left( t \right)}{e^{\mathtt{r2.bm.lnu}\left( t \right)}} \\
 \frac{\mathrm{d} \mathtt{r2.bm.ln\nu}\left( t \right)}{\mathrm{d}t} &amp;= \frac{e^{\mathtt{r2.bm.lnu}\left( t \right)} - \left( e^{\mathtt{r2.bm.ln\nu}\left( t \right)} \right)^{3.125}}{2 e^{\mathtt{ln\tau}} e^{\mathtt{r2.bm.ln\nu}\left( t \right)}} \\
-\frac{\mathrm{d} \mathtt{r2.bm.lnq}\left( t \right)}{\mathrm{d}t} &amp;= \frac{\frac{2.5 \left( 1 - 0.6^{\frac{1}{e^{\mathtt{r2.bm.lnu}\left( t \right)}}} \right) e^{\mathtt{r2.bm.lnu}\left( t \right)}}{e^{\mathtt{r2.bm.lnq}\left( t \right)}} - \left( e^{\mathtt{r2.bm.ln\nu}\left( t \right)} \right)^{2.125}}{2 e^{\mathtt{ln\tau}}} \\
+\frac{\mathrm{d} \mathtt{r2.bm.lnq}\left( t \right)}{\mathrm{d}t} &amp;= \frac{\frac{2.5 e^{\mathtt{r2.bm.lnu}\left( t \right)} \left( 1 - 0.6^{\frac{1}{e^{\mathtt{r2.bm.lnu}\left( t \right)}}} \right)}{e^{\mathtt{r2.bm.lnq}\left( t \right)}} - \left( e^{\mathtt{r2.bm.ln\nu}\left( t \right)} \right)^{2.125}}{2 e^{\mathtt{ln\tau}}} \\
 \frac{\mathrm{d} \mathtt{r3.lm.x}\left( t \right)}{\mathrm{d}t} &amp;= \mathtt{r3.lm.jcn}\left( t \right) \\
-\frac{\mathrm{d} \mathtt{r3.bm.s}\left( t \right)}{\mathrm{d}t} &amp;=  - 0.32 \left( -1 + e^{\mathtt{r3.bm.lnu}\left( t \right)} \right) + \mathtt{r3.bm.jcn}\left( t \right) - 0.64 e^{\mathtt{ln\kappa}} \mathtt{r3.bm.s}\left( t \right) \\
+\frac{\mathrm{d} \mathtt{r3.bm.s}\left( t \right)}{\mathrm{d}t} &amp;= \mathtt{r3.bm.jcn}\left( t \right) - 0.32 \left( -1 + e^{\mathtt{r3.bm.lnu}\left( t \right)} \right) - 0.64 e^{\mathtt{ln\kappa}} \mathtt{r3.bm.s}\left( t \right) \\
 \frac{\mathrm{d} \mathtt{r3.bm.lnu}\left( t \right)}{\mathrm{d}t} &amp;= \frac{\mathtt{r3.bm.s}\left( t \right)}{e^{\mathtt{r3.bm.lnu}\left( t \right)}} \\
 \frac{\mathrm{d} \mathtt{r3.bm.ln\nu}\left( t \right)}{\mathrm{d}t} &amp;= \frac{e^{\mathtt{r3.bm.lnu}\left( t \right)} - \left( e^{\mathtt{r3.bm.ln\nu}\left( t \right)} \right)^{3.125}}{2 e^{\mathtt{ln\tau}} e^{\mathtt{r3.bm.ln\nu}\left( t \right)}} \\
-\frac{\mathrm{d} \mathtt{r3.bm.lnq}\left( t \right)}{\mathrm{d}t} &amp;= \frac{\frac{2.5 \left( 1 - 0.6^{\frac{1}{e^{\mathtt{r3.bm.lnu}\left( t \right)}}} \right) e^{\mathtt{r3.bm.lnu}\left( t \right)}}{e^{\mathtt{r3.bm.lnq}\left( t \right)}} - \left( e^{\mathtt{r3.bm.ln\nu}\left( t \right)} \right)^{2.125}}{2 e^{\mathtt{ln\tau}}} \\
+\frac{\mathrm{d} \mathtt{r3.bm.lnq}\left( t \right)}{\mathrm{d}t} &amp;= \frac{\frac{2.5 e^{\mathtt{r3.bm.lnu}\left( t \right)} \left( 1 - 0.6^{\frac{1}{e^{\mathtt{r3.bm.lnu}\left( t \right)}}} \right)}{e^{\mathtt{r3.bm.lnq}\left( t \right)}} - \left( e^{\mathtt{r3.bm.ln\nu}\left( t \right)} \right)^{2.125}}{2 e^{\mathtt{ln\tau}}} \\
 0 &amp;= 1 - \mathtt{r1.ei.u}\left( t \right) \\
-0 &amp;=  - \mathtt{r1.bm.bold}\left( t \right) + 4 \left( 3.7726 + \frac{ - 0.4 e^{\mathtt{ln\epsilon}} e^{\mathtt{r1.bm.lnq}\left( t \right)}}{e^{\mathtt{r1.bm.ln\nu}\left( t \right)}} - 0.6 e^{\mathtt{ln\epsilon}} - 2.7726 e^{\mathtt{r1.bm.lnq}\left( t \right)} + \left( -1 + e^{\mathtt{ln\epsilon}} \right) e^{\mathtt{r1.bm.ln\nu}\left( t \right)} \right) \\
+0 &amp;=  - \mathtt{r1.bm.bold}\left( t \right) + 4 \left( 3.7726 + \frac{ - 0.4 e^{\mathtt{r1.bm.lnq}\left( t \right)} e^{\mathtt{ln\epsilon}}}{e^{\mathtt{r1.bm.ln\nu}\left( t \right)}} - 2.7726 e^{\mathtt{r1.bm.lnq}\left( t \right)} - 0.6 e^{\mathtt{ln\epsilon}} + e^{\mathtt{r1.bm.ln\nu}\left( t \right)} \left( -1 + e^{\mathtt{ln\epsilon}} \right) \right) \\
 0 &amp;= 1 - \mathtt{r2.ei.u}\left( t \right) \\
 0 &amp;=  - \mathtt{r2.bm.bold}\left( t \right) + 4 \left( 3.7726 + \frac{ - 0.4 e^{\mathtt{r2.bm.lnq}\left( t \right)} e^{\mathtt{ln\epsilon}}}{e^{\mathtt{r2.bm.ln\nu}\left( t \right)}} - 2.7726 e^{\mathtt{r2.bm.lnq}\left( t \right)} - 0.6 e^{\mathtt{ln\epsilon}} + e^{\mathtt{r2.bm.ln\nu}\left( t \right)} \left( -1 + e^{\mathtt{ln\epsilon}} \right) \right) \\
 0 &amp;= 1 - \mathtt{r3.ei.u}\left( t \right) \\
-0 &amp;=  - \mathtt{r3.bm.bold}\left( t \right) + 4 \left( 3.7726 - 2.7726 e^{\mathtt{r3.bm.lnq}\left( t \right)} - 0.6 e^{\mathtt{ln\epsilon}} + \frac{ - 0.4 e^{\mathtt{r3.bm.lnq}\left( t \right)} e^{\mathtt{ln\epsilon}}}{e^{\mathtt{r3.bm.ln\nu}\left( t \right)}} + e^{\mathtt{r3.bm.ln\nu}\left( t \right)} \left( -1 + e^{\mathtt{ln\epsilon}} \right) \right)
+0 &amp;=  - \mathtt{r3.bm.bold}\left( t \right) + 4 \left( 3.7726 + \frac{ - 0.4 e^{\mathtt{r3.bm.lnq}\left( t \right)} e^{\mathtt{ln\epsilon}}}{e^{\mathtt{r3.bm.ln\nu}\left( t \right)}} - 2.7726 e^{\mathtt{r3.bm.lnq}\left( t \right)} - 0.6 e^{\mathtt{ln\epsilon}} + e^{\mathtt{r3.bm.ln\nu}\left( t \right)} \left( -1 + e^{\mathtt{ln\epsilon}} \right) \right)
 \end{align}
  \]</p><h2 id="Setup-spectral-DCM"><a class="docs-heading-anchor" href="#Setup-spectral-DCM">Setup spectral DCM</a><a id="Setup-spectral-DCM-1"></a><a class="docs-heading-anchor-permalink" href="#Setup-spectral-DCM" title="Permalink"></a></h2><pre><code class="language-julia hljs">max_iter = 128;            # maximum number of iterations
 # attribute initial conditions to states
 sts, _ = get_dynamic_states(fitmodel);</code></pre><p>the following step is needed if the model&#39;s Jacobian would give degenerate eigenvalues when expanded around the fixed point 0 (which is the default expansion). We simply add small random values to avoid this degeneracy:</p><pre><code class="language-julia hljs">perturbedfp = Dict(sts .=&gt; abs.(0.001*rand(length(sts))))     # slight noise to avoid issues with Automatic Differentiation.</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">Dict{SymbolicUtils.BasicSymbolic{Real}, Float64} with 15 entries:
-  r3₊lm₊x(t)   =&gt; 0.000489568
-  r3₊bm₊lnq(t) =&gt; 0.000198145
-  r2₊bm₊lnq(t) =&gt; 0.000210419
-  r1₊bm₊lnν(t) =&gt; 0.000541726
-  r2₊bm₊s(t)   =&gt; 0.000397204
-  r3₊bm₊lnu(t) =&gt; 0.000169086
-  r2₊bm₊lnν(t) =&gt; 0.000646358
   r1₊bm₊s(t)   =&gt; 0.000138322
-  r3₊bm₊lnν(t) =&gt; 0.000570881
-  r1₊lm₊x(t)   =&gt; 4.49163e-6
   r1₊bm₊lnu(t) =&gt; 0.000896385
-  r3₊bm₊s(t)   =&gt; 0.000388604
-  r2₊lm₊x(t)   =&gt; 0.000928402
+  r2₊bm₊s(t)   =&gt; 0.000397204
   r2₊bm₊lnu(t) =&gt; 0.000747008
-  r1₊bm₊lnq(t) =&gt; 0.000808084</code></pre><p>For convenience we can use the default prior function to use standardized prior values as given in SPM:</p><pre><code class="language-julia hljs">pmean, pcovariance, indices = defaultprior(fitmodel, nr)
+  r3₊bm₊s(t)   =&gt; 0.000388604
+  r3₊bm₊lnu(t) =&gt; 0.000169086
+  r1₊lm₊x(t)   =&gt; 4.49163e-6
+  r2₊lm₊x(t)   =&gt; 0.000928402
+  r1₊bm₊lnν(t) =&gt; 0.000541726
+  r2₊bm₊lnν(t) =&gt; 0.000646358
+  r3₊lm₊x(t)   =&gt; 0.000489568
+  r1₊bm₊lnq(t) =&gt; 0.000808084
+  r2₊bm₊lnq(t) =&gt; 0.000210419
+  r3₊bm₊lnν(t) =&gt; 0.000570881
+  r3₊bm₊lnq(t) =&gt; 0.000198145</code></pre><p>For convenience we can use the default prior function to use standardized prior values as given in SPM:</p><pre><code class="language-julia hljs">pmean, pcovariance, indices = defaultprior(fitmodel, nr)
 
 priors = (μθ_pr = pmean,
           Σθ_pr = pcovariance
@@ -200,29 +200,29 @@ with_stack(f, n) = fetch(schedule(Task(f, n)));</code></pre><p>We are now ready 
             end
         end
     end
-end</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">iteration: 1 - F:0.0 - dF predicted:1151.645766452124
-iteration: 2 - F:720.5547736157578 - dF predicted:570.6511079784511
-iteration: 3 - F:1215.6518683848608 - dF predicted:524.3646402342182
-iteration: 4 - F:1665.722169689831 - dF predicted:478.76839953696805
-iteration: 5 - F:2082.993250412941 - dF predicted:453.2489798680496
-iteration: 6 - F:2471.3382742885374 - dF predicted:365.08220043740664
-iteration: 7 - F:2764.4593506953092 - dF predicted:210.20136064526912
-iteration: 8 - F:2924.709003099365 - dF predicted:100.06125194189815
-iteration: 9 - F:3004.593138037215 - dF predicted:53.19735621866338
-iteration: 10 - F:3046.491041829753 - dF predicted:24.073777898343582
-iteration: 11 - F:3064.4438352630955 - dF predicted:8.90206505174811
-iteration: 12 - F:3071.3642526244244 - dF predicted:3.9011652163031827
-iteration: 13 - F:3074.5761926879595 - dF predicted:2.236425597482659
-iteration: 14 - F:3076.454990714618 - dF predicted:1.4295039738103021
-iteration: 15 - F:3077.6440773251416 - dF predicted:0.8876270589060057
-iteration: 16 - F:3078.3717218868333 - dF predicted:0.5419600356309695
-iteration: 17 - F:3078.817628139951 - dF predicted:0.32462393587937843
-iteration: 18 - F:3079.067898187026 - dF predicted:0.1953923146142779
-iteration: 19 - F:3079.222726485119 - dF predicted:0.1356567213936276
-iteration: 20 - F:3079.26816440303 - dF predicted:0.1876142673830501
-iteration: 21 - F:3079.277567704102 - dF predicted:0.6009586099207189
-iteration: 22 - F:3079.277567704102 - dF predicted:0.0024760626876751974
-iteration: 23 - F:3079.279392680642 - dF predicted:0.0037885150649157704
-iteration: 24 - F:3079.282627218574 - dF predicted:0.00593298656638601
-iteration: 25 - F:3079.2878438837383 - dF predicted:0.009058419383521577
-convergence</code></pre><h1 id="Plot-Results"><a class="docs-heading-anchor" href="#Plot-Results">Plot Results</a><a id="Plot-Results-1"></a><a class="docs-heading-anchor-permalink" href="#Plot-Results" title="Permalink"></a></h1><p>Free energy is the objective function of the optimization scheme of spectral DCM. Note that in the machine learning literature this it is called Evidence Lower Bound (ELBO). Plot the free energy evolution over optimization iterations to see how the algorithm converges towards a (potentially local) optimum:</p><pre><code class="language-julia hljs">freeenergy(state)</code></pre><img src="25e46652.png" alt="Example block output"/><p>Plot the estimated posterior of the effective connectivity and compare that to the true parameter values. Bar hight are the posterior mean and error bars are the standard deviation of the posterior.</p><pre><code class="language-julia hljs">ecbarplot(state, setup, A_true)</code></pre><img src="59954702.png" alt="Example block output"/><h2 id="References"><a class="docs-heading-anchor" href="#References">References</a><a id="References-1"></a><a class="docs-heading-anchor-permalink" href="#References" title="Permalink"></a></h2><p>[1] <a href="https://doi.org/10.1162/netn_a_00348">Novelli, Leonardo, Karl Friston, and Adeel Razi. “Spectral Dynamic Causal Modeling: A Didactic Introduction and Its Relationship with Functional Connectivity.” Network Neuroscience 8, no. 1 (April 1, 2024): 178–202.</a> <br/>[2] <a href="https://doi.org/10.1101/2023.10.27.564407">Hofmann, David, Anthony G. Chesebro, Chris Rackauckas, Lilianne R. Mujica-Parodi, Karl J. Friston, Alan Edelman, and Helmut H. Strey. “Leveraging Julia’s Automated Differentiation and Symbolic Computation to Increase Spectral DCM Flexibility and Speed.” bioRxiv: The Preprint Server for Biology, 2023.</a> <br/>[3] <a href="https://linkinghub.elsevier.com/retrieve/pii/S1053811913012135">Friston, Karl J., Joshua Kahan, Bharat Biswal, and Adeel Razi. “A DCM for Resting State fMRI.” NeuroImage 94 (July 2014): 396–407.</a></p><hr/><p><em>This page was generated using <a href="https://github.com/fredrikekre/Literate.jl">Literate.jl</a>.</em></p></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../neural_assembly/">« Bottom-up construction of a neural assembly</a><a class="docs-footer-nextpage" href="../../api/">API »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.8.0 on <span class="colophon-date" title="Wednesday 8 January 2025 15:10">Wednesday 8 January 2025</span>. Using Julia version 1.11.2.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
+end</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">iteration: 1 - F:0.0 - dF predicted:1147.1054551103696
+iteration: 2 - F:718.0093510944293 - dF predicted:569.299236898208
+iteration: 3 - F:1212.0890668666557 - dF predicted:523.7480518200163
+iteration: 4 - F:1661.7384106660927 - dF predicted:478.73443066512357
+iteration: 5 - F:2079.0215116278723 - dF predicted:453.5261059681964
+iteration: 6 - F:2467.61340881909 - dF predicted:365.41805040344536
+iteration: 7 - F:2761.006165403611 - dF predicted:210.3956027762734
+iteration: 8 - F:2921.4041942815306 - dF predicted:100.11497057081677
+iteration: 9 - F:3001.306058688854 - dF predicted:53.12301661772222
+iteration: 10 - F:3043.128347345615 - dF predicted:24.01009773005822
+iteration: 11 - F:3061.03826801537 - dF predicted:8.90674999075749
+iteration: 12 - F:3067.9725278678598 - dF predicted:3.9341757821794645
+iteration: 13 - F:3071.2158454588116 - dF predicted:2.267115887541819
+iteration: 14 - F:3073.1217359964458 - dF predicted:1.4525817629732556
+iteration: 15 - F:3074.3302523542498 - dF predicted:0.9021357068992089
+iteration: 16 - F:3075.0701667933245 - dF predicted:0.5499039418576805
+iteration: 17 - F:3075.522247650467 - dF predicted:0.3274667143936829
+iteration: 18 - F:3075.776926859192 - dF predicted:0.19301397542487178
+iteration: 19 - F:3075.9322828650593 - dF predicted:0.11838171904597196
+iteration: 20 - F:3075.9936004914603 - dF predicted:0.10613156150926072
+iteration: 21 - F:3076.035589119687 - dF predicted:0.23456566248347616
+iteration: 22 - F:3076.035589119687 - dF predicted:0.0011664583343338065
+iteration: 23 - F:3076.035589119687 - dF predicted:0.00016958743689815048
+iteration: 24 - F:3076.035618930205 - dF predicted:0.00025378090229427044
+iteration: 25 - F:3076.035618930205 - dF predicted:3.4906311202532494e-5
+convergence</code></pre><h1 id="Plot-Results"><a class="docs-heading-anchor" href="#Plot-Results">Plot Results</a><a id="Plot-Results-1"></a><a class="docs-heading-anchor-permalink" href="#Plot-Results" title="Permalink"></a></h1><p>Free energy is the objective function of the optimization scheme of spectral DCM. Note that in the machine learning literature this it is called Evidence Lower Bound (ELBO). Plot the free energy evolution over optimization iterations to see how the algorithm converges towards a (potentially local) optimum:</p><pre><code class="language-julia hljs">freeenergy(state)</code></pre><img src="829b365c.png" alt="Example block output"/><p>Plot the estimated posterior of the effective connectivity and compare that to the true parameter values. Bar hight are the posterior mean and error bars are the standard deviation of the posterior.</p><pre><code class="language-julia hljs">ecbarplot(state, setup, A_true)</code></pre><img src="c8380558.png" alt="Example block output"/><h2 id="References"><a class="docs-heading-anchor" href="#References">References</a><a id="References-1"></a><a class="docs-heading-anchor-permalink" href="#References" title="Permalink"></a></h2><p>[1] <a href="https://doi.org/10.1162/netn_a_00348">Novelli, Leonardo, Karl Friston, and Adeel Razi. “Spectral Dynamic Causal Modeling: A Didactic Introduction and Its Relationship with Functional Connectivity.” Network Neuroscience 8, no. 1 (April 1, 2024): 178–202.</a> <br/>[2] <a href="https://doi.org/10.1101/2023.10.27.564407">Hofmann, David, Anthony G. Chesebro, Chris Rackauckas, Lilianne R. Mujica-Parodi, Karl J. Friston, Alan Edelman, and Helmut H. Strey. “Leveraging Julia’s Automated Differentiation and Symbolic Computation to Increase Spectral DCM Flexibility and Speed.” bioRxiv: The Preprint Server for Biology, 2023.</a> <br/>[3] <a href="https://linkinghub.elsevier.com/retrieve/pii/S1053811913012135">Friston, Karl J., Joshua Kahan, Bharat Biswal, and Adeel Razi. “A DCM for Resting State fMRI.” NeuroImage 94 (July 2014): 396–407.</a></p><hr/><p><em>This page was generated using <a href="https://github.com/fredrikekre/Literate.jl">Literate.jl</a>.</em></p></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../neural_assembly/">« Bottom-up construction of a neural assembly</a><a class="docs-footer-nextpage" href="../../api/">API »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.8.0 on <span class="colophon-date" title="Friday 10 January 2025 23:59">Friday 10 January 2025</span>. Using Julia version 1.11.2.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
