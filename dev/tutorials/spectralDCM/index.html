@@ -24,7 +24,7 @@ regions = [];      # list of neural mass blocks to then connect them to each oth
 end</code></pre><p>Next we define the between-region connectivity matrix and connect regions; we use the same matrix as is defined in [3]</p><pre><code class="language-julia hljs">A_true = [[-0.5 -2 0]; [0.4 -0.5 -0.3]; [0 0.2 -0.5]]
 for idx in CartesianIndices(A_true)
     add_edge!(g, regions[idx[1]] =&gt; regions[idx[2]], weight=A_true[idx[1], idx[2]])
-end</code></pre><p>finally we compose the simulation model</p><pre><code class="language-julia hljs">@named simmodel = system_from_graph(g, split=false)</code></pre><p class="math-container">\[ \begin{align}
+end</code></pre><p>finally we compose the simulation model</p><pre><code class="language-julia hljs">@named simmodel = system_from_graph(g)</code></pre><p class="math-container">\[ \begin{align}
 \frac{\mathrm{d} \mathtt{r1.ou.x}\left( t \right)}{\mathrm{d}t} &amp;= \frac{\mathtt{r1.ou.\mu} - \mathtt{r1.ou.x}\left( t \right)}{\mathtt{r1.ou.\tau}} \\
 \frac{\mathrm{d} \mathtt{r1.lm.x}\left( t \right)}{\mathrm{d}t} &amp;= \mathtt{w\_r1.lm\_r1.lm} \mathtt{r1.lm.x}\left( t \right) + \mathtt{w\_r1.ou\_r1.lm} \mathtt{r1.ou.x}\left( t \right) + \mathtt{w\_r2.lm\_r1.lm} \mathtt{r2.lm.x}\left( t \right) + \mathtt{w\_r3.lm\_r1.lm} \mathtt{r3.lm.x}\left( t \right) \\
 \frac{\mathrm{d} \mathtt{r1.bm.s}\left( t \right)}{\mathrm{d}t} &amp;=  - 0.32 \left( -1 + e^{\mathtt{r1.bm.lnu}\left( t \right)} \right) + \mathtt{w\_r1.lm\_r1.bm} \mathtt{r1.lm.x}\left( t \right) - 0.64 \mathtt{r1.bm.s}\left( t \right) e^{\mathtt{r1.bm.ln\kappa}} \\
@@ -49,7 +49,7 @@ end</code></pre><p>finally we compose the simulation model</p><pre><code class="
 \end{align}
  \]</p><h2 id="Run-the-simulation-and-plot-the-results"><a class="docs-heading-anchor" href="#Run-the-simulation-and-plot-the-results">Run the simulation and plot the results</a><a id="Run-the-simulation-and-plot-the-results-1"></a><a class="docs-heading-anchor-permalink" href="#Run-the-simulation-and-plot-the-results" title="Permalink"></a></h2><p>setup simulation of the model, time in seconds</p><pre><code class="language-julia hljs">tspan = (0.0, 512.0)
 prob = SDEProblem(simmodel, [], tspan)
-dt = 2   # 2 seconds (units are milliseconds) as measurement interval for fMRI
+dt = 2   # 2 seconds (units are seconds) as measurement interval for fMRI
 sol = solve(prob, ImplicitRKMil(), saveat=dt);</code></pre><p>we now want to extract all the variables in our model which carry the tag &quot;measurement&quot;. For this purpose we can use the Neuroblox function <code>get_idx_tagged_vars</code> the observable quantity in our model is the BOLD signal, the variable of the Blox <code>BalloonModel</code> that represents the BOLD signal is tagged with &quot;measurement&quot; tag. other tags that are defined are &quot;input&quot; which denotes variables representing a stimulus, like for instance an <code>OUBlox</code>.</p><pre><code class="language-julia hljs">idx_m = get_idx_tagged_vars(simmodel, &quot;measurement&quot;)    # get index of bold signal</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">3-element Vector{Int64}:
  19
  20
@@ -113,21 +113,21 @@ end</code></pre><p>Avoid simplification of the model in order to be able to excl
 \mathtt{r2.bm.jcn}\left( t \right) &amp;= \mathtt{w\_r2.lm\_r2.bm} \mathtt{r2.lm.x}\left( t \right) \\
 \mathtt{r3.lm.jcn}\left( t \right) &amp;= \mathtt{A3} \mathtt{r1.lm.x}\left( t \right) + \mathtt{A6} \mathtt{r2.lm.x}\left( t \right) + C \mathtt{r3.ei.u}\left( t \right) - \frac{1}{2} e^{\mathtt{A9}} \mathtt{r3.lm.x}\left( t \right) \\
 \mathtt{r3.bm.jcn}\left( t \right) &amp;= \mathtt{w\_r3.lm\_r3.bm} \mathtt{r3.lm.x}\left( t \right) \\
-\mathtt{r1.ei.u}\left( t \right) &amp;= 1 \\
+\mathtt{r1.ei.u}\left( t \right) &amp;= 0 \\
 \frac{\mathrm{d} \mathtt{r1.lm.x}\left( t \right)}{\mathrm{d}t} &amp;= \mathtt{r1.lm.jcn}\left( t \right) \\
 \frac{\mathrm{d} \mathtt{r1.bm.s}\left( t \right)}{\mathrm{d}t} &amp;= \mathtt{r1.bm.jcn}\left( t \right) - 0.32 \left( -1 + e^{\mathtt{r1.bm.lnu}\left( t \right)} \right) - 0.64 e^{\mathtt{ln\kappa}} \mathtt{r1.bm.s}\left( t \right) \\
 \frac{\mathrm{d} \mathtt{r1.bm.lnu}\left( t \right)}{\mathrm{d}t} &amp;= \frac{\mathtt{r1.bm.s}\left( t \right)}{e^{\mathtt{r1.bm.lnu}\left( t \right)}} \\
 \frac{\mathrm{d} \mathtt{r1.bm.ln\nu}\left( t \right)}{\mathrm{d}t} &amp;= \frac{e^{\mathtt{r1.bm.lnu}\left( t \right)} - \left( e^{\mathtt{r1.bm.ln\nu}\left( t \right)} \right)^{3.125}}{2 e^{\mathtt{ln\tau}} e^{\mathtt{r1.bm.ln\nu}\left( t \right)}} \\
 \frac{\mathrm{d} \mathtt{r1.bm.lnq}\left( t \right)}{\mathrm{d}t} &amp;= \frac{\frac{2.5 e^{\mathtt{r1.bm.lnu}\left( t \right)} \left( 1 - 0.6^{\frac{1}{e^{\mathtt{r1.bm.lnu}\left( t \right)}}} \right)}{e^{\mathtt{r1.bm.lnq}\left( t \right)}} - \left( e^{\mathtt{r1.bm.ln\nu}\left( t \right)} \right)^{2.125}}{2 e^{\mathtt{ln\tau}}} \\
 \mathtt{r1.bm.bold}\left( t \right) &amp;= 4 \left( 3.7726 + \frac{ - 0.4 e^{\mathtt{ln\epsilon}} e^{\mathtt{r1.bm.lnq}\left( t \right)}}{e^{\mathtt{r1.bm.ln\nu}\left( t \right)}} - 0.6 e^{\mathtt{ln\epsilon}} - 2.7726 e^{\mathtt{r1.bm.lnq}\left( t \right)} + \left( -1 + e^{\mathtt{ln\epsilon}} \right) e^{\mathtt{r1.bm.ln\nu}\left( t \right)} \right) \\
-\mathtt{r2.ei.u}\left( t \right) &amp;= 1 \\
+\mathtt{r2.ei.u}\left( t \right) &amp;= 0 \\
 \frac{\mathrm{d} \mathtt{r2.lm.x}\left( t \right)}{\mathrm{d}t} &amp;= \mathtt{r2.lm.jcn}\left( t \right) \\
 \frac{\mathrm{d} \mathtt{r2.bm.s}\left( t \right)}{\mathrm{d}t} &amp;=  - 0.32 \left( -1 + e^{\mathtt{r2.bm.lnu}\left( t \right)} \right) + \mathtt{r2.bm.jcn}\left( t \right) - 0.64 e^{\mathtt{ln\kappa}} \mathtt{r2.bm.s}\left( t \right) \\
 \frac{\mathrm{d} \mathtt{r2.bm.lnu}\left( t \right)}{\mathrm{d}t} &amp;= \frac{\mathtt{r2.bm.s}\left( t \right)}{e^{\mathtt{r2.bm.lnu}\left( t \right)}} \\
 \frac{\mathrm{d} \mathtt{r2.bm.ln\nu}\left( t \right)}{\mathrm{d}t} &amp;= \frac{e^{\mathtt{r2.bm.lnu}\left( t \right)} - \left( e^{\mathtt{r2.bm.ln\nu}\left( t \right)} \right)^{3.125}}{2 e^{\mathtt{ln\tau}} e^{\mathtt{r2.bm.ln\nu}\left( t \right)}} \\
 \frac{\mathrm{d} \mathtt{r2.bm.lnq}\left( t \right)}{\mathrm{d}t} &amp;= \frac{\frac{2.5 \left( 1 - 0.6^{\frac{1}{e^{\mathtt{r2.bm.lnu}\left( t \right)}}} \right) e^{\mathtt{r2.bm.lnu}\left( t \right)}}{e^{\mathtt{r2.bm.lnq}\left( t \right)}} - \left( e^{\mathtt{r2.bm.ln\nu}\left( t \right)} \right)^{2.125}}{2 e^{\mathtt{ln\tau}}} \\
 \mathtt{r2.bm.bold}\left( t \right) &amp;= 4 \left( 3.7726 + \frac{ - 0.4 e^{\mathtt{r2.bm.lnq}\left( t \right)} e^{\mathtt{ln\epsilon}}}{e^{\mathtt{r2.bm.ln\nu}\left( t \right)}} - 2.7726 e^{\mathtt{r2.bm.lnq}\left( t \right)} - 0.6 e^{\mathtt{ln\epsilon}} + e^{\mathtt{r2.bm.ln\nu}\left( t \right)} \left( -1 + e^{\mathtt{ln\epsilon}} \right) \right) \\
-\mathtt{r3.ei.u}\left( t \right) &amp;= 1 \\
+\mathtt{r3.ei.u}\left( t \right) &amp;= 0 \\
 \frac{\mathrm{d} \mathtt{r3.lm.x}\left( t \right)}{\mathrm{d}t} &amp;= \mathtt{r3.lm.jcn}\left( t \right) \\
 \frac{\mathrm{d} \mathtt{r3.bm.s}\left( t \right)}{\mathrm{d}t} &amp;=  - 0.32 \left( -1 + e^{\mathtt{r3.bm.lnu}\left( t \right)} \right) + \mathtt{r3.bm.jcn}\left( t \right) - 0.64 e^{\mathtt{ln\kappa}} \mathtt{r3.bm.s}\left( t \right) \\
 \frac{\mathrm{d} \mathtt{r3.bm.lnu}\left( t \right)}{\mathrm{d}t} &amp;= \frac{\mathtt{r3.bm.s}\left( t \right)}{e^{\mathtt{r3.bm.lnu}\left( t \right)}} \\
@@ -153,76 +153,96 @@ fitmodel = structural_simplify(fitmodel, split=false)   # and now simplify the e
 \frac{\mathrm{d} \mathtt{r3.bm.lnu}\left( t \right)}{\mathrm{d}t} &amp;= \frac{\mathtt{r3.bm.s}\left( t \right)}{e^{\mathtt{r3.bm.lnu}\left( t \right)}} \\
 \frac{\mathrm{d} \mathtt{r3.bm.ln\nu}\left( t \right)}{\mathrm{d}t} &amp;= \frac{e^{\mathtt{r3.bm.lnu}\left( t \right)} - \left( e^{\mathtt{r3.bm.ln\nu}\left( t \right)} \right)^{3.125}}{2 e^{\mathtt{ln\tau}} e^{\mathtt{r3.bm.ln\nu}\left( t \right)}} \\
 \frac{\mathrm{d} \mathtt{r3.bm.lnq}\left( t \right)}{\mathrm{d}t} &amp;= \frac{\frac{2.5 \left( 1 - 0.6^{\frac{1}{e^{\mathtt{r3.bm.lnu}\left( t \right)}}} \right) e^{\mathtt{r3.bm.lnu}\left( t \right)}}{e^{\mathtt{r3.bm.lnq}\left( t \right)}} - \left( e^{\mathtt{r3.bm.ln\nu}\left( t \right)} \right)^{2.125}}{2 e^{\mathtt{ln\tau}}} \\
-0 &amp;= 1 - \mathtt{r1.ei.u}\left( t \right) \\
+0 &amp;=  - \mathtt{r1.ei.u}\left( t \right) \\
 0 &amp;=  - \mathtt{r1.bm.bold}\left( t \right) + 4 \left( 3.7726 + \frac{ - 0.4 e^{\mathtt{ln\epsilon}} e^{\mathtt{r1.bm.lnq}\left( t \right)}}{e^{\mathtt{r1.bm.ln\nu}\left( t \right)}} - 0.6 e^{\mathtt{ln\epsilon}} - 2.7726 e^{\mathtt{r1.bm.lnq}\left( t \right)} + \left( -1 + e^{\mathtt{ln\epsilon}} \right) e^{\mathtt{r1.bm.ln\nu}\left( t \right)} \right) \\
-0 &amp;= 1 - \mathtt{r2.ei.u}\left( t \right) \\
+0 &amp;=  - \mathtt{r2.ei.u}\left( t \right) \\
 0 &amp;=  - \mathtt{r2.bm.bold}\left( t \right) + 4 \left( 3.7726 + \frac{ - 0.4 e^{\mathtt{r2.bm.lnq}\left( t \right)} e^{\mathtt{ln\epsilon}}}{e^{\mathtt{r2.bm.ln\nu}\left( t \right)}} - 2.7726 e^{\mathtt{r2.bm.lnq}\left( t \right)} - 0.6 e^{\mathtt{ln\epsilon}} + e^{\mathtt{r2.bm.ln\nu}\left( t \right)} \left( -1 + e^{\mathtt{ln\epsilon}} \right) \right) \\
-0 &amp;= 1 - \mathtt{r3.ei.u}\left( t \right) \\
+0 &amp;=  - \mathtt{r3.ei.u}\left( t \right) \\
 0 &amp;=  - \mathtt{r3.bm.bold}\left( t \right) + 4 \left( 3.7726 - 2.7726 e^{\mathtt{r3.bm.lnq}\left( t \right)} - 0.6 e^{\mathtt{ln\epsilon}} + \frac{ - 0.4 e^{\mathtt{r3.bm.lnq}\left( t \right)} e^{\mathtt{ln\epsilon}}}{e^{\mathtt{r3.bm.ln\nu}\left( t \right)}} + e^{\mathtt{r3.bm.ln\nu}\left( t \right)} \left( -1 + e^{\mathtt{ln\epsilon}} \right) \right)
 \end{align}
  \]</p><h2 id="Setup-spectral-DCM"><a class="docs-heading-anchor" href="#Setup-spectral-DCM">Setup spectral DCM</a><a id="Setup-spectral-DCM-1"></a><a class="docs-heading-anchor-permalink" href="#Setup-spectral-DCM" title="Permalink"></a></h2><pre><code class="language-julia hljs">max_iter = 128;            # maximum number of iterations
 # attribute initial conditions to states
-sts, _ = get_dynamic_states(fitmodel);</code></pre><p>the following step is needed if the model&#39;s Jacobian would give degenerate eigenvalues when expanded around the fixed point 0 (which is the default expansion). We simply add small random values to avoid this degeneracy:</p><pre><code class="language-julia hljs">perturbedfp = Dict(sts .=&gt; abs.(0.001*rand(length(sts))))     # slight noise to avoid issues with Automatic Differentiation.</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">Dict{SymbolicUtils.BasicSymbolic{Real}, Float64} with 15 entries:
-  r3₊lm₊x(t)   =&gt; 0.000489568
-  r3₊bm₊lnq(t) =&gt; 0.000198145
-  r2₊bm₊lnq(t) =&gt; 0.000210419
-  r1₊bm₊lnν(t) =&gt; 0.000541726
-  r2₊bm₊s(t)   =&gt; 0.000397204
-  r3₊bm₊lnu(t) =&gt; 0.000169086
-  r2₊bm₊lnν(t) =&gt; 0.000646358
-  r1₊bm₊s(t)   =&gt; 0.000138322
-  r3₊bm₊lnν(t) =&gt; 0.000570881
-  r1₊lm₊x(t)   =&gt; 4.49163e-6
-  r1₊bm₊lnu(t) =&gt; 0.000896385
-  r3₊bm₊s(t)   =&gt; 0.000388604
-  r2₊lm₊x(t)   =&gt; 0.000928402
-  r2₊bm₊lnu(t) =&gt; 0.000747008
-  r1₊bm₊lnq(t) =&gt; 0.000808084</code></pre><p>For convenience we can use the default prior function to use standardized prior values as given in SPM:</p><pre><code class="language-julia hljs">pmean, pcovariance, indices = defaultprior(fitmodel, nr)
+sts, _ = get_dynamic_states(fitmodel);
+sts = unknowns(fitmodel)
+rv = rand(length(sts))</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">21-element Vector{Float64}:
+ 0.004491628835879058
+ 0.1383222132934412
+ 0.8963847874358261
+ 0.5417257606171452
+ 0.8080840602252259
+ 0.9284024499910537
+ 0.3972039390177752
+ 0.7470075803411821
+ 0.26476805918235147
+ 0.15312223840673855
+ ⋮
+ 0.8838972945061436
+ 0.29772729407479337
+ 0.21942934194774466
+ 0.6635207597717726
+ 0.6463578588757963
+ 0.21041883733487587
+ 0.48956779118332816
+ 0.3886038323086184
+ 0.1690862868185009</code></pre><p>the following step is needed if the model&#39;s Jacobian would give degenerate eigenvalues when expanded around the fixed point 0 (which is the default expansion). We simply add small random values to avoid this degeneracy:</p><pre><code class="language-julia hljs">perturbedfp = OrderedDict(sts .=&gt; abs.(0.001*rv[1:length(sts)]))     # slight noise to avoid issues with Automatic Differentiation.</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">OrderedCollections.OrderedDict{SymbolicUtils.BasicSymbolic{Real}, Float64} with 21 entries:
+  r1₊lm₊x(t)    =&gt; 4.49163e-6
+  r1₊bm₊s(t)    =&gt; 0.000138322
+  r1₊bm₊lnu(t)  =&gt; 0.000896385
+  r1₊bm₊lnν(t)  =&gt; 0.000541726
+  r1₊bm₊lnq(t)  =&gt; 0.000808084
+  r2₊lm₊x(t)    =&gt; 0.000928402
+  r2₊bm₊s(t)    =&gt; 0.000397204
+  r2₊bm₊lnu(t)  =&gt; 0.000747008
+  r2₊bm₊lnν(t)  =&gt; 0.000264768
+  r2₊bm₊lnq(t)  =&gt; 0.000153122
+  r3₊lm₊x(t)    =&gt; 0.000656112
+  r3₊bm₊s(t)    =&gt; 0.000817439
+  r3₊bm₊lnu(t)  =&gt; 0.000883897
+  r3₊bm₊lnν(t)  =&gt; 0.000297727
+  r3₊bm₊lnq(t)  =&gt; 0.000219429
+  r1₊ei₊u(t)    =&gt; 0.000663521
+  r2₊ei₊u(t)    =&gt; 0.000646358
+  r3₊ei₊u(t)    =&gt; 0.000210419
+  r1₊bm₊bold(t) =&gt; 0.000489568
+  ⋮             =&gt; ⋮</code></pre><p>For convenience we can use the default prior function to use standardized prior values as given in SPM:</p><pre><code class="language-julia hljs">pmean, pcovariance, indices = defaultprior(fitmodel, nr)
 
 priors = (μθ_pr = pmean,
           Σθ_pr = pcovariance
-         );</code></pre><p>Setup hyper parameter prior as well:</p><pre><code class="language-julia hljs">hyperpriors = Dict(:Πλ_pr =&gt; 128.0*ones(1, 1),   # prior metaparameter precision, needs to be a matrix
-                   :μλ_pr =&gt; [8.0]               # prior metaparameter mean, needs to be a vector
-                  );</code></pre><p>To compute the cross spectral densities we need to provide the sampling interval of the time series, the frequency axis and the order of the multivariate autoregressive model:</p><pre><code class="language-julia hljs">csdsetup = (mar_order = p, freq = freq, dt = dt);</code></pre><p>earlier we used the function <code>get_idx_tagged_vars</code> to get the indices of tagged variables. Here we don&#39;t want to get the indices but rather the symbolic variable names themselves. and in particular we need to get the measurement variables in the same ordering as the model equations are defined.</p><pre><code class="language-julia hljs">_, s_bold = get_eqidx_tagged_vars(fitmodel, &quot;measurement&quot;);    # get bold signal variables</code></pre><p>Prepare the DCM. This function will setup the computation of the Dynamic Causal Model. The last parameter specifies that wer are using fMRI time series as opposed to LFPs.</p><pre><code class="language-julia hljs">(state, setup) = setup_sDCM(dfsol[:, String.(Symbol.(s_bold))], fitmodel, perturbedfp, csdsetup, priors, hyperpriors, indices, pmean, &quot;fMRI&quot;);
-
-# HACK: on machines with very small amounts of RAM, Julia can run out of stack space while compiling the code called in this loop
-# this should be rewritten to abuse the compiler less, but for now, an easy solution is just to run it with more allocated stack space.
-with_stack(f, n) = fetch(schedule(Task(f, n)));</code></pre><p>We are now ready to run the optimization procedure! :) That is we loop over run<em>sDCM</em>iteration! which will alter <code>state</code> after each optimization iteration. It essentially computes the Variational Laplace estimation of expectation and variance of the tunable parameters.</p><pre><code class="language-julia hljs">with_stack(5_000_000) do  # 5MB of stack space
-    for iter in 1:max_iter
-        state.iter = iter
-        run_sDCM_iteration!(state, setup)
-        print(&quot;iteration: &quot;, iter, &quot; - F:&quot;, state.F[end] - state.F[2], &quot; - dF predicted:&quot;, state.dF[end], &quot;\n&quot;)
-        if iter &gt;= 4
-            criterion = state.dF[end-3:end] .&lt; setup.tolerance
-            if all(criterion)
-                print(&quot;convergence\n&quot;)
-                break
-            end
+         );</code></pre><p>Setup hyper parameter prior as well:</p><pre><code class="language-julia hljs">hyperpriors = (Πλ_pr = 128.0*ones(1, 1),   # prior metaparameter precision, needs to be a matrix
+               μλ_pr = [8.0]               # prior metaparameter mean, needs to be a vector
+              );</code></pre><p>To compute the cross spectral densities we need to provide the sampling interval of the time series, the frequency axis and the order of the multivariate autoregressive model:</p><pre><code class="language-julia hljs">csdsetup = (mar_order = p, freq = freq, dt = dt);</code></pre><p>earlier we used the function <code>get_idx_tagged_vars</code> to get the indices of tagged variables. Here we don&#39;t want to get the indices but rather the symbolic variable names themselves. and in particular we need to get the measurement variables in the same ordering as the model equations are defined.</p><pre><code class="language-julia hljs">_, s_bold = get_eqidx_tagged_vars(fitmodel, &quot;measurement&quot;);    # get bold signal variables</code></pre><p>Prepare the DCM. This function will setup the computation of the Dynamic Causal Model. The last parameter specifies that wer are using fMRI time series as opposed to LFPs.</p><pre><code class="language-julia hljs">(state, setup) = setup_sDCM(dfsol[:, String.(Symbol.(s_bold))], fitmodel, perturbedfp, csdsetup, priors, hyperpriors, indices, pmean, &quot;fMRI&quot;);</code></pre><p>We are now ready to run the optimization procedure! :) That is we loop over run<em>sDCM</em>iteration! which will alter <code>state</code> after each optimization iteration. It essentially computes the Variational Laplace estimation of expectation and variance of the tunable parameters.</p><pre><code class="language-julia hljs">for iter in 1:max_iter
+    state.iter = iter
+    run_sDCM_iteration!(state, setup)
+    print(&quot;iteration: &quot;, iter, &quot; - F:&quot;, state.F[end] - state.F[2], &quot; - dF predicted:&quot;, state.dF[end], &quot;\n&quot;)
+    if iter &gt;= 4
+        criterion = state.dF[end-3:end] .&lt; setup.tolerance
+        if all(criterion)
+            print(&quot;convergence\n&quot;)
+            break
         end
     end
-end</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">iteration: 1 - F:0.0 - dF predicted:1151.645766454626
-iteration: 2 - F:720.5547736165249 - dF predicted:570.6511079776099
-iteration: 3 - F:1215.651868384979 - dF predicted:524.3646402335777
-iteration: 4 - F:1665.7221696894617 - dF predicted:478.7683995366398
-iteration: 5 - F:2082.9932504123144 - dF predicted:453.24897986787704
-iteration: 6 - F:2471.3382742877843 - dF predicted:365.0822004373764
-iteration: 7 - F:2764.4593506945635 - dF predicted:210.2013606453641
-iteration: 8 - F:2924.7090030987124 - dF predicted:100.06125194194902
-iteration: 9 - F:3004.593138036572 - dF predicted:53.19735621850561
-iteration: 10 - F:3046.491041829023 - dF predicted:24.073777898263447
-iteration: 11 - F:3064.4438352623 - dF predicted:8.902065051716994
-iteration: 12 - F:3071.3642526236063 - dF predicted:3.901165216297128
-iteration: 13 - F:3074.576192687138 - dF predicted:2.2364255974822576
-iteration: 14 - F:3076.454990713796 - dF predicted:1.429503973813221
-iteration: 15 - F:3077.6440773243203 - dF predicted:0.8876270589104192
-iteration: 16 - F:3078.371721886017 - dF predicted:0.5419600356351018
-iteration: 17 - F:3078.8176281391366 - dF predicted:0.32462393588823557
-iteration: 18 - F:3079.0678981862034 - dF predicted:0.1953923146434604
-iteration: 19 - F:3079.2227264843 - dF predicted:0.135656721526179
-iteration: 20 - F:3079.2681644021 - dF predicted:0.18761426800246586
-iteration: 21 - F:3079.2775677029013 - dF predicted:0.6009586126933194
-iteration: 22 - F:3079.2775677029013 - dF predicted:0.002476062697706699
-iteration: 23 - F:3079.2793926794598 - dF predicted:0.0037885150812212915
-iteration: 24 - F:3079.282627217406 - dF predicted:0.005932986591946685
-iteration: 25 - F:3079.2878438825924 - dF predicted:0.009058419422460832
-convergence</code></pre><h1 id="Plot-Results"><a class="docs-heading-anchor" href="#Plot-Results">Plot Results</a><a id="Plot-Results-1"></a><a class="docs-heading-anchor-permalink" href="#Plot-Results" title="Permalink"></a></h1><p>Free energy is the objective function of the optimization scheme of spectral DCM. Note that in the machine learning literature this it is called Evidence Lower Bound (ELBO). Plot the free energy evolution over optimization iterations to see how the algorithm converges towards a (potentially local) optimum:</p><pre><code class="language-julia hljs">freeenergy(state)</code></pre><img src="25e46652.png" alt="Example block output"/><p>Plot the estimated posterior of the effective connectivity and compare that to the true parameter values. Bar hight are the posterior mean and error bars are the standard deviation of the posterior.</p><pre><code class="language-julia hljs">ecbarplot(state, setup, A_true)</code></pre><img src="59954702.png" alt="Example block output"/><h2 id="References"><a class="docs-heading-anchor" href="#References">References</a><a id="References-1"></a><a class="docs-heading-anchor-permalink" href="#References" title="Permalink"></a></h2><p>[1] <a href="https://doi.org/10.1162/netn_a_00348">Novelli, Leonardo, Karl Friston, and Adeel Razi. “Spectral Dynamic Causal Modeling: A Didactic Introduction and Its Relationship with Functional Connectivity.” Network Neuroscience 8, no. 1 (April 1, 2024): 178–202.</a> <br/>[2] <a href="https://doi.org/10.1101/2023.10.27.564407">Hofmann, David, Anthony G. Chesebro, Chris Rackauckas, Lilianne R. Mujica-Parodi, Karl J. Friston, Alan Edelman, and Helmut H. Strey. “Leveraging Julia’s Automated Differentiation and Symbolic Computation to Increase Spectral DCM Flexibility and Speed.” bioRxiv: The Preprint Server for Biology, 2023.</a> <br/>[3] <a href="https://linkinghub.elsevier.com/retrieve/pii/S1053811913012135">Friston, Karl J., Joshua Kahan, Bharat Biswal, and Adeel Razi. “A DCM for Resting State fMRI.” NeuroImage 94 (July 2014): 396–407.</a></p><hr/><p><em>This page was generated using <a href="https://github.com/fredrikekre/Literate.jl">Literate.jl</a>.</em></p></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../neural_assembly/">« Bottom-up construction of a neural assembly</a><a class="docs-footer-nextpage" href="../../api/">API »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.8.0 on <span class="colophon-date" title="Monday 20 January 2025 17:25">Monday 20 January 2025</span>. Using Julia version 1.11.2.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
+end</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">iteration: 1 - F:0.0 - dF predicted:1157.0261789861593
+iteration: 2 - F:723.0311507426045 - dF predicted:571.656052707972
+iteration: 3 - F:1218.8873080621652 - dF predicted:524.9758884339153
+iteration: 4 - F:1669.388381795574 - dF predicted:478.98646966397627
+iteration: 5 - F:2086.803685683444 - dF predicted:453.2176029188732
+iteration: 6 - F:2475.1023155284897 - dF predicted:364.92229844966255
+iteration: 7 - F:2768.083292806169 - dF predicted:210.06120733632355
+iteration: 8 - F:2928.225476107456 - dF predicted:99.97542571862947
+iteration: 9 - F:3008.0302043827633 - dF predicted:53.10659116417999
+iteration: 10 - F:3049.8502192344695 - dF predicted:24.01404947895049
+iteration: 11 - F:3067.7597698327736 - dF predicted:8.893055462225313
+iteration: 12 - F:3074.6787752886653 - dF predicted:3.9145217815208673
+iteration: 13 - F:3077.904012606121 - dF predicted:2.2506414762131106
+iteration: 14 - F:3079.7956904858083 - dF predicted:1.4418619388434442
+iteration: 15 - F:3080.995630276641 - dF predicted:0.8972970656350311
+iteration: 16 - F:3081.7314827643168 - dF predicted:0.5491028142793443
+iteration: 17 - F:3082.1835796910373 - dF predicted:0.33037552520766184
+iteration: 18 - F:3082.4362185574328 - dF predicted:0.20315703085400078
+iteration: 19 - F:3082.592871428726 - dF predicted:0.1603888038901559
+iteration: 20 - F:3082.620794040093 - dF predicted:0.2975516396562602
+iteration: 21 - F:3082.620794040093 - dF predicted:0.0018908586173894848
+iteration: 22 - F:3082.620794040093 - dF predicted:0.0003166164508284269
+iteration: 23 - F:3082.620860438044 - dF predicted:0.0004207543304993158
+iteration: 24 - F:3082.620860438044 - dF predicted:5.977464790351296e-5
+convergence</code></pre><h1 id="Plot-Results"><a class="docs-heading-anchor" href="#Plot-Results">Plot Results</a><a id="Plot-Results-1"></a><a class="docs-heading-anchor-permalink" href="#Plot-Results" title="Permalink"></a></h1><p>Free energy is the objective function of the optimization scheme of spectral DCM. Note that in the machine learning literature this it is called Evidence Lower Bound (ELBO). Plot the free energy evolution over optimization iterations to see how the algorithm converges towards a (potentially local) optimum:</p><pre><code class="language-julia hljs">freeenergy(state)</code></pre><img src="6b54b8b7.png" alt="Example block output"/><p>Plot the estimated posterior of the effective connectivity and compare that to the true parameter values. Bar hight are the posterior mean and error bars are the standard deviation of the posterior.</p><pre><code class="language-julia hljs">ecbarplot(state, setup, A_true)</code></pre><img src="3813c911.png" alt="Example block output"/><h2 id="References"><a class="docs-heading-anchor" href="#References">References</a><a id="References-1"></a><a class="docs-heading-anchor-permalink" href="#References" title="Permalink"></a></h2><p>[1] <a href="https://doi.org/10.1162/netn_a_00348">Novelli, Leonardo, Karl Friston, and Adeel Razi. “Spectral Dynamic Causal Modeling: A Didactic Introduction and Its Relationship with Functional Connectivity.” Network Neuroscience 8, no. 1 (April 1, 2024): 178–202.</a> <br/>[2] <a href="https://doi.org/10.1101/2023.10.27.564407">Hofmann, David, Anthony G. Chesebro, Chris Rackauckas, Lilianne R. Mujica-Parodi, Karl J. Friston, Alan Edelman, and Helmut H. Strey. “Leveraging Julia’s Automated Differentiation and Symbolic Computation to Increase Spectral DCM Flexibility and Speed.” bioRxiv: The Preprint Server for Biology, 2023.</a> <br/>[3] <a href="https://linkinghub.elsevier.com/retrieve/pii/S1053811913012135">Friston, Karl J., Joshua Kahan, Bharat Biswal, and Adeel Razi. “A DCM for Resting State fMRI.” NeuroImage 94 (July 2014): 396–407.</a></p><hr/><p><em>This page was generated using <a href="https://github.com/fredrikekre/Literate.jl">Literate.jl</a>.</em></p></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../neural_assembly/">« Bottom-up construction of a neural assembly</a><a class="docs-footer-nextpage" href="../../api/">API »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.8.0 on <span class="colophon-date" title="Tuesday 28 January 2025 17:07">Tuesday 28 January 2025</span>. Using Julia version 1.11.3.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
