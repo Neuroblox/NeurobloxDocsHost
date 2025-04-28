@@ -2526,9 +2526,9 @@ version = "0.1.0"
 
 [[deps.SciMLBase]]
 deps = ["ADTypes", "Accessors", "ArrayInterface", "CommonSolve", "ConstructionBase", "Distributed", "DocStringExtensions", "EnumX", "FunctionWrappersWrappers", "IteratorInterfaceExtensions", "LinearAlgebra", "Logging", "Markdown", "Moshi", "PrecompileTools", "Preferences", "Printf", "RecipesBase", "RecursiveArrayTools", "Reexport", "RuntimeGeneratedFunctions", "SciMLOperators", "SciMLStructures", "StaticArraysCore", "Statistics", "SymbolicIndexingInterface"]
-git-tree-sha1 = "70744adfa4d6875dfcb2c41749d20d73a90edd7d"
+git-tree-sha1 = "341c75a6ba4fa155a2471f5609163df5e3184e7b"
 uuid = "0bca4576-84f4-4d90-8ffe-ffa030f20462"
-version = "2.86.1"
+version = "2.86.2"
 
     [deps.SciMLBase.extensions]
     SciMLBaseChainRulesCoreExt = "ChainRulesCore"
@@ -2697,9 +2697,9 @@ version = "2.25.0"
 
 [[deps.SparseMatrixColorings]]
 deps = ["ADTypes", "DocStringExtensions", "LinearAlgebra", "Random", "SparseArrays"]
-git-tree-sha1 = "0582fd1410a01a667a2a2a79cdc98a7c478d11d8"
+git-tree-sha1 = "76e9564f0de0d1d7a46095e758ae13ceba680cfb"
 uuid = "0a514795-09f3-496d-8182-132a7b665d35"
-version = "0.4.18"
+version = "0.4.19"
 
     [deps.SparseMatrixColorings.extensions]
     SparseMatrixColoringsCliqueTreesExt = "CliqueTrees"
