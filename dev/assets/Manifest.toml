@@ -201,9 +201,9 @@ version = "0.1.6"
 
 [[deps.BlockArrays]]
 deps = ["ArrayLayouts", "FillArrays", "LinearAlgebra"]
-git-tree-sha1 = "be56ef2fb72f89e251af9b38136897d57fbdb211"
+git-tree-sha1 = "a8c0f363186263d75e97a41878d10dd842797561"
 uuid = "8e7c35d0-a365-5155-bbbb-fb81a777f24e"
-version = "1.6.2"
+version = "1.6.3"
 
     [deps.BlockArrays.extensions]
     BlockArraysAdaptExt = "Adapt"
