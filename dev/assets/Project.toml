@@ -25,4 +25,4 @@ Neuroblox = {path = "/home/runner/work/Neuroblox.jl/Neuroblox.jl"}
 
 [compat]
 Documenter = "1"
-GraphDynamics = "0.2.8"
+GraphDynamics = "0.4.1"

@@ -2,7 +2,7 @@
 
 julia_version = "1.11.5"
 manifest_format = "2.0"
-project_hash = "9a8a8a96f295a6c857ddc4672bdc0497405946a5"
+project_hash = "762ae6bce7186db0c84b75ba42e323932395b57c"
 
 [[deps.ADTypes]]
 git-tree-sha1 = "e2478490447631aedba0823d4d7a80b2cc8cdb32"
@@ -475,9 +475,9 @@ version = "1.6.4"
 
 [[deps.DiffEqBase]]
 deps = ["ArrayInterface", "ConcreteStructs", "DataStructures", "DocStringExtensions", "EnumX", "EnzymeCore", "FastBroadcast", "FastClosures", "FastPower", "FunctionWrappers", "FunctionWrappersWrappers", "LinearAlgebra", "Logging", "Markdown", "MuladdMacro", "Parameters", "PrecompileTools", "Printf", "RecursiveArrayTools", "Reexport", "SciMLBase", "SciMLOperators", "SciMLStructures", "Setfield", "Static", "StaticArraysCore", "Statistics", "SymbolicIndexingInterface", "TruncatedStacktraces"]
-git-tree-sha1 = "575a4b945c26f654625c9bc58a1ed10a4eddd267"
+git-tree-sha1 = "02ab1cc1da453c97dcb1dabeee3ee3c3f56d8822"
 uuid = "2b5f629d-d688-5b77-993f-72d75c75574e"
-version = "6.173.0"
+version = "6.173.1"
 
     [deps.DiffEqBase.extensions]
     DiffEqBaseCUDAExt = "CUDA"
@@ -641,9 +641,9 @@ version = "0.9.4"
 
 [[deps.Documenter]]
 deps = ["ANSIColoredPrinters", "AbstractTrees", "Base64", "CodecZlib", "Dates", "DocStringExtensions", "Downloads", "Git", "IOCapture", "InteractiveUtils", "JSON", "Logging", "Markdown", "MarkdownAST", "Pkg", "PrecompileTools", "REPL", "RegistryInstances", "SHA", "TOML", "Test", "Unicode"]
-git-tree-sha1 = "844cf386d62dd684a37193dcb14d357e7f979587"
+git-tree-sha1 = "6f8730fd1bdf974009ef296bd81afb2728854fc0"
 uuid = "e30172f5-a6a5-5a46-863b-614d45cd2de4"
-version = "1.11.2"
+version = "1.11.3"
 
 [[deps.DomainSets]]
 deps = ["CompositeTypes", "IntervalSets", "LinearAlgebra", "Random", "StaticArrays"]
@@ -1004,9 +1004,9 @@ version = "1.3.1"
 
 [[deps.GraphDynamics]]
 deps = ["Accessors", "ConstructionBase", "OhMyThreads", "OrderedCollections", "RecursiveArrayTools", "SciMLBase", "SparseArrays", "SymbolicIndexingInterface"]
-git-tree-sha1 = "3a0a14760b191892bc95636f692399064ea28068"
+git-tree-sha1 = "6591284becf4307b5192ac8ec47c0c34b9a6b0d3"
 uuid = "bcd5d0fe-e6b7-4ef1-9848-780c183c7f4c"
-version = "0.2.14"
+version = "0.4.1"
 weakdeps = ["ModelingToolkit", "Symbolics"]
 
     [deps.GraphDynamics.extensions]
@@ -1191,9 +1191,9 @@ weakdeps = ["Unitful"]
 
 [[deps.IntervalArithmetic]]
 deps = ["CRlibm", "MacroTools", "OpenBLASConsistentFPCSR_jll", "Random", "RoundingEmulator"]
-git-tree-sha1 = "4e1b4155f04ffa0acf3a0d6e3d651892604666f5"
+git-tree-sha1 = "694c52705f8b23dc5b39eeac629dc3059a168a40"
 uuid = "d1acc4aa-44c8-5952-acd4-ba5d80a2a253"
-version = "0.22.34"
+version = "0.22.35"
 weakdeps = ["DiffRules", "ForwardDiff", "IntervalSets", "LinearAlgebra", "RecipesBase", "SparseArrays"]
 
     [deps.IntervalArithmetic.extensions]
