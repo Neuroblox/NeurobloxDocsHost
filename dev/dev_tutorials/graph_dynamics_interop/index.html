@@ -48,7 +48,7 @@ using CairoMakie, StochasticDiffEq</code></pre><h2 id="Van-der-Pol"><a class="do
         sys = System(eqs, t, sts, p; name=name)
         new(name, p, sys, namespace)
     end
-end;</code></pre><h3 id="GraphDynamics-version"><a class="docs-heading-anchor" href="#GraphDynamics-version">GraphDynamics version</a><a id="GraphDynamics-version-1"></a><a class="docs-heading-anchor-permalink" href="#GraphDynamics-version" title="Permalink"></a></h3><h4 id="Converting-to-Subsystem"><a class="docs-heading-anchor" href="#Converting-to-Subsystem">Converting to Subsystem</a><a id="Converting-to-Subsystem-1"></a><a class="docs-heading-anchor-permalink" href="#Converting-to-Subsystem" title="Permalink"></a></h4><p>GraphDynamics.jl uses a type called <code>Subsystem</code> which is really a bundle around a <code>SubsystemStates</code> which stores the dynamical states of an object, and <code>SubsystemParams</code> which stores whatever parameters might affect the evolution of the object (or be important to it in some other way).</p><p>We need to teach <code>GraphDynamicsInterop</code> how to convert a <code>VanDerPol</code> into a <code>Subsystem{VanDerPol}</code></p><pre><code class="language-julia hljs">function GraphDynamicsInterop.to_subsystem(v::VanDerPol)
+end;</code></pre><h3 id="GraphDynamics-version"><a class="docs-heading-anchor" href="#GraphDynamics-version">GraphDynamics version</a><a id="GraphDynamics-version-1"></a><a class="docs-heading-anchor-permalink" href="#GraphDynamics-version" title="Permalink"></a></h3><h4 id="Converting-to-Subsystem"><a class="docs-heading-anchor" href="#Converting-to-Subsystem">Converting to Subsystem</a><a id="Converting-to-Subsystem-1"></a><a class="docs-heading-anchor-permalink" href="#Converting-to-Subsystem" title="Permalink"></a></h4><p>GraphDynamics.jl uses a type called <code>Subsystem</code> which is really a bundle around a <code>SubsystemStates</code> which stores the dynamical states of an object, and <code>SubsystemParams</code> which stores whatever parameters might affect the evolution of the object (or be important to it in some other way).</p><p>We need to teach <code>GraphDynamicsInterop</code> how to convert a <code>VanDerPol</code> into a <code>Subsystem{VanDerPol}</code></p><pre><code class="language-julia hljs">function GraphDynamics.to_subsystem(v::VanDerPol)
     # Extract the default values of the parameters θ and ϕ
     θ = GraphDynamicsInterop.recursive_getdefault(v.θ)
     ϕ = GraphDynamicsInterop.recursive_getdefault(v.ϕ)
@@ -118,8 +118,8 @@ end</code></pre><img src="edc39b53.png" alt="Example block output"/><p>And now l
     sol = solve(prob, RKMil())
     f = Figure()
     ax = Axis(f[1, 1], xlabel=&quot;t&quot;)
-    lines!(ax, sol.t, sol[:v1₊r], label=&quot;v1.r&quot;)
-    lines!(ax, sol.t, sol[:v2₊r], label=&quot;v2.r&quot;)
+    lines!(ax, sol.t, sol[v1.r], label=&quot;v1.r&quot;)
+    lines!(ax, sol.t, sol[v2.r], label=&quot;v2.r&quot;)
     f
 end</code></pre><img src="edc39b53-001.png" alt="Example block output"/><h2 id="DBS-Source-blox"><a class="docs-heading-anchor" href="#DBS-Source-blox">DBS Source blox</a><a id="DBS-Source-blox-1"></a><a class="docs-heading-anchor-permalink" href="#DBS-Source-blox" title="Permalink"></a></h2><p>Now lets implement another random blox, the DBS Source blox from <code>Neuroblox/src/blox/DBS_sources.jl</code>, because lets say we want to use this to drive our VanDerPol oscillator.</p><pre><code class="language-julia hljs">struct DBS &lt;: Neuroblox.StimulusBlox
     name::Symbol
@@ -224,26 +224,26 @@ end</code></pre><img src="3a1c0321.png" alt="Example block output"/><p>and with 
     sol = solve(prob, RKMil())
     f = Figure()
     ax = Axis(f[1, 1], xlabel=&quot;t&quot;)
-    lines!(ax, sol.t, sol[:v1₊r], label=&quot;v1.r&quot;)
-    lines!(ax, sol.t, sol[:v2₊r], label=&quot;v2.r&quot;)
+    lines!(ax, sol.t, sol[v1.r], label=&quot;v1.r&quot;)
+    lines!(ax, sol.t, sol[v2.r], label=&quot;v2.r&quot;)
     f
 end</code></pre><img src="3a1c0321-001.png" alt="Example block output"/><h2 id="Composite-blox"><a class="docs-heading-anchor" href="#Composite-blox">Composite blox</a><a id="Composite-blox-1"></a><a class="docs-heading-anchor-permalink" href="#Composite-blox" title="Permalink"></a></h2><p>Some blox are modelled as a collection of sub-blox. Let&#39;s look at an example where we pretent we had a use for a structure which is a big bag of randomly connected VdP oscillators.</p><p>Supporting structures like this in GraphDynamics can be as simple as defining a container for the sub-blox:</p><pre><code class="language-julia hljs">struct BagOfVdP &lt;: Neuroblox.CompositeBlox
     name
-    vdps
+    parts
     weights
     function BagOfVdP(;name, N_osc, θ=1.0, ϕ=0.1, weights=rand(N_osc, N_osc))
-        vdps = [VanDerPol(;name=Symbol(&quot;vdp&quot;, i), θ, ϕ) for i ∈ 1:N_osc]
-        new(name, vdps, weights)
+        parts = [VanDerPol(;name=Symbol(name, &quot;₊vdp&quot;, i), θ, ϕ) for i ∈ 1:N_osc]
+        new(name, parts, weights)
     end
 end</code></pre><p>and then defining a <code>system_wiring_rule!</code> which tells GraphDynamics.jl how to &#39;flatten&#39; this into a graph:</p><pre><code class="language-julia hljs">using GraphDynamics: system_wiring_rule!
 function GraphDynamics.system_wiring_rule!(g, blox::BagOfVdP; kwargs...)
-    (;vdps, weights) = blox
-    for blox ∈ vdps
+    (;parts, weights) = blox
+    for blox ∈ parts
         # Recursively add the sub-structures to our graph
         system_wiring_rule!(g, blox)
     end
-    for (i, blox_src) ∈ enumerate(vdps)
-        for (j, blox_dst) ∈ enumerate(vdps)
+    for (i, blox_src) ∈ enumerate(parts)
+        for (j, blox_dst) ∈ enumerate(parts)
             if !iszero(weights[i, j])
                 # Add connections between the blox
                 system_wiring_rule!(g, blox_src, blox_dst; weight=weights[i, j])
@@ -251,7 +251,7 @@ function GraphDynamics.system_wiring_rule!(g, blox::BagOfVdP; kwargs...)
         end
     end
 end</code></pre><p>Now lets define a connection between a <code>BagOfVdP</code> and our <code>DBS</code> stimulus blox where each VdP oscillator gets wired to the DBS blox. We can do this by defining a 3-arg method for <code>system_wiring_rule</code>:</p><pre><code class="language-julia hljs">function GraphDynamics.system_wiring_rule!(g, blox_src::DBS, blox_dst::BagOfVdP; weight, kwargs...)
-    for vdp_dst ∈ blox_dst.vdps
+    for vdp_dst ∈ blox_dst.parts
         system_wiring_rule!(g, blox_src, vdp_dst; weight, kwargs...)
     end
 end</code></pre><p>Finally, in order for this to work, we&#39;ll also need to define what a <code>BasicConnection</code> does between two VanDerPols:</p><pre><code class="language-julia hljs">function (c::BasicConnection)(src::Subsystem{VanDerPol}, dst::Subsystem{VanDerPol}, t)
@@ -260,7 +260,6 @@ end</code></pre><p>Finally, in order for this to work, we&#39;ll also need to de
     jcn = w * src.x
     (; jcn_x, jcn) # This must match the form of initialize_input(sys_dst)
 end</code></pre><p>Now we can use our composite structure:</p><pre><code class="language-julia hljs">let
-
     g = MetaDiGraph()
     @named dbs = DBS()
     @named vdps = BagOfVdP(N_osc=3)
@@ -272,8 +271,8 @@ end</code></pre><p>Now we can use our composite structure:</p><pre><code class="
     sol = solve(prob, RKMil())
     f = Figure()
     ax = Axis(f[1, 1], xlabel=&quot;t&quot;)
-    lines!(ax, sol.t, sol[:vdp1₊r], label=&quot;vdp1.r&quot;)
-    lines!(ax, sol.t, sol[:vdp2₊r], label=&quot;vdp2.r&quot;)
-    lines!(ax, sol.t, sol[:vdp3₊r], label=&quot;vdp3.r&quot;)
+    lines!(ax, sol.t, sol[vdps.parts[1].r], label=&quot;vdp1.r&quot;)
+    lines!(ax, sol.t, sol[vdps.parts[2].r], label=&quot;vdp2.r&quot;)
+    lines!(ax, sol.t, sol[vdps.parts[3].r], label=&quot;vdp3.r&quot;)
     f
-end</code></pre><img src="55780359.png" alt="Example block output"/><h2 id="TODO:-Events"><a class="docs-heading-anchor" href="#TODO:-Events">TODO: Events</a><a id="TODO:-Events-1"></a><a class="docs-heading-anchor-permalink" href="#TODO:-Events" title="Permalink"></a></h2><hr/><p><em>This page was generated using <a href="https://github.com/fredrikekre/Literate.jl">Literate.jl</a>.</em></p></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../../tutorials/neural_assembly/">« Bottom-up construction of a neural assembly</a><a class="docs-footer-nextpage" href="../../api/">API »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.11.4 on <span class="colophon-date" title="Monday 2 June 2025 17:21">Monday 2 June 2025</span>. Using Julia version 1.11.5.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
+end</code></pre><img src="e0a56158.png" alt="Example block output"/><h2 id="TODO:-Events"><a class="docs-heading-anchor" href="#TODO:-Events">TODO: Events</a><a id="TODO:-Events-1"></a><a class="docs-heading-anchor-permalink" href="#TODO:-Events" title="Permalink"></a></h2><hr/><p><em>This page was generated using <a href="https://github.com/fredrikekre/Literate.jl">Literate.jl</a>.</em></p></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../../tutorials/neural_assembly/">« Bottom-up construction of a neural assembly</a><a class="docs-footer-nextpage" href="../../api/">API »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.12.0 on <span class="colophon-date" title="Wednesday 18 June 2025 13:20">Wednesday 18 June 2025</span>. Using Julia version 1.11.5.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
