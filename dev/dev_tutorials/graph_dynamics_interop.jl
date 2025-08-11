@@ -13,7 +13,7 @@ using Neuroblox.GraphDynamicsInterop: GraphDynamicsInterop, BasicConnection
 
 using Neuroblox: 
     paramscoping,
-    NeuralMassBlox,
+    AbstractNeuralMass,
     get_namespaced_sys,
     generate_weight_param,
     Connector
@@ -32,7 +32,7 @@ First, let's consider something that's suspiciously like the noisy Van der Pol o
 * It has some 'computed variables' (i.e. variables which don't really exist in the system solution, but can be calulated based on its parameters and states)
 ===============================================================================================================#
 
-struct VanDerPol <: NeuralMassBlox
+struct VanDerPol <: AbstractNeuralMass
     name
     params
     system
@@ -265,7 +265,7 @@ end                                                          #src
 Now lets implement another random blox, the DBS Source blox from `Neuroblox/src/blox/DBS_sources.jl`, because lets say we want to use this to drive our VanDerPol oscillator.
 ===============================================================================================================#
 
-struct DBS <: Neuroblox.StimulusBlox
+struct DBS <: Neuroblox.AbstractStimulus
     name::Symbol
     params::Vector{Num}
     system::ODESystem
@@ -356,7 +356,7 @@ Suppose our regular Neuroblox connection rule looks like:
 
 function Neuroblox.Connector(
     blox_src::DBS,
-    blox_dest::NeuralMassBlox;
+    blox_dest::AbstractNeuralMass;
     kwargs...
 )
     sys_src = get_namespaced_sys(blox_src)
@@ -437,7 +437,7 @@ structure which is a big bag of randomly connected VdP oscillators.
 
 Supporting structures like this in GraphDynamics can be as simple as defining a container for the sub-blox:
 ===============================================================================================================#
-struct BagOfVdP <: Neuroblox.CompositeBlox
+struct BagOfVdP <: Neuroblox.AbstractComposite
     name
     parts
     weights
