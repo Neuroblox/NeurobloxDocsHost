@@ -9,7 +9,7 @@ show you here the "manual" way of doing this, which is typically going to be bet
 ===============================================================================================================#
 
 using Neuroblox, ModelingToolkit, GraphDynamics
-using Neuroblox.GraphDynamicsInterop: GraphDynamicsInterop, BasicConnection
+using Neuroblox.NeurobloxBase.GraphDynamicsInterop: GraphDynamicsInterop, BasicConnection
 
 using Neuroblox: 
     paramscoping,
