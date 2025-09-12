@@ -114,7 +114,7 @@ for i in Base.OneTo(N_exci)
     add_edge!(g, n_excis[i] => n_inh, weight = 1.0)
 end
 
-@named sys = system_from_graph(g)
+@named sys = system_from_graph(g; graphdynamics = true)
 prob = ODEProblem(sys, [], (0.0, 1000), [])
 sol = solve(prob, Vern7(), saveat=0.1)
 stackplot(vcat(n_excis, n_inh), sol)
@@ -133,7 +133,7 @@ wta2 = WinnerTakeAll(name=Symbol("wta2"), I_bg=4.0, N_exci=N_exci, namespace=glo
 g = MetaDiGraph()
 add_edge!(g, wta1 => wta2, weight=1, density=0.5) ##density keyword sets the connection probability from each excitatory neuron of source WTA circuit to each excitatory neuron of target WTA circuit
 
-sys = system_from_graph(g, name=global_namespace)
+sys = system_from_graph(g, name=global_namespace; graphdynamics = true)
 prob = ODEProblem(sys, [], (0.0, 1000), [])
 sol = solve(prob, Vern7(), saveat=0.1)
 
@@ -184,7 +184,7 @@ for i in 1:N_wta
     add_edge!(g, n_ff_inh => wtas[i], weight=1)
 end
 
-sys = system_from_graph(g, name=global_namespace)
+sys = system_from_graph(g, name=global_namespace; graphdynamics = true)
 prob = ODEProblem(sys, [], (0.0, 1000), [])
 sol = solve(prob, Vern7(), saveat=0.1)
 
@@ -212,7 +212,7 @@ g = MetaDiGraph()
 add_edge!(g, ASC1 => CB, weight=44)
 
 ## solve the system for time 0 to 1000 ms
-sys = system_from_graph(g, name=global_namespace)
+sys = system_from_graph(g, name=global_namespace; graphdynamics = true)
 prob = ODEProblem(sys, [], (0.0, 1000), []) ## tspan = (0,1000)
 sol = solve(prob, Vern7(), saveat=0.1);
 
@@ -270,7 +270,7 @@ add_edge!(g, ASC1 => AC, weight=44)
 add_edge!(g, VAC => AC, weight=3, density=0.08)
 
 ## define system and solve
-sys = system_from_graph(g, name=global_namespace)
+sys = system_from_graph(g, name=global_namespace; graphdynamics = true)
 prob = ODEProblem(sys, [], (0.0, 1000), []) ## tspan = (0,1000)
 sol = solve(prob, Vern7(), saveat=0.1);
 
