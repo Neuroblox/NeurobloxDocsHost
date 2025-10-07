@@ -1,7 +1,7 @@
 # # Synaptic plasticity and Reinforcement Learning
 
 using Neuroblox 
-using OrdinaryDiffEq ## to build the ODE problem and solve it, gain access to multiple solvers from this
+using OrdinaryDiffEqDefault, OrdinaryDiffEqVerner ## to build the ODE problem and solve it, gain access to multiple solvers from this
 using Random ## for generating random variables
 using CairoMakie ## for customized plotting recipies for blox
 using CSV ## to read data from CSV files

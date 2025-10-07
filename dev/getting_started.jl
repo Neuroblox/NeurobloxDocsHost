@@ -37,7 +37,7 @@
 # Let's create an oscillating circuit by connecting two Wilson-Cowan neural masses:
 
 using Neuroblox
-using OrdinaryDiffEq
+using OrdinaryDiffEqRosenbrock
 using CairoMakie
 
 ## Create two Wilson-Cowan blox
