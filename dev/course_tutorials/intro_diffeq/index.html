@@ -33,23 +33,23 @@ sol = solve(prob, Tsit5());</code></pre><p>The solution object contains the valu
  5.0
  4.737486951537538
  4.159128176496565
- 3.3782322868012167
- 2.567239547206995
- 1.9773834953757765
- 1.609406579313759
- 1.5527495138127192
- 1.751976919353582
- 2.354631344083018
+ 3.3782322868012162
+ 2.5672395472069955
+ 1.977383495375779
+ 1.6094065793137624
+ 1.5527495138127205
+ 1.7519768926099863
+ 2.354631225053724
  ⋮
- 1.8142907939983393
- 1.5487494242884368
- 1.7613255917012127
- 2.557622956958202
- 4.022959649813752
- 5.154551933372799
- 3.767965007739118
- 2.227941601184653
- 1.9461160463927163</code></pre><p>Finally we can plot the timeseries of both variables of the solution in a line plot using</p><pre><code class="language-julia hljs">fig = plot(sol)
+ 1.814291633172069
+ 1.5487493568378696
+ 1.7613244814291886
+ 2.5576191015109053
+ 4.0229552328109435
+ 5.154552266613606
+ 3.767979346268823
+ 2.227954401720682
+ 1.9461159411228923</code></pre><p>Finally we can plot the timeseries of both variables of the solution in a line plot using</p><pre><code class="language-julia hljs">fig = plot(sol)
 # display the figure
 fig</code></pre><p><img src="../../assets/mtk1.svg" alt/></p><p>We will shortly see more plot types and options.</p><h2 id="Izhikevich-Neuron"><a class="docs-heading-anchor" href="#Izhikevich-Neuron">Izhikevich Neuron</a><a id="Izhikevich-Neuron-1"></a><a class="docs-heading-anchor-permalink" href="#Izhikevich-Neuron" title="Permalink"></a></h2><h3 id="Simulating-Spikes"><a class="docs-heading-anchor" href="#Simulating-Spikes">Simulating Spikes</a><a id="Simulating-Spikes-1"></a><a class="docs-heading-anchor-permalink" href="#Simulating-Spikes" title="Permalink"></a></h3><p>The Izhikevich neuron is a similar system of ODEs like the Lotka-Volterra example above. One notable difference however is the spiking mechanism. Spiking in the Izhikevich neuron needs to be implemented &quot;manually&quot;. That is we need to detect when the voltage variable crosses a spiking threshold and every time this event happens we need to reset the neuron&#39;s voltage to a more polarized value and potentially alter other variables too.</p><pre><code class="language-julia hljs">@variables v(t)=-65 u(t)=-13
 # The following parameter values correspond to chattering spiking.
@@ -114,4 +114,4 @@ izh_prob = ODEProblem(izh_simple, [], tspan)
 izh_sol = solve(izh_prob)
 
 fig = plot(izh_sol; idxs=[v, I])
-fig</code></pre><p><img src="../../assets/mtk5.svg" alt/></p><p>Notice how the external current is slowly being accumulated in the neuron&#39;s potential <code>v</code> until the eventual spike and reset.</p><h2 id="Challenge-Problems"><a class="docs-heading-anchor" href="#Challenge-Problems">Challenge Problems</a><a id="Challenge-Problems-1"></a><a class="docs-heading-anchor-permalink" href="#Challenge-Problems" title="Permalink"></a></h2><ul><li>Define a <a href="https://neuronaldynamics.epfl.ch/online/Pt2.html">Generalized Integrate-and-Fire neuron</a> as an <code>ODESystem</code> and simulate it.</li><li>Pick a neuron model of your choice and perform a sensitivity analysis on the system. How is its spiking behavior change as its parameters change? Summarize the results in one (or several) plots.</li></ul><h2 id="References"><a class="docs-heading-anchor" href="#References">References</a><a id="References-1"></a><a class="docs-heading-anchor-permalink" href="#References" title="Permalink"></a></h2><ul><li>[1] E. M. Izhikevich, &quot;Simple model of spiking neurons,&quot; in IEEE Transactions on Neural Networks, vol. 14, no. 6, pp. 1569-1572, Nov. 2003, doi: 10.1109/TNN.2003.820440</li><li>[2] Ma, Yingbo, Shashi Gowda, Ranjan Anantharaman, Chris Laughman, Viral Shah, and Chris Rackauckas. &quot;Modelingtoolkit: A composable graph transformation system for equation-based modeling.&quot; arXiv preprint arXiv:2103.05244 (2021).</li><li>[3] https://docs.sciml.ai/ModelingToolkit/stable/</li></ul><hr/><p><em>This page was generated using <a href="https://github.com/fredrikekre/Literate.jl">Literate.jl</a>.</em></p></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../../blox_api/">« Blox Documentation</a><a class="docs-footer-nextpage" href="../intro_plot/">Plotting with Makie »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.14.1 on <span class="colophon-date" title="Tuesday 7 October 2025 17:30">Tuesday 7 October 2025</span>. Using Julia version 1.11.7.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
+fig</code></pre><p><img src="../../assets/mtk5.svg" alt/></p><p>Notice how the external current is slowly being accumulated in the neuron&#39;s potential <code>v</code> until the eventual spike and reset.</p><h2 id="Challenge-Problems"><a class="docs-heading-anchor" href="#Challenge-Problems">Challenge Problems</a><a id="Challenge-Problems-1"></a><a class="docs-heading-anchor-permalink" href="#Challenge-Problems" title="Permalink"></a></h2><ul><li>Define a <a href="https://neuronaldynamics.epfl.ch/online/Pt2.html">Generalized Integrate-and-Fire neuron</a> as an <code>ODESystem</code> and simulate it.</li><li>Pick a neuron model of your choice and perform a sensitivity analysis on the system. How is its spiking behavior change as its parameters change? Summarize the results in one (or several) plots.</li></ul><h2 id="References"><a class="docs-heading-anchor" href="#References">References</a><a id="References-1"></a><a class="docs-heading-anchor-permalink" href="#References" title="Permalink"></a></h2><ul><li>[1] E. M. Izhikevich, &quot;Simple model of spiking neurons,&quot; in IEEE Transactions on Neural Networks, vol. 14, no. 6, pp. 1569-1572, Nov. 2003, doi: 10.1109/TNN.2003.820440</li><li>[2] Ma, Yingbo, Shashi Gowda, Ranjan Anantharaman, Chris Laughman, Viral Shah, and Chris Rackauckas. &quot;Modelingtoolkit: A composable graph transformation system for equation-based modeling.&quot; arXiv preprint arXiv:2103.05244 (2021).</li><li>[3] https://docs.sciml.ai/ModelingToolkit/stable/</li></ul><hr/><p><em>This page was generated using <a href="https://github.com/fredrikekre/Literate.jl">Literate.jl</a>.</em></p></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../../blox_api/">« Blox Documentation</a><a class="docs-footer-nextpage" href="../intro_plot/">Plotting with Makie »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.14.1 on <span class="colophon-date" title="Saturday 11 October 2025 02:10">Saturday 11 October 2025</span>. Using Julia version 1.12.0.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
