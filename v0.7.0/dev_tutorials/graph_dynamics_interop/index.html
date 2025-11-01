@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><title>Making Neuroblox models work with GraphDynamics · Neuroblox Documentation</title><meta name="title" content="Making Neuroblox models work with GraphDynamics · Neuroblox Documentation"/><meta property="og:title" content="Making Neuroblox models work with GraphDynamics · Neuroblox Documentation"/><meta property="twitter:title" content="Making Neuroblox models work with GraphDynamics · Neuroblox Documentation"/><meta name="description" content="Documentation for Neuroblox Documentation."/><meta property="og:description" content="Documentation for Neuroblox Documentation."/><meta property="twitter:description" content="Documentation for Neuroblox Documentation."/><script data-outdated-warner src="../../assets/warner.js"></script><link href="https://cdnjs.cloudflare.com/ajax/libs/lato-font/3.0.0/css/lato-font.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/juliamono/0.050/juliamono.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/fontawesome.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/solid.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/brands.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.8/katex.min.css" rel="stylesheet" type="text/css"/><script>documenterBaseURL="../.."</script><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" data-main="../../assets/documenter.js"></script><script src="../../search_index.js"></script><script src="../../siteinfo.js"></script><script src="../../../versions.js"></script><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/catppuccin-mocha.css" data-theme-name="catppuccin-mocha"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/catppuccin-macchiato.css" data-theme-name="catppuccin-macchiato"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/catppuccin-frappe.css" data-theme-name="catppuccin-frappe"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/catppuccin-latte.css" data-theme-name="catppuccin-latte"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/documenter-dark.css" data-theme-name="documenter-dark" data-theme-primary-dark/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/documenter-light.css" data-theme-name="documenter-light" data-theme-primary/><script src="../../assets/themeswap.js"></script><link href="../../assets/favicon.ico" rel="icon" type="image/x-icon"/></head><body><div id="documenter"><nav class="docs-sidebar"><a class="docs-logo" href="../../"><img src="../../assets/logo.png" alt="Neuroblox Documentation logo"/></a><div class="docs-package-name"><span class="docs-autofit"><a href="../../">Neuroblox Documentation</a></span></div><button class="docs-search-query input is-rounded is-small is-clickable my-2 mx-auto py-1 px-2" id="documenter-search-query">Search docs (Ctrl + /)</button><ul class="docs-menu"><li><a class="tocitem" href="../../">About</a></li><li><a class="tocitem" href="../../install/">How to install</a></li><li><a class="tocitem" href="../../getting_started/">Getting Started</a></li><li><span class="tocitem">Tutorials</span><ul><li><a class="tocitem" href="../../tutorials/resting_state/">Resting state simulation using neural mass models</a></li><li><a class="tocitem" href="../../tutorials/ping_network/">Pyramidal-Interneuron Gamma network</a></li><li><a class="tocitem" href="../../tutorials/parkinsons/">Building a model of the Basal Ganglia using Neural Mass models</a></li><li><a class="tocitem" href="../../tutorials/basal_ganglia/">Basal Ganglia Model and Parkinson&#39;s Disease Simulation</a></li><li><a class="tocitem" href="../../tutorials/neural_assembly/">Bottom-up construction of a neural assembly</a></li></ul></li><li><span class="tocitem">Dev Tutorials</span><ul><li class="is-active"><a class="tocitem" href>Making Neuroblox models work with GraphDynamics</a><ul class="internal"><li><a class="tocitem" href="#Van-der-Pol"><span>Van der Pol</span></a></li><li><a class="tocitem" href="#DBS-Source-blox"><span>DBS Source blox</span></a></li><li><a class="tocitem" href="#Connections"><span>Connections</span></a></li><li><a class="tocitem" href="#Composite-blox"><span>Composite blox</span></a></li><li><a class="tocitem" href="#TODO:-Events"><span>TODO: Events</span></a></li></ul></li></ul></li><li><span class="tocitem">API</span><ul><li><a class="tocitem" href="../../api/">Neuroblox API</a></li><li><a class="tocitem" href="../../blox_api/">Blox Documentation</a></li></ul></li><li><span class="tocitem">Neuroblox Course</span><ul><li><a class="tocitem" href="../../course_tutorials/intro_diffeq/">Differential Equations with ModelingToolkit</a></li><li><a class="tocitem" href="../../course_tutorials/intro_plot/">Plotting with Makie</a></li><li><a class="tocitem" href="../../course_tutorials/blox_connections/">Blox and Connections in Neuroblox</a></li><li><a class="tocitem" href="../../course_tutorials/neuron_mass/">Neurons, Neural Masses and Sources</a></li><li><a class="tocitem" href="../../course_tutorials/PING_circuit/">Pyramidal-Interneuron Gamma network</a></li><li><a class="tocitem" href="../../course_tutorials/CS_circuit/">Biomimetic Model of Corticostriatal Micro-assemblies</a></li><li><a class="tocitem" href="../../course_tutorials/decision_making/">Decision Making in a Circuit Model</a></li><li><a class="tocitem" href="../../course_tutorials/learning/">Synaptic Plasticity and Reinforcement Learning</a></li></ul></li><li><a class="tocitem" href="../../release_notes/">Release Notes</a></li></ul><div class="docs-version-selector field has-addons"><div class="control"><span class="docs-label button is-static is-size-7">Version</span></div><div class="docs-selector control is-expanded"><div class="select is-fullwidth is-size-7"><select id="documenter-version-selector"></select></div></div></div></nav><div class="docs-main"><header class="docs-navbar"><a class="docs-sidebar-button docs-navbar-link fa-solid fa-bars is-hidden-desktop" id="documenter-sidebar-button" href="#"></a><nav class="breadcrumb"><ul class="is-hidden-mobile"><li><a class="is-disabled">Dev Tutorials</a></li><li class="is-active"><a href>Making Neuroblox models work with GraphDynamics</a></li></ul><ul class="is-hidden-tablet"><li class="is-active"><a href>Making Neuroblox models work with GraphDynamics</a></li></ul></nav><div class="docs-right"><a class="docs-settings-button docs-navbar-link fa-solid fa-gear" id="documenter-settings-button" href="#" title="Settings"></a><a class="docs-article-toggle-button fa-solid fa-chevron-up" id="documenter-article-toggle-button" href="javascript:;" title="Collapse all docstrings"></a></div></header><article class="content" id="documenter-page"><h1 id="Making-Neuroblox-models-work-with-GraphDynamics"><a class="docs-heading-anchor" href="#Making-Neuroblox-models-work-with-GraphDynamics">Making Neuroblox models work with GraphDynamics</a><a id="Making-Neuroblox-models-work-with-GraphDynamics-1"></a><a class="docs-heading-anchor-permalink" href="#Making-Neuroblox-models-work-with-GraphDynamics" title="Permalink"></a></h1><p>In this notebook I&#39;ll show some toy examples of Neuroblox systems and make them interoperate with GraphDynamics.</p><p>There are some functions in Neuroblox.GraphDynamicsInterop to try and automate this process, but I&#39;m going to show you here the &quot;manual&quot; way of doing this, which is typically going to be better supported and more powerful / robust.</p><pre><code class="language-julia hljs">using Neuroblox, ModelingToolkit, GraphDynamics
+using Neuroblox.NeurobloxBase.GraphDynamicsInterop: GraphDynamicsInterop, BasicConnection
+
+using Neuroblox:
+    paramscoping,
+    AbstractNeuralMass,
+    get_namespaced_sys,
+    generate_weight_param,
+    Connector
+
+using CairoMakie, StochasticDiffEq</code></pre><h2 id="Van-der-Pol"><a class="docs-heading-anchor" href="#Van-der-Pol">Van der Pol</a><a id="Van-der-Pol-1"></a><a class="docs-heading-anchor-permalink" href="#Van-der-Pol" title="Permalink"></a></h2><p>First, let&#39;s consider something that&#39;s suspiciously like the noisy Van der Pol oscillator in <code>Neuroblox/src/blox/neural_mass.jl</code>, except:</p><ul><li>It has 2 inputs instead of only 1 (I added jcn_x as an additional complication)</li><li>It has some &#39;computed variables&#39; (i.e. variables which don&#39;t really exist in the system solution, but can be calulated based on its parameters and states)</li></ul><pre><code class="language-julia hljs">struct VanDerPol &lt;: AbstractNeuralMass
+    name
+    params
+    system
+    namespace
+    function VanDerPol(; name, namespace=nothing, θ=1.0, ϕ=0.1)
+        p = paramscoping(θ=θ, ϕ=ϕ)
+        θ, ϕ = p
+        sts = @variables begin
+            # our regular dynamical variables
+            x(t)=0.0
+            [output=true]
+            y(t)=0.0
+
+            # our algebraic inputs (these are really computed variables too)
+            jcn_x(t)
+            [input=true]
+            jcn(t)
+            [input=true]
+
+            # our extra computed variables
+            jcn_tot(t)
+            r(t)
+        end
+
+        @brownian ξ
+
+        eqs = [
+            # Dynamical equations
+            D(x) ~ y + jcn_x,
+            D(y) ~ θ*(1-x^2)*y - x + ϕ*ξ + jcn,
+
+            # Extra computed variables
+            jcn_tot ~ jcn_x + jcn,
+            r ~ √(x^2 + y^2)
+        ]
+        sys = System(eqs, t, sts, p; name=name)
+        new(name, p, sys, namespace)
+    end
+end;</code></pre><h3 id="GraphDynamics-version"><a class="docs-heading-anchor" href="#GraphDynamics-version">GraphDynamics version</a><a id="GraphDynamics-version-1"></a><a class="docs-heading-anchor-permalink" href="#GraphDynamics-version" title="Permalink"></a></h3><h4 id="Converting-to-Subsystem"><a class="docs-heading-anchor" href="#Converting-to-Subsystem">Converting to Subsystem</a><a id="Converting-to-Subsystem-1"></a><a class="docs-heading-anchor-permalink" href="#Converting-to-Subsystem" title="Permalink"></a></h4><p>GraphDynamics.jl uses a type called <code>Subsystem</code> which is really a bundle around a <code>SubsystemStates</code> which stores the dynamical states of an object, and <code>SubsystemParams</code> which stores whatever parameters might affect the evolution of the object (or be important to it in some other way).</p><p>We need to teach <code>GraphDynamicsInterop</code> how to convert a <code>VanDerPol</code> into a <code>Subsystem{VanDerPol}</code></p><pre><code class="language-julia hljs">function GraphDynamics.to_subsystem(v::VanDerPol)
+    # Extract the default values of the parameters θ and ϕ
+    θ = GraphDynamicsInterop.recursive_getdefault(v.θ)
+    ϕ = GraphDynamicsInterop.recursive_getdefault(v.ϕ)
+
+    params = SubsystemParams{VanDerPol}(; θ, ϕ)
+
+    # Extract the default values of dynamical states x and y
+    x = GraphDynamicsInterop.recursive_getdefault(v.x)
+    y = GraphDynamicsInterop.recursive_getdefault(v.y)
+    states = SubsystemStates{VanDerPol}(; x, y)
+
+    # Form a Subsystem from the states and params
+    Subsystem(states, params)
+end</code></pre><p>Here it is in action:</p><pre><code class="language-julia hljs">let @named v = VanDerPol(;θ=10.0)
+    sys = GraphDynamics.to_subsystem(v)
+    @info &quot;States and params out of a Subsystem:&quot; sys.x sys.y sys.θ sys.ϕ
+end</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">┌ Info: States and params out of a Subsystem:
+│   sys.x = 0.0
+│   sys.y = 0.0
+│   sys.θ = 10.0
+└   sys.ϕ = 0.1</code></pre><h4 id="Inputs"><a class="docs-heading-anchor" href="#Inputs">Inputs</a><a id="Inputs-1"></a><a class="docs-heading-anchor-permalink" href="#Inputs" title="Permalink"></a></h4><p>Now let&#39;s define what an &quot;input&quot; to a VanDerPol must look like. In the MTK definition above, we said it had two possible inputs, <code>jcn_x</code> and <code>jcn</code>, so we&#39;ll make the &quot;zero input&quot; to  a VanDerPol be a NamedTuple with those two names as keys:</p><pre><code class="language-julia hljs">GraphDynamics.initialize_input(s::Subsystem{VanDerPol}) = (;jcn_x = 0.0, jcn = 0.0)</code></pre><h4 id="The-subsystem-differential"><a class="docs-heading-anchor" href="#The-subsystem-differential">The subsystem differential</a><a id="The-subsystem-differential-1"></a><a class="docs-heading-anchor-permalink" href="#The-subsystem-differential" title="Permalink"></a></h4><p>Now we can get to the interesting stuff: defining the differential equations of a Subsystem.</p><p>The idea is that we add a method to <code>GraphDynamics.subsustem_differential</code> that takes in the subsystem, whatever inputs were &quot;sent&quot; to it, and the time (which we don&#39;t need), and then we compute a <code>SubsystemStates</code> whose entries correspond to the derivatives of the respective states</p><pre><code class="language-julia hljs">function GraphDynamics.subsystem_differential(sys::Subsystem{VanDerPol}, inputs, t)
+    # Unpack the states and params we need
+    (;x, y, θ) = sys # this is fancy syntax for x = sys.x; y = sys.y; θ = sys.θ
+
+    # Unpack the inputs
+    (;jcn_x, jcn) = inputs
+
+    return SubsystemStates{VanDerPol}(
+        #=d/dt=#x = y + jcn_x,
+        #=d/dt=#y = θ*(1-x^2)*y - x + jcn
+    )
+end</code></pre><h4 id="Noise-terms"><a class="docs-heading-anchor" href="#Noise-terms">Noise terms</a><a id="Noise-terms-1"></a><a class="docs-heading-anchor-permalink" href="#Noise-terms" title="Permalink"></a></h4><p>The keen-eyed may have noticed that we didn&#39;t include the <code>ϕ*ξ</code> term in the differential for <code>y</code>. This is because we only use <code>subsystem_differential</code> for the non-stochastic part of the ODE.</p><p>To include stochastic noise, we first tell GraphDynamics that our <code>VanDerPol</code> oscillator is stochastic (by default, it&#39;s assumed to not be stochastic)</p><pre><code class="language-julia hljs">GraphDynamics.isstochastic(::Type{VanDerPol}) = true
+
+function GraphDynamics.apply_subsystem_noise!(v_noise, sys::Subsystem{VanDerPol}, t)
+    v_noise[2] = sys.ϕ
+end</code></pre><p>The above method works by mutating a vector of potential noise terms because noise is typically &quot;sparse&quot;, i.e. not all of our variables experience noise directly.</p><p>Writing <code>v_noise[2] = sys.ϕ</code> is eqivalent to the <code>ξ*ϕ</code> term where <code>ξ</code> is a Brownian variable.</p><p>If <code>x</code> also were to experience noise, you&#39;d mutate <code>v_noise[1]</code> as well.</p><p>Currently, GraphDynamics assumes that each source of noise in the equations is <em>independant</em>, and does not support cases where <code>x</code> and <code>y</code> see correlated noise. This is equivalent to either 0 or 1 Brownian variable per state.</p><h4 id="Computed-properties"><a class="docs-heading-anchor" href="#Computed-properties">Computed properties</a><a id="Computed-properties-1"></a><a class="docs-heading-anchor-permalink" href="#Computed-properties" title="Permalink"></a></h4><p>Now lets deal with the computed properties <code>r</code>, <code>jcn_x</code>, <code>jcn</code> and <code>jcn_total</code>.</p><p><code>r</code> is different from the others because it does not depend on the inputs, it only depends on the internal states / parameters of the subsystem itself. We can tell GraphDynamics how to compute <code>r</code> by adding a method to <code>computed_properties</code> which returns a NamedTuple whose keys are the property names, and the values are functions to compute them:</p><pre><code class="language-julia hljs">function GraphDynamics.computed_properties(v::Subsystem{VanDerPol})
+    r_func(v) = √(v.x^2 + v.y^2)
+    (; r = r_func)
+end</code></pre><p>Likewise, for computed properties that depend on a subsystem&#39;s inputs, we define a method on <code>computed_properties_with_inputs</code>, except the functions returned will have an extra argument for the inputs:</p><pre><code class="language-julia hljs">function GraphDynamics.computed_properties_with_inputs(v::Subsystem{VanDerPol})
+    jcn_x(v, input) = input.jcn_x
+    jcn(v, input) = input.jcn
+    jcn_tot(v, input) = input.jcn_x + input.jcn
+    (; jcn_x, jcn, jcn_tot)
+end</code></pre><h3 id="Solving-a-system-of-Van-der-Pols"><a class="docs-heading-anchor" href="#Solving-a-system-of-Van-der-Pols">Solving a system of Van der Pols</a><a id="Solving-a-system-of-Van-der-Pols-1"></a><a class="docs-heading-anchor-permalink" href="#Solving-a-system-of-Van-der-Pols" title="Permalink"></a></h3><p>Lets simulate a couple of VanDerPol oscillators. We can&#39;t couple them together yet because we haven&#39;t talked about connections, but we can at least run two parallel VdP oscillators and look at the results:</p><p>lets first solve the regular version:</p><pre><code class="language-julia hljs">tspan = (0.0, 2.0)
+seed = 1234
+
+g_vdp = MetaDiGraph()
+@named v1 = VanDerPol(θ = 1.0, ϕ = 2.0)
+@named v2 = VanDerPol(θ = 0.5, ϕ = 0.25)
+
+add_blox!(g_vdp, v1)
+add_blox!(g_vdp, v2);</code></pre><p>Here&#39;s a solution computed with the regular machinery:</p><pre><code class="language-julia hljs">let
+    @named sys = system_from_graph(g_vdp)
+    # Seed with a set value so we get consistent results
+    prob = SDEProblem(sys, [], tspan; seed=seed)
+    sol = solve(prob, RKMil())
+    f = Figure()
+    ax = Axis(f[1, 1], xlabel=&quot;t&quot;)
+    lines!(ax, sol.t, sol[v1.r], label=&quot;v1.r&quot;)
+    lines!(ax, sol.t, sol[v2.r], label=&quot;v2.r&quot;)
+    f
+end</code></pre><img src="c793dda1.png" alt="Example block output"/><p>And now lets try to do the same with GraphDynamics:</p><pre><code class="language-julia hljs">let
+    # this is how we tell it to use GraphDynamics! ------↓
+    @named sys = system_from_graph(g_vdp; graphdynamics=true)
+    # Use the same seed as the MTK solution to make sure we get consistent results
+    prob = SDEProblem(sys, [], tspan; seed=seed)
+    sol = solve(prob, RKMil())
+    f = Figure()
+    ax = Axis(f[1, 1], xlabel=&quot;t&quot;)
+    lines!(ax, sol.t, sol[v1.r], label=&quot;v1.r&quot;)
+    lines!(ax, sol.t, sol[v2.r], label=&quot;v2.r&quot;)
+    f
+end</code></pre><img src="c793dda1-001.png" alt="Example block output"/><h2 id="DBS-Source-blox"><a class="docs-heading-anchor" href="#DBS-Source-blox">DBS Source blox</a><a id="DBS-Source-blox-1"></a><a class="docs-heading-anchor-permalink" href="#DBS-Source-blox" title="Permalink"></a></h2><p>Now lets implement another random blox, the DBS Source blox from <code>Neuroblox/src/blox/DBS_sources.jl</code>, because lets say we want to use this to drive our VanDerPol oscillator.</p><pre><code class="language-julia hljs">struct DBS &lt;: Neuroblox.AbstractStimulus
+    name::Symbol
+    params::Vector{Num}
+    system::ODESystem
+    namespace::Union{Symbol, Nothing}
+    stimulus::Function
+    function DBS(;
+        name,
+        namespace=nothing,
+        frequency=130.0,
+        amplitude=2.5,
+        pulse_width=0.066,
+        offset=0.0,
+        start_time=0.0,
+        smooth=1e-4
+    )
+        # Ensure consistent numeric types for all parameters
+        frequency, amplitude, pulse_width, offset, start_time, smooth =
+            promote(frequency, amplitude, pulse_width, offset, start_time, smooth)
+
+        # Convert to kHz (to match interal time in ms)
+        frequency_khz = frequency/1000.0
+
+        # Create stimulus function based on smooth/non-smooth square wave
+        stimulus = if smooth == 0
+            t -&gt; Neuroblox.square(t, frequency_khz, amplitude, offset, start_time, pulse_width)
+        else
+            t -&gt; Neuroblox.square(t, frequency_khz, amplitude, offset, start_time, pulse_width, smooth)
+        end
+
+        p = Neuroblox.paramscoping(
+            tunable=false;
+            frequency=frequency,
+            amplitude=amplitude,
+            pulse_width=pulse_width,
+            offset=offset,
+            start_time=start_time
+        )
+
+        sts = @variables u(t) [output = true]
+        eqs = [u ~ stimulus(t)]
+        sys = System(eqs, t, sts, p; name=name)
+
+        new(name, p, sys, namespace, stimulus)
+    end
+end</code></pre><p>This is a bit special because it doesn&#39;t actually have <em>any</em> dynamical state. It basically just has it&#39;s <code>u ~ stimulus(t)</code>, which we&#39;ll actually treat as a parameter in the GraphDynamics approach:</p><h3 id="GraphDynamics-version-2"><a class="docs-heading-anchor" href="#GraphDynamics-version-2">GraphDynamics version</a><a class="docs-heading-anchor-permalink" href="#GraphDynamics-version-2" title="Permalink"></a></h3><h4 id="Basics"><a class="docs-heading-anchor" href="#Basics">Basics</a><a id="Basics-1"></a><a class="docs-heading-anchor-permalink" href="#Basics" title="Permalink"></a></h4><pre><code class="language-julia hljs">GraphDynamics.initialize_input(s::Subsystem{DBS}) = (;)
+
+function GraphDynamicsInterop.to_subsystem(d::DBS)
+    # Extract the DBS stimulus function
+    stimulus = getfield(d, :stimulus)
+    params = SubsystemParams{DBS}(; stimulus)
+
+    # Return *empty* states
+    states = SubsystemStates{DBS}()
+
+    # Form a Subsystem from the states and params
+    Subsystem(states, params)
+end</code></pre><h4 id="A-do-nothing-differential"><a class="docs-heading-anchor" href="#A-do-nothing-differential">A do-nothing differential</a><a id="A-do-nothing-differential-1"></a><a class="docs-heading-anchor-permalink" href="#A-do-nothing-differential" title="Permalink"></a></h4><p>Since there&#39;s no dynamics, we can skip <code>subsystem_differential</code> and instead just tell it that <code>apply_subsystem_differential!</code> does nothing:</p><pre><code class="language-julia hljs">function GraphDynamics.apply_subsystem_differential!(_, d::Subsystem{DBS}, _, _)
+    nothing
+end</code></pre><h2 id="Connections"><a class="docs-heading-anchor" href="#Connections">Connections</a><a id="Connections-1"></a><a class="docs-heading-anchor-permalink" href="#Connections" title="Permalink"></a></h2><p>Now, all we need to do is define some connections between some blox. Let&#39;s go for a connection from the DBS source to a Van der Pol.</p><p>Suppose our regular Neuroblox connection rule looks like:</p><pre><code class="language-julia hljs">function Neuroblox.Connector(
+    blox_src::DBS,
+    blox_dest::AbstractNeuralMass;
+    kwargs...
+)
+    sys_src = get_namespaced_sys(blox_src)
+    sys_dest = get_namespaced_sys(blox_dest)
+
+    w = generate_weight_param(blox_src, blox_dest; kwargs...)
+
+    eq = sys_dest.jcn ~ w * sys_src.u
+
+    return Connector(nameof(sys_src), nameof(sys_dest); equation=eq, weight=w)
+end</code></pre><p>Then the GraphDynamics version of this can be as simple as</p><pre><code class="language-julia hljs">function (c::BasicConnection)(sys_src::Subsystem{DBS},
+                              sys_dst::Subsystem{VanDerPol},
+                              t)
+
+    w = c.weight
+    jcn_x = 0.0 # do nothing to jcn_x
+    jcn = w * sys_src.stimulus(t) # drive jcn
+    (; jcn_x, jcn) # This must match the form of initialize_input(sys_dst)
+end</code></pre><h3 id="Solve-a-system-with-the-DBS-and-VdP-Blox"><a class="docs-heading-anchor" href="#Solve-a-system-with-the-DBS-and-VdP-Blox">Solve a system with the DBS and VdP Blox</a><a id="Solve-a-system-with-the-DBS-and-VdP-Blox-1"></a><a class="docs-heading-anchor-permalink" href="#Solve-a-system-with-the-DBS-and-VdP-Blox" title="Permalink"></a></h3><pre><code class="language-julia hljs">g_vdp_dbs = MetaDiGraph()
+@named dbs = DBS()
+add_edge!(g_vdp_dbs, dbs =&gt; v1; weight=1.0)
+add_edge!(g_vdp_dbs, dbs =&gt; v2; weight=1.0)
+
+let
+    @named sys = system_from_graph(g_vdp_dbs)
+
+    prob = SDEProblem(sys, [], tspan; seed=seed)
+    sol = solve(prob, RKMil())
+    f = Figure()
+    ax = Axis(f[1, 1], xlabel=&quot;t&quot;)
+    lines!(ax, sol.t, sol[v1.r], label=&quot;v1.r&quot;)
+    lines!(ax, sol.t, sol[v2.r], label=&quot;v2.r&quot;)
+    f
+end</code></pre><img src="39fbadee.png" alt="Example block output"/><p>and with GraphDynamics:</p><pre><code class="language-julia hljs">let
+    # this is how we tell it to use GraphDynamics! ----------↓
+    @named sys = system_from_graph(g_vdp_dbs; graphdynamics=true)
+
+    prob = SDEProblem(sys, [], tspan; seed=seed)
+    sol = solve(prob, RKMil())
+    f = Figure()
+    ax = Axis(f[1, 1], xlabel=&quot;t&quot;)
+    lines!(ax, sol.t, sol[v1.r], label=&quot;v1.r&quot;)
+    lines!(ax, sol.t, sol[v2.r], label=&quot;v2.r&quot;)
+    f
+end</code></pre><img src="39fbadee-001.png" alt="Example block output"/><h2 id="Composite-blox"><a class="docs-heading-anchor" href="#Composite-blox">Composite blox</a><a id="Composite-blox-1"></a><a class="docs-heading-anchor-permalink" href="#Composite-blox" title="Permalink"></a></h2><p>Some blox are modelled as a collection of sub-blox. Let&#39;s look at an example where we pretent we had a use for a structure which is a big bag of randomly connected VdP oscillators.</p><p>Supporting structures like this in GraphDynamics can be as simple as defining a container for the sub-blox:</p><pre><code class="language-julia hljs">struct BagOfVdP &lt;: Neuroblox.AbstractComposite
+    name
+    parts
+    weights
+    function BagOfVdP(;name, N_osc, θ=1.0, ϕ=0.1, weights=rand(N_osc, N_osc))
+        parts = [VanDerPol(;name=Symbol(name, &quot;₊vdp&quot;, i), θ, ϕ) for i ∈ 1:N_osc]
+        new(name, parts, weights)
+    end
+end</code></pre><p>and then defining a <code>system_wiring_rule!</code> which tells GraphDynamics.jl how to &#39;flatten&#39; this into a graph:</p><pre><code class="language-julia hljs">using GraphDynamics: system_wiring_rule!
+function GraphDynamics.system_wiring_rule!(g, blox::BagOfVdP; kwargs...)
+    (;parts, weights) = blox
+    for blox ∈ parts
+        # Recursively add the sub-structures to our graph
+        system_wiring_rule!(g, blox)
+    end
+    for (i, blox_src) ∈ enumerate(parts)
+        for (j, blox_dst) ∈ enumerate(parts)
+            if !iszero(weights[i, j])
+                # Add connections between the blox
+                system_wiring_rule!(g, blox_src, blox_dst; weight=weights[i, j])
+            end
+        end
+    end
+end</code></pre><p>Now lets define a connection between a <code>BagOfVdP</code> and our <code>DBS</code> stimulus blox where each VdP oscillator gets wired to the DBS blox. We can do this by defining a 3-arg method for <code>system_wiring_rule</code>:</p><pre><code class="language-julia hljs">function GraphDynamics.system_wiring_rule!(g, blox_src::DBS, blox_dst::BagOfVdP; weight, kwargs...)
+    for vdp_dst ∈ blox_dst.parts
+        system_wiring_rule!(g, blox_src, vdp_dst; weight, kwargs...)
+    end
+end</code></pre><p>Finally, in order for this to work, we&#39;ll also need to define what a <code>BasicConnection</code> does between two VanDerPols:</p><pre><code class="language-julia hljs">function (c::BasicConnection)(src::Subsystem{VanDerPol}, dst::Subsystem{VanDerPol}, t)
+    w = c.weight
+    jcn_x = 0.0 # do nothing to jcn_x
+    jcn = w * src.x
+    (; jcn_x, jcn) # This must match the form of initialize_input(sys_dst)
+end</code></pre><p>Now we can use our composite structure:</p><pre><code class="language-julia hljs">let
+    g = MetaDiGraph()
+    @named dbs = DBS()
+    @named vdps = BagOfVdP(N_osc=3)
+    add_edge!(g, dbs =&gt; vdps; weight=1.0)
+
+    @named sys = system_from_graph(g; graphdynamics=true)
+
+    prob = SDEProblem(sys, [], (0.0, 10.0); seed=seed)
+    sol = solve(prob, RKMil())
+    f = Figure()
+    ax = Axis(f[1, 1], xlabel=&quot;t&quot;)
+    lines!(ax, sol.t, sol[vdps.parts[1].r], label=&quot;vdp1.r&quot;)
+    lines!(ax, sol.t, sol[vdps.parts[2].r], label=&quot;vdp2.r&quot;)
+    lines!(ax, sol.t, sol[vdps.parts[3].r], label=&quot;vdp3.r&quot;)
+    f
+end</code></pre><img src="d116677d.png" alt="Example block output"/><h2 id="TODO:-Events"><a class="docs-heading-anchor" href="#TODO:-Events">TODO: Events</a><a id="TODO:-Events-1"></a><a class="docs-heading-anchor-permalink" href="#TODO:-Events" title="Permalink"></a></h2><hr/><p><em>This page was generated using <a href="https://github.com/fredrikekre/Literate.jl">Literate.jl</a>.</em></p></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../../tutorials/neural_assembly/">« Bottom-up construction of a neural assembly</a><a class="docs-footer-nextpage" href="../../api/">Neuroblox API »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.15.0 on <span class="colophon-date" title="Saturday 1 November 2025 21:39">Saturday 1 November 2025</span>. Using Julia version 1.12.1.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
