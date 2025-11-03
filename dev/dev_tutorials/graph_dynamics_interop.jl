@@ -183,7 +183,7 @@ to `computed_properties` which returns a NamedTuple whose keys are the property 
 functions to compute them:
 ===============================================================================================================#
 
-function GraphDynamics.computed_properties(v::Subsystem{VanDerPol})
+function GraphDynamics.computed_properties(::Type{VanDerPol})
     r_func(v) = √(v.x^2 + v.y^2)
     (; r = r_func)
 end
@@ -193,7 +193,7 @@ Likewise, for computed properties that depend on a subsystem's inputs, we define
 `computed_properties_with_inputs`, except the functions returned will have an extra argument for the inputs:
 ===============================================================================================================#
 
-function GraphDynamics.computed_properties_with_inputs(v::Subsystem{VanDerPol})
+function GraphDynamics.computed_properties_with_inputs(::Type{VanDerPol})
     jcn_x(v, input) = input.jcn_x
     jcn(v, input) = input.jcn
     jcn_tot(v, input) = input.jcn_x + input.jcn
