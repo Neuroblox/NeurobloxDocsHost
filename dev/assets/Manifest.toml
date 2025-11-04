@@ -513,9 +513,9 @@ version = "1.11.0"
 
 [[deps.DelaunayTriangulation]]
 deps = ["AdaptivePredicates", "EnumX", "ExactPredicates", "Random"]
-git-tree-sha1 = "5620ff4ee0084a6ab7097a27ba0c19290200b037"
+git-tree-sha1 = "783b21581a051ac91a3921ee37e26a23ed7f57a6"
 uuid = "927a84f5-c5f4-47a5-9785-b46e178433df"
-version = "1.6.4"
+version = "1.6.5"
 
 [[deps.DiffEqBase]]
 deps = ["ArrayInterface", "ConcreteStructs", "DocStringExtensions", "EnzymeCore", "FastBroadcast", "FastClosures", "FastPower", "FunctionWrappers", "FunctionWrappersWrappers", "LinearAlgebra", "Logging", "Markdown", "MuladdMacro", "PrecompileTools", "Printf", "RecursiveArrayTools", "Reexport", "SciMLBase", "SciMLOperators", "SciMLStructures", "Setfield", "Static", "StaticArraysCore", "Statistics", "SymbolicIndexingInterface", "TruncatedStacktraces"]
@@ -2353,10 +2353,15 @@ uuid = "69de0a69-1ddd-5017-9359-2bf0b02dc9f0"
 version = "2.8.3"
 
 [[deps.Peaks]]
-deps = ["RecipesBase", "SIMD"]
-git-tree-sha1 = "75d0ce1c30696d77bc60840222d7fc5d549ebf5f"
+deps = ["SIMD"]
+git-tree-sha1 = "e2314aa25d620e1f03565b83e88ab824fd83aac5"
 uuid = "18e31ff7-3703-566c-8e60-38913d67486b"
-version = "0.5.3"
+version = "0.6.0"
+weakdeps = ["Makie", "RecipesBase"]
+
+    [deps.Peaks.extensions]
+    MakieExt = "Makie"
+    PlotsExt = "RecipesBase"
 
 [[deps.Pixman_jll]]
 deps = ["Artifacts", "CompilerSupportLibraries_jll", "JLLWrappers", "LLVMOpenMP_jll", "Libdl"]
