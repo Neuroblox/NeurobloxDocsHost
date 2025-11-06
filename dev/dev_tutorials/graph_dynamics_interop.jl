@@ -158,16 +158,16 @@ To include stochastic noise, we first tell GraphDynamics that our `VanDerPol` os
 GraphDynamics.isstochastic(::Type{VanDerPol}) = true
 
 function GraphDynamics.apply_subsystem_noise!(v_noise, sys::Subsystem{VanDerPol}, t)
-    v_noise[2] = sys.ϕ
+    v_noise.y[] = sys.ϕ
 end
 
 #===============================================================================================================
 The above method works by mutating a vector of potential noise terms because noise is typically "sparse", i.e.
 not all of our variables experience noise directly. 
 
-Writing `v_noise[2] = sys.ϕ` is eqivalent to the `ξ*ϕ` term where `ξ` is a Brownian variable.
+Writing `v_noise.y[] = sys.ϕ` is eqivalent to the `ξ*ϕ` term where `ξ` is a Brownian variable.
 
-If `x` also were to experience noise, you'd mutate `v_noise[1]` as well.
+If `x` also were to experience noise, you'd mutate `v_noise.x[]` as well.
 
 Currently, GraphDynamics assumes that each source of noise in the equations is *independant*, and does not
 support cases where `x` and `y` see correlated noise. This is equivalent to either 0 or 1 Brownian variable per
