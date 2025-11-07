@@ -122,8 +122,8 @@ connection_equations(lif, izh, weight=1, connection_rule="basic") ## connection 
 # Let's define a custom equation that connects a `LIFNeuron` to our `IzhNeuron`. The first thing we need to do is to import the `connection_equations` function from Neuroblox so that we can add a new dispatch to it. 
 import Neuroblox: connection_equations
 
-function connection_equations(source::LIFNeuron, destination::IzhNeuron, conn; kwargs...)
-    equation = destination.jcn ~ conn.weight * source.G * (destination.V - source.E_syn)
+function connection_equations(source::LIFNeuron, destination::IzhNeuron, weight; kwargs...)
+    equation = destination.jcn ~ weight * source.G * (destination.V - source.E_syn)
 
     return equation
 end
@@ -151,8 +151,8 @@ sol = solve(prob, Tsit5());
 # We can add as many keyword arguments as we want to our `connection_equations` dispatch. Such arguments can be used as additional terms to the equations.
 # Here we add a constant current `const_current` to the equations above. 
 
-function connection_equations(source::IzhNeuron, destination::LIFNeuron, conn; const_current=1, kwargs...)
-    equation = destination.jcn ~ conn.weight * source.V + const_current
+function connection_equations(source::IzhNeuron, destination::LIFNeuron, weight; const_current=1, kwargs...)
+    equation = destination.jcn ~ weight * source.V + const_current
     
     return equation
 end
