@@ -2,7 +2,7 @@
 
 julia_version = "1.12.1"
 manifest_format = "2.0"
-project_hash = "7fad9b897cc26b7ae9ade6c16fa5cc5449db2772"
+project_hash = "cb4ff6d7b7e2f4aa6165a650618b1018aa745d34"
 
 [[deps.ADTypes]]
 git-tree-sha1 = "27cecae79e5cc9935255f90c53bb831cc3c870d7"
@@ -1881,7 +1881,7 @@ uuid = "ca575930-c2e3-43a9-ace4-1e988b2c1908"
 version = "1.3.0"
 
 [[deps.Neuroblox]]
-deps = ["NeurobloxBase", "NeurobloxBasics", "NeurobloxDBS", "NeurobloxDBSPrivate", "NeurobloxPharma", "NeurobloxSynapticBlox", "Reexport"]
+deps = ["NeurobloxBase", "NeurobloxBasics", "NeurobloxDBS", "NeurobloxDBSPrivate", "NeurobloxPharma", "NeurobloxPharmaPrivate", "NeurobloxSynapticBlox", "Reexport"]
 path = "."
 uuid = "769b91e5-4c60-41ee-bfae-153c84203cb2"
 version = "0.7.0"
@@ -1923,6 +1923,12 @@ weakdeps = ["UnicodePlots"]
 
     [deps.NeurobloxPharma.extensions]
     UnicodePlotsExt = "UnicodePlots"
+
+[[deps.NeurobloxPharmaPrivate]]
+deps = ["Accessors", "CSV", "DataFrames", "DiffEqCallbacks", "Distributions", "GraphDynamics", "Graphs", "LogExpFunctions", "MetaGraphs", "ModelingToolkit", "NeurobloxBase", "NeurobloxPharma", "ProgressMeter", "Random", "RecursiveArrayTools", "Reexport", "SciMLBase", "SparseArrays", "StatsBase", "SymbolicUtils", "Symbolics"]
+path = "NeurobloxPharmaPrivate"
+uuid = "58ac089b-67af-4add-8f86-e409aa08e46d"
+version = "0.1.0"
 
 [[deps.NeurobloxSynapticBlox]]
 deps = ["Accessors", "Distributions", "GraphDynamics", "ModelingToolkit", "NeurobloxBase", "NeurobloxBasics", "NeurobloxPharma", "Reexport", "StatsBase"]
