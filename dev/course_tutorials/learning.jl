@@ -55,7 +55,7 @@ add_edge!(g, ASC1 => VAC, weight=44)
 add_edge!(g, ASC1 => AC, weight=44)
 add_edge!(g, VAC => AC, weight=3, density=0.1, learning_rule = hebbian_cort) ## pass learning rule as a keyword argument
 
-agent = Agent(g; name=model_name); 
+agent = Agent(g; name=model_name, graphdynamics = true);
 env = ClassificationEnvironment(stim, N_trials; name=:env, namespace=model_name);
 
 fig = Figure(size = (1600, 800))
@@ -119,7 +119,8 @@ add_edge!(g, STR2 => AS);
 
 # The last two connections add the ability to output actions. The `AS` Blox is a `GreedyPolicy` meaning that it will compare the activity of both Striatum Bloxs `STR1` and `STR2` and select the highest value. If `STR1` wins then the left choice is made and if `STR2` wins then the model chooses the right direction as the true dot movement direction. 
 
-agent = Agent(g; name=model_name, t_block = time_block_dur); ## define agent
+agent = Agent(g; name=model_name, t_block = time_block_dur, graphdynamics = true); ## define agent
+
 env = ClassificationEnvironment(stim, N_trials; name=:env, namespace=model_name)
 
 fig = Figure(title="Adjacency matrix", size = (1600, 800))

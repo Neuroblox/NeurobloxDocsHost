@@ -178,7 +178,8 @@ function generate_spike_times(source::BernoulliSpikes)
 end
 
 # We also import `connection_spike_affects` and dispatch it by pairing our new source with any neuron that we want to affect. In this function we write all equations that should be evaluated each time `source` spikes. The `w` input is necessary and it is the symbolic connection weight, same as in `connection_equations`.
-function connection_spike_affects(source::BernoulliSpikes, ifn::IFNeuron, w)
+function connection_spike_affects(source::BernoulliSpikes, ifn::IFNeuron, conn)
+    w = conn.weight
     eqs = [ifn.I_in ~ ifn.I_in + w]
     return eqs
 end
