@@ -55,7 +55,7 @@ add_edge!(g, ASC1 => VAC, weight=44)
 add_edge!(g, ASC1 => AC, weight=44)
 add_edge!(g, VAC => AC, weight=3, density=0.1, learning_rule = hebbian_cort) ## pass learning rule as a keyword argument
 
-agent = Agent(g; name=model_name); 
+agent = Agent(g; name=model_name);
 env = ClassificationEnvironment(stim, N_trials; name=:env, namespace=model_name);
 
 fig = Figure(size = (1600, 800))
