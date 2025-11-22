@@ -20,6 +20,7 @@
 using Neuroblox
 using OrdinaryDiffEqTsit5, OrdinaryDiffEqVerner
 using CairoMakie
+using GraphDynamics
 
 ## Set the random seed for reproducible results
 using Random
@@ -80,9 +81,10 @@ save(joinpath("../assets/", "qif_timeseries.svg"), fig); # hide
 using StochasticDiffEq ## to access stochastic DE solvers
 
 @named hh = HHNeuronExci_STN_Adam(; σ=2) ## σ is the brownian noise amplitude
+g = GraphSystem()
+add_node!(g, hh)
 
-sys = system(hh)
-prob = SDEProblem(sys, [], (0, 1000))
+prob = SDEProblem(g, [], (0, 1000))
 sol = solve(prob, RKMil())
 
 ## Plot the powerspectrum of the solution
@@ -304,11 +306,9 @@ save(joinpath("../assets/", "stim_protocol.svg"), fig); # hide
 
 @named nn = HHNeuronExci(I_bg=0.4)
 
-g = MetaDiGraph()
-add_edge!(g, dbs => nn, weight = 10.0)
-
-@named sys = system_from_graph(g)
-prob = ODEProblem(sys, [], tspan)
+g = GraphSystem()
+add_connection!(g, dbs => nn, weight = 10.0)
+prob = ODEProblem(g, [], tspan)
 
 transitions_inds = detect_transitions(ts, stimulus; atol=0.001)
 transition_times = ts[transitions_inds]

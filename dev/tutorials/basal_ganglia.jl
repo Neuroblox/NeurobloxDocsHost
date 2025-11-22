@@ -13,6 +13,7 @@ using Neuroblox
 using StochasticDiffEq ## For building and solving differential equations problems
 using CairoMakie ## For plotting
 using Random ## For setting a random seed
+using GraphDynamics
 
 Random.seed!(123) ## Set a random seed for reproducibility
 
@@ -22,10 +23,6 @@ Random.seed!(123) ## Set a random seed for reproducibility
 # Blox definition
 N_MSN = 100 ## number of Medium Spiny Neurons
 @named msn = Striatum_MSN_Adam(N_inhib = N_MSN)
-sys = structural_simplify(get_system(msn))
-
-## Check the system's variables (100 neurons, each with associated currents)
-unknowns(sys)
 
 # Create and solve the SDE problem
 ## Define simulation parameters
@@ -33,7 +30,7 @@ tspan = (0.0, 2000.0) ## simulation time span [ms]
 dt = 0.05 ## time step for solving and saving [ms]
 
 ## Create a stochastic differential equation problem and use the RKMil method to solve it
-prob = SDEProblem(sys, [], tspan, [])
+prob = SDEProblem(msn.graph, [], tspan, [])
 sol = solve(prob, RKMil(), dt = dt, saveat = dt);
 
 # Plot voltage of a single neuron
@@ -88,11 +85,10 @@ N_FSI = 50 ## number of Fast Spiking Interneurons
 density_FSI_MSN = 0.15 ## fraction of FSIs connecting to the MSN population
 weight_FSI_MSN = ḡ_FSI_MSN / (N_FSI * density_FSI_MSN) ## normalized synaptic weight
 
-g = MetaDiGraph()
-add_edge!(g, fsi => msn, weight = weight_FSI_MSN, density = density_FSI_MSN)
+g = GraphSystem()
+add_connection!(g, fsi => msn, weight = weight_FSI_MSN, density = density_FSI_MSN)
 
-@named sys = system_from_graph(g; graphdynamics = true)
-prob = SDEProblem(sys, [], tspan, [])
+prob = SDEProblem(g, [], tspan, [])
 ens_prob = EnsembleProblem(prob)
 ens_sol = solve(ens_prob, RKMil(), dt=dt, saveat = dt, trajectories = 3);
 
@@ -139,11 +135,11 @@ weight_MSN_GPe = ḡ_MSN_GPe / (N_MSN * density_MSN_GPe)
 weight_GPe_STN = ḡ_GPe_STN / (N_GPe * density_GPe_STN)
 weight_STN_FSI = ḡ_STN_FSI / (N_STN * density_STN_FSI)
 
-g = MetaDiGraph()
-add_edge!(g, fsi => msn, weight = weight_FSI_MSN, density = density_FSI_MSN)
-add_edge!(g, msn => gpe, weight = weight_MSN_GPe, density = density_MSN_GPe)
-add_edge!(g, gpe => stn, weight = weight_GPe_STN, density = density_GPe_STN)
-add_edge!(g, stn => fsi, weight = weight_STN_FSI, density = density_STN_FSI)
+g = GraphSystem()
+add_connection!(g, fsi => msn, weight = weight_FSI_MSN, density = density_FSI_MSN)
+add_connection!(g, msn => gpe, weight = weight_MSN_GPe, density = density_MSN_GPe)
+add_connection!(g, gpe => stn, weight = weight_GPe_STN, density = density_GPe_STN)
+add_connection!(g, stn => fsi, weight = weight_STN_FSI, density = density_STN_FSI)
 
 @named sys = system_from_graph(g; graphdynamics = true)
 prob = SDEProblem(sys, [], tspan, [])
@@ -202,15 +198,13 @@ fig
 ḡ_FSI_MSN = 0.48 ## decreased maximal conductance of FSI-MSN projection [mS/cm^-2]
 weight_FSI_MSN = ḡ_FSI_MSN / (N_FSI * density_FSI_MSN) ## normalized synaptic weight
 
-g = MetaDiGraph()
-add_edge!(g, fsi => msn, weight = weight_FSI_MSN, density = density_FSI_MSN)
-add_edge!(g, msn => gpe, weight = weight_MSN_GPe, density = density_MSN_GPe)
-add_edge!(g, gpe => stn, weight = weight_GPe_STN, density = density_GPe_STN)
-add_edge!(g, stn => fsi, weight = weight_STN_FSI, density = density_STN_FSI)
+g = GraphSystem()
+add_connection!(g, fsi => msn, weight = weight_FSI_MSN, density = density_FSI_MSN)
+add_connection!(g, msn => gpe, weight = weight_MSN_GPe, density = density_MSN_GPe)
+add_connection!(g, gpe => stn, weight = weight_GPe_STN, density = density_GPe_STN)
+add_connection!(g, stn => fsi, weight = weight_STN_FSI, density = density_STN_FSI)
 
-@named sys = system_from_graph(g; graphdynamics = true)
-
-prob = SDEProblem(sys, [], tspan, [])
+prob = SDEProblem(g, [], tspan, [])
 ens_prob = EnsembleProblem(prob)
 ens_sol = solve(ens_prob, RKMil(), dt = dt, saveat = dt, trajectories = 3);
 
