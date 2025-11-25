@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><title>Plotting with Makie · Neuroblox Documentation</title><meta name="title" content="Plotting with Makie · Neuroblox Documentation"/><meta property="og:title" content="Plotting with Makie · Neuroblox Documentation"/><meta property="twitter:title" content="Plotting with Makie · Neuroblox Documentation"/><meta name="description" content="Documentation for Neuroblox Documentation."/><meta property="og:description" content="Documentation for Neuroblox Documentation."/><meta property="twitter:description" content="Documentation for Neuroblox Documentation."/><script data-outdated-warner src="../../assets/warner.js"></script><link href="https://cdnjs.cloudflare.com/ajax/libs/lato-font/3.0.0/css/lato-font.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/juliamono/0.050/juliamono.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/fontawesome.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/solid.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/brands.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.8/katex.min.css" rel="stylesheet" type="text/css"/><script>documenterBaseURL="../.."</script><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" data-main="../../assets/documenter.js"></script><script src="../../search_index.js"></script><script src="../../siteinfo.js"></script><script src="../../../versions.js"></script><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/catppuccin-mocha.css" data-theme-name="catppuccin-mocha"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/catppuccin-macchiato.css" data-theme-name="catppuccin-macchiato"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/catppuccin-frappe.css" data-theme-name="catppuccin-frappe"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/catppuccin-latte.css" data-theme-name="catppuccin-latte"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/documenter-dark.css" data-theme-name="documenter-dark" data-theme-primary-dark/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/documenter-light.css" data-theme-name="documenter-light" data-theme-primary/><script src="../../assets/themeswap.js"></script><link href="../../assets/favicon.ico" rel="icon" type="image/x-icon"/></head><body><div id="documenter"><nav class="docs-sidebar"><a class="docs-logo" href="../../"><img src="../../assets/logo.png" alt="Neuroblox Documentation logo"/></a><div class="docs-package-name"><span class="docs-autofit"><a href="../../">Neuroblox Documentation</a></span></div><button class="docs-search-query input is-rounded is-small is-clickable my-2 mx-auto py-1 px-2" id="documenter-search-query">Search docs (Ctrl + /)</button><ul class="docs-menu"><li><a class="tocitem" href="../../">About</a></li><li><a class="tocitem" href="../../install/">How to install</a></li><li><a class="tocitem" href="../../getting_started/">Getting Started</a></li><li><span class="tocitem">Tutorials</span><ul><li><a class="tocitem" href="../../tutorials/resting_state/">Resting state simulation using neural mass models</a></li><li><a class="tocitem" href="../../tutorials/ping_network/">Pyramidal-Interneuron Gamma network</a></li><li><a class="tocitem" href="../../tutorials/parkinsons/">Building a model of the Basal Ganglia using Neural Mass models</a></li><li><a class="tocitem" href="../../tutorials/basal_ganglia/">Basal Ganglia Model and Parkinson&#39;s Disease Simulation</a></li><li><a class="tocitem" href="../../tutorials/neural_assembly/">Bottom-up construction of a neural assembly</a></li></ul></li><li><span class="tocitem">Dev Tutorials</span><ul><li><a class="tocitem" href="../../dev_tutorials/graph_dynamics_interop/">Making Neuroblox models work with GraphDynamics</a></li></ul></li><li><span class="tocitem">API</span><ul><li><a class="tocitem" href="../../api/">Neuroblox API</a></li><li><a class="tocitem" href="../../blox_api/">Blox Documentation</a></li></ul></li><li><span class="tocitem">Neuroblox Course</span><ul><li><a class="tocitem" href="../intro_diffeq/">Differential Equations with ModelingToolkit</a></li><li class="is-active"><a class="tocitem" href>Plotting with Makie</a><ul class="internal"><li><a class="tocitem" href="#Introduction"><span>Introduction</span></a></li><li><a class="tocitem" href="#Plotting-Layouts"><span>Plotting Layouts</span></a></li><li><a class="tocitem" href="#Plotting-Spikes"><span>Plotting Spikes</span></a></li><li class="toplevel"><a class="tocitem" href="#References"><span>References</span></a></li></ul></li><li><a class="tocitem" href="../blox_connections/">Blox and Connections in Neuroblox</a></li><li><a class="tocitem" href="../neuron_mass/">Neurons, Neural Masses and Sources</a></li><li><a class="tocitem" href="../PING_circuit/">Pyramidal-Interneuron Gamma network</a></li><li><a class="tocitem" href="../CS_circuit/">Biomimetic Model of Corticostriatal Micro-assemblies</a></li><li><a class="tocitem" href="../decision_making/">Decision Making in a Circuit Model</a></li><li><a class="tocitem" href="../learning/">Synaptic Plasticity and Reinforcement Learning</a></li></ul></li><li><a class="tocitem" href="../../release_notes/">Release Notes</a></li></ul><div class="docs-version-selector field has-addons"><div class="control"><span class="docs-label button is-static is-size-7">Version</span></div><div class="docs-selector control is-expanded"><div class="select is-fullwidth is-size-7"><select id="documenter-version-selector"></select></div></div></div></nav><div class="docs-main"><header class="docs-navbar"><a class="docs-sidebar-button docs-navbar-link fa-solid fa-bars is-hidden-desktop" id="documenter-sidebar-button" href="#"></a><nav class="breadcrumb"><ul class="is-hidden-mobile"><li><a class="is-disabled">Neuroblox Course</a></li><li class="is-active"><a href>Plotting with Makie</a></li></ul><ul class="is-hidden-tablet"><li class="is-active"><a href>Plotting with Makie</a></li></ul></nav><div class="docs-right"><a class="docs-settings-button docs-navbar-link fa-solid fa-gear" id="documenter-settings-button" href="#" title="Settings"></a><a class="docs-article-toggle-button fa-solid fa-chevron-up" id="documenter-article-toggle-button" href="javascript:;" title="Collapse all docstrings"></a></div></header><article class="content" id="documenter-page"><h1 id="Plotting-with-Makie"><a class="docs-heading-anchor" href="#Plotting-with-Makie">Plotting with Makie</a><a id="Plotting-with-Makie-1"></a><a class="docs-heading-anchor-permalink" href="#Plotting-with-Makie" title="Permalink"></a></h1><blockquote><p><strong><em>Jupyter Notebook</em>:</strong> Please work on <code>intro_plot.ipynb</code>.</p></blockquote><h2 id="Introduction"><a class="docs-heading-anchor" href="#Introduction">Introduction</a><a id="Introduction-1"></a><a class="docs-heading-anchor-permalink" href="#Introduction" title="Permalink"></a></h2><p>Makie [1] is a plotting ecosystem based in Julia. It comes with multiple backends for rendering and displaying plots. For this course we will be using <code>CairoMakie</code> as it has a lot of features for 2D static plots and most computers should support it as it only requires a CPU and no GPU. Makie has a great <a href="https://docs.makie.org/stable/tutorials/getting-started">Getting Started page</a>. We will make use of this tutorial to introduce some basic plotting functions and labelling options.</p><p>Learning goals:</p><ul><li>Design layouts with multiple axes in figures.</li><li>Use Makie&#39;s functionality to plot neuron-specific figures.</li></ul><h2 id="Plotting-Layouts"><a class="docs-heading-anchor" href="#Plotting-Layouts">Plotting Layouts</a><a id="Plotting-Layouts-1"></a><a class="docs-heading-anchor-permalink" href="#Plotting-Layouts" title="Permalink"></a></h2><p>We&#39;ll now see how to create layouts of multiple subplots within a single window. We&#39;ll use the same data from the Makie tutorial linked above.</p><pre><code class="language-julia hljs">using CairoMakie
+
+seconds = 0:0.1:2
+measurements = [8.2, 8.4, 6.3, 9.5, 9.1, 10.5, 8.6, 8.2, 10.5, 8.5, 7.2,
+        8.8, 9.7, 10.8, 12.5, 11.6, 12.1, 12.1, 15.1, 14.7, 13.1]
+
+fig = Figure(title=&quot;Line &amp; Scatter layout&quot;)
+axs = [Axis(fig[1,1], title = &quot;Line plot&quot;, xlabel = &quot;Time [sec]&quot;, ylabel = &quot;Measurement&quot;),
+        Axis(fig[2,1], title = &quot;Scatter plot&quot;, xlabel = &quot;Time [sec]&quot;, ylabel = &quot;Measurement&quot;)]
+
+lines!(axs[1], seconds, measurements)
+scatter!(axs[2], seconds, measurements)
+
+fig</code></pre><p><img src="../../assets/layout.svg" alt/></p><blockquote><p>Note: Plot functions in Makie also work without defining a <code>Figure</code> and an <code>Axis</code> object explicitly. E.g. plotting with <code>lines(seconds, measurements)</code> or <code>scatter(seconds, measurements)</code> . However in this case we won&#39;t have all the customization options for the plot axes readily available.</p></blockquote><p>Plotting layouts in Makie is quite intuitive. We can treat the <code>Figure</code> object as a matrix of (sub)plot positions. In the example above we organized the two plots on a single column on positions <code>fig[1,1]</code> and <code>fig[2,1]</code> (remember that Julia is an 1-index language!). We then input these grid positions of the figure to the respective <code>Axis</code> object to define the 2D axes which will contain each plot. When defining an <code>Axis</code> there are multiple options to affect its appearance and alignment, see the <a href="https://docs.makie.org/v0.21/reference/blocks/axis">Axis documentation page</a> for more details. We can also change an <code>Axis</code> after it has been constructed. For instance we could hide the x-axis label and ticks on the top plot above, since it is a duplicate of the x-axis of the bottom plot. We will keep the grid lines though, because it is easier to read the x-axis values this way.</p><pre><code class="language-julia hljs">hidexdecorations!(axs[1], grid=false) ## `grid=false` avoids hiding the x grid lines
+
+# Now we can display the figure again with the updated axes
+fig</code></pre><p><img src="../../assets/layout_hidex.svg" alt/></p><h2 id="Plotting-Spikes"><a class="docs-heading-anchor" href="#Plotting-Spikes">Plotting Spikes</a><a id="Plotting-Spikes-1"></a><a class="docs-heading-anchor-permalink" href="#Plotting-Spikes" title="Permalink"></a></h2><p>We will now combine the Makie and the Differential Equations ecosystems to start plotting more meaningful results after simulating neuronal models. We will use the Izhikevich model from the last section in its fast-spiking regime. Besides the spiking event, we will add a second event that increases the external current flowing into the neuron at a specific time during simulation. We will count and plot the spikes that the neuron emits within time windows of a given width both before and after the change in external current.</p><pre><code class="language-julia hljs">using ModelingToolkit
+using ModelingToolkit: t_nounits as t, D_nounits as D
+using OrdinaryDiffEqDefault
+
+@variables v(t)=-65 u(t)=-13
+@parameters a=0.1 b=0.2 c=-65 d=2 I=10 ## Parameters for fast spiking.
+
+eqs = [D(v) ~ 0.04 * v ^ 2 + 5 * v + 140 - u + I,
+        D(u) ~ a * (b * v - u)]
+
+spike_threshold = 30
+t_bigger_stimulation = 250
+spike_event = (v &gt; spike_threshold) =&gt; [u ~ u + d, v ~ c]
+stimulation_event = [t_bigger_stimulation] =&gt; [I ~ I + 10]
+
+@named izh_system = ODESystem(eqs, t, [v, u], [a, b, c, d, I]; discrete_events = [spike_event, stimulation_event])
+izh_simple = structural_simplify(izh_system)
+
+u0 = [v =&gt; -65.0, u =&gt; -13.0]
+tspan = (0.0, 400.0)
+
+izh_prob = ODEProblem(izh_simple, u0, tspan)
+izh_sol = solve(izh_prob)
+
+# retrieve the voltage potential variable from solution
+V_izh = izh_sol[v]
+# retrieve all stimulation timesteps that the integrator took to solve the ODEProblem
+timepoints = izh_sol.t
+
+# set a time window width for spike counting
+t_window = 20
+# split time into bins of size `t_window`
+t_range = first(tspan):t_window:last(tspan)
+# initialize an empty vector to hold the spike values.
+spikes = zeros(length(t_range) - 1)</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">20-element Vector{Float64}:
+ 0.0
+ 0.0
+ 0.0
+ 0.0
+ 0.0
+ 0.0
+ 0.0
+ 0.0
+ 0.0
+ 0.0
+ 0.0
+ 0.0
+ 0.0
+ 0.0
+ 0.0
+ 0.0
+ 0.0
+ 0.0
+ 0.0
+ 0.0</code></pre><p>To find spikes we need to</p><ul><li>loop over the timepoints at which every time window begins</li><li>find the indices of timepoints that fall within the current time window</li><li>count the number of spikes within the same window</li></ul><pre><code class="language-julia hljs">for i in eachindex(t_range[1:end-1])
+    idxs = findall(t -&gt; t_range[i] &lt;= t &lt;= t_range[i+1], timepoints)
+
+    spikes[i] = count(V_izh[idxs] .&gt; spike_threshold) ## counts the number of True elements in a Boolean vector
+end
+
+fig = Figure()
+ax = Axis(fig[1,1], xlabel=&quot;Time (sec)&quot;, ylabel=&quot;Spikes&quot;)
+
+# plot spikes for each time window
+barplot!(ax, t_range[1:end-1], spikes, label=&quot;Spikes&quot;)
+# plot a vertical line to note when the change in current `I` occurred
+vlines!(ax, [t_bigger_stimulation]; color=:tomato, linestyle=:dash, linewidth=4, label=&quot;Stimulation: I = I+10&quot;)
+
+# display the legend
+axislegend(position = :lt)
+fig</code></pre><p><img src="../../assets/spikes.svg" alt/></p><h1 id="References"><a class="docs-heading-anchor" href="#References">References</a><a id="References-1"></a><a class="docs-heading-anchor-permalink" href="#References" title="Permalink"></a></h1><ul><li>[1] Danisch et al., (2021). Makie.jl: Flexible high-performance data visualization for Julia. Journal of Open Source Software, 6(65), 3349, https://doi.org/10.21105/joss.03349</li><li>[2] https://docs.makie.org/stable/</li></ul><hr/><p><em>This page was generated using <a href="https://github.com/fredrikekre/Literate.jl">Literate.jl</a>.</em></p></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../intro_diffeq/">« Differential Equations with ModelingToolkit</a><a class="docs-footer-nextpage" href="../blox_connections/">Blox and Connections in Neuroblox »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.16.1 on <span class="colophon-date" title="Tuesday 25 November 2025 19:30">Tuesday 25 November 2025</span>. Using Julia version 1.12.2.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
