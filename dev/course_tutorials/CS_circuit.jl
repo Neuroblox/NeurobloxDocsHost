@@ -17,31 +17,29 @@ using CairoMakie
 #nb # ![Lateral inhibition in the winner-takes-all circuit](../assets/CS_WTA.png)
 # *Figure 1: Lateral inhibition in the winner-takes-all circuit.*
 
-model_name = :g
-
-@named inh = HHNeuronInhib(namespace=model_name, G_syn = 4.0) ##feedback inhibitory interneuron neuron
-
-##creating an array of excitatory pyramidal neurons
-@named exci1 = HHNeuronExci(namespace=model_name, I_bg = 5*rand())
-@named exci2 = HHNeuronExci(namespace=model_name, I_bg = 5*rand())
-@named exci3 = HHNeuronExci(namespace=model_name, I_bg = 5*rand())
-@named exci4 = HHNeuronExci(namespace=model_name, I_bg = 5*rand())
-@named exci5 = HHNeuronExci(namespace=model_name, I_bg = 5*rand())
-
-g = MetaDiGraph()
-
-for exci_neuron in [exci1, exci2, exci3, exci4, exci5]
-    add_edge!(g, inh => exci_neuron, weight = 1)
-    add_edge!(g, exci_neuron => inh, weight = 1)
+@graph g begin
+    @nodes begin
+        inh = HHNeuronInhib(G_syn = 4.0) ##feedback inhibitory interneuron neuron
+        ##creating an array of excitatory pyramidal neurons
+        exci1 = HHNeuronExci(I_bg = 5*rand())
+        exci2 = HHNeuronExci(I_bg = 5*rand())
+        exci3 = HHNeuronExci(I_bg = 5*rand())
+        exci4 = HHNeuronExci(I_bg = 5*rand())
+        exci5 = HHNeuronExci(I_bg = 5*rand())
+    end
+    @connections begin
+        for exci_neuron ∈ [exci1, exci2, exci3, exci5]
+            inh => exci_neuron, [weight = 1]
+            exci_neuron => inh, [weight = 1]
+        end
+    end
 end
 
 # As we can see, the lateral inhibition circuit is made up of 5 excitatory neurons with each one having a reciprocal connection to the same inhibitory interneuron.
-
-@named sys = system_from_graph(g; graphdynamics = true)
-prob = ODEProblem(sys, [], (0.0, 1000), [])
+prob = ODEProblem(g, [], (0.0, 1000), [])
 sol = solve(prob, Vern7())
 fig = stackplot([exci1, exci2, exci3, exci4, exci5, inh], sol)
-save(joinpath("../assets/", "wta_stack.svg"), fig); # hide
+save(joinpath(@__DIR__(), "../assets/", "wta_stack.svg"), fig); # hide
 #!nb # ![](../assets/wta_stack.svg)
 
 # `stackplot` stacks the voltage timeseries of each input neuron on top of each other. Excitatory neurons appear in blue and inhibitory neurons in red by default. The y-axis scale is meaningless due to timeseries offsets, yet the plot offers a useful look into spiking patterns in a population.
@@ -51,22 +49,25 @@ save(joinpath("../assets/", "wta_stack.svg"), fig); # hide
 
 N_exci = 5 ## number of excitatory neurons in each WTA circuit
 ## For a single-valued input `I_bg`, each neuron in the WTA Blox will receive a uniformly distributed random background current from 0 to `I_bg`.
-@named wta1 = WinnerTakeAll(namespace=model_name, I_bg=5, N_exci=N_exci)
-@named wta2 = WinnerTakeAll(namespace=model_name, I_bg=4, N_exci=N_exci)
-
-g = MetaDiGraph()
-add_edge!(g, wta1 => wta2, weight=1, density=0.5);
+@graph g begin
+    @nodes begin
+        wta1 = WinnerTakeAll(I_bg=5, N_exci=N_exci)
+        wta2 = WinnerTakeAll(I_bg=4, N_exci=N_exci)
+    end
+    @connections begin
+        wta1 => wta2, [weight=1, density=0.5]
+    end
+end
 
 # The `density` keyword argument sets the connection probability from each excitatory neuron of `wta1` to each excitatory neuron of `wta2`.
 # Whether a connection is actually made or not depends on a Bernoulli trial with probability of success equal to `density`.
 
-sys = system_from_graph(g, name=model_name; graphdynamics = true)
-prob = ODEProblem(sys, [], (0.0, 1000), [])
+prob = ODEProblem(g, [], (0.0, 1000), [])
 sol = solve(prob, Vern7())
 
 neuron_set = get_neurons([wta1, wta2]) ## extract neurons from a composite blocks 
 fig = stackplot(neuron_set, sol)
-save(joinpath("../assets/", "wta_wta_stack.svg"), fig); # hide
+save(joinpath(@__DIR__(), "../assets/", "wta_wta_stack.svg"), fig); # hide
 #!nb # ![](../assets/wta_wta_stack.svg)
 
 # ## Cortical Superficial Layer
@@ -86,42 +87,34 @@ G_syn_inhib = 4.0 ## maximal synaptic conductance in GABAergic (inhibitory) syna
 G_syn_ff_inhib = 3.5 ## maximal synaptic conductance in GABAergic (inhibitory) synapses from feedforward interneurons
 I_bg = 5.0 ## background input current
 density = 0.01 ## connection density between WTA circuits
-
-## create a vector of `WinnerTakesAllBlox` using list comprehension
-wtas = [WinnerTakeAll(;
-                        name=Symbol("wta$i"), ## manually add a name instead of using the @named macro
-                        namespace=model_name,
-                        N_exci=N_exci,
-                        G_syn_exci=G_syn_exci,
-                        G_syn_inhib=G_syn_inhib,
-                        I_bg = I_bg  
-                        ) 
-for i = 1:N_wta]
-
-@named n_ff_inh = HHNeuronInhib(; namespace=model_name, G_syn=G_syn_ff_inhib)
-
-g = MetaDiGraph()
-
-for i in 1:N_wta
-    for j in 1:N_wta
-        if j != i
-            add_edge!(g, wtas[i] => wtas[j], weight=1, density=density);
+@graph g begin
+    @nodes begin
+        ## create a vector of `WinnerTakesAllBlox` using list comprehension
+        wtas = [WinnerTakeAll(; N_exci, G_syn_exci, G_syn_inhib, I_bg) for i in 1:N_wta]
+        n_ff_inh = HHNeuronInhib(; G_syn=G_syn_ff_inhib)
+    end
+    @connections begin
+        for i in 1:N_wta
+            for j in 1:N_wta
+                if j != i
+                    wtas[i] => wtas[j], [weight=1, density=density]
+                end
+            end
+            n_ff_inh => wtas[i], [weight=1]
         end
     end
-    add_edge!(g, n_ff_inh => wtas[i], weight=1);
 end
 
 # WTA circuits connect to each other with given connection density and the feedforward interneuron connects to each WTA circuit.
 # The feedforward interneuron `n_ff_inh` of a `CorticalBlox` connects to all excitatory (pyramidal) cells of the WTA circuits within the `CorticalBlox` and receives input from excitatory neurons of other `CorticalBlox` that connect to the current `CorticalBlox`. This interneuron is largely responsible for controlling the spiking rhythm of the ensemble of WTAs.
-  
-sys = system_from_graph(g, name = model_name; graphdynamics = true)
-prob = ODEProblem(sys, [], (0.0, 1000))
+
+prob = ODEProblem(g, [], (0.0, 1000))
 sol = solve(prob, Vern7())
 
 wta_neurons = get_neurons(wtas) ## extract neurons from WTA circuits
 neurons = vcat(wta_neurons, n_ff_inh)
 fig = stackplot(neurons, sol)
-save(joinpath("../assets/", "cort_stack.svg"), fig); # hide
+save(joinpath(@__DIR__(), "../assets/", "cort_stack.svg"), fig); # hide
 #!nb # ![](../assets/cort_stack.svg)
 
 # > **_Exercise:_** Try different connection densities and weights and see how it affects the population activity. 
@@ -130,6 +123,8 @@ save(joinpath("../assets/", "cort_stack.svg"), fig); # hide
 
 # The next step is to expand the cortical model we just created by adding a Blox representing an ascending system (ASC1 in [1]) to it. 
 # We define the ascending system using a Next Generation Neural Mass model as described in [2]. The neural mass parameters are fixed to generate a 16 Hz modulating frequency in the cortical neurons.  
+
+model_name = :g
 
 @named ASC1 = NextGenerationEI(;namespace=model_name, Cₑ=2*26, Cᵢ=26, v_synₑₑ=10.0, v_synₑᵢ=-10.0, v_synᵢₑ=10.0, v_synᵢᵢ=-10.0, alpha_invₑₑ=10.0/26, alpha_invₑᵢ=0.8/26, alpha_invᵢₑ=10.0/26, alpha_invᵢᵢ=0.8/26, kₑᵢ=0.6*26, kᵢₑ=0.6*26);
 
@@ -140,29 +135,28 @@ save(joinpath("../assets/", "cort_stack.svg"), fig); # hide
 ## number of pyramidal neurons in each WTA circuit = N_exci = 5
 @named CB = Cortical(N_wta=10, N_exci=5, density=0.01, weight=1, I_bg_ar=7; namespace=model_name)
 
-g = MetaDiGraph()
-add_edge!(g, ASC1 => CB, weight=44)
+g = GraphSystem()
+add_connection!(g, ASC1 => CB, weight=44)
 
 ## solve the system for time 0 to 1000 ms
-sys = system_from_graph(g, name = model_name; graphdynamics = true)
-prob = ODEProblem(sys, [], (0.0, 1000)) 
+prob = ODEProblem(g, [], (0.0, 1000)) 
 sol = solve(prob, Vern7());
 
 neuron_set = get_neurons(CB) ## extract neurons from a composite block like CorticalBlox
 n_neurons = 50 ## set number of neurons to display in the stackplot
 fig = stackplot(neuron_set[1:n_neurons], sol)
-save(joinpath("../assets/", "cort_asc_stack.svg"), fig); # hide
+save(joinpath(@__DIR__(), "../assets/", "cort_asc_stack.svg"), fig); # hide
 #!nb # ![](../assets/cort_asc_stack.svg)
 
 # We can also generate plots of averaged activity in any composite Blox like `CorticalBlox` and `WinnerTakeAllBlox`. 
 # For instance the meanfield of all cortical block neurons (mean membrane voltage)
 fig = meanfield(CB, sol)
-save(joinpath("../assets/", "cort_meanfield.svg"), fig); # hide
+save(joinpath(@__DIR__(), "../assets/", "cort_meanfield.svg"), fig); # hide
 #!nb # ![](../assets/cort_meanfield.svg)
 
 # and the powerspectrum of the meanfield (average over membrane potentials)
 fig = powerspectrumplot(CB, sol; sampling_rate=0.01)
-save(joinpath("../assets/", "cort_power.svg"), fig); # hide
+save(joinpath(@__DIR__(), "../assets/", "cort_power.svg"), fig); # hide
 #!nb # ![](../assets/cort_power.svg)
 
 # Notice the peak at 16 Hz, representing beta oscillations.
@@ -200,20 +194,19 @@ pixels = Array(image_set[image_sample, 1:end-1])
 pixels = reshape(pixels, 15, 15)
 ## plot the image that the visual cortex 'sees'
 fig = heatmap(pixels, colormap = :gray1)
-save(joinpath("../assets/", "image_stim.svg"), fig); # hide
+save(joinpath(@__DIR__(), "../assets/", "image_stim.svg"), fig); # hide
 #!nb # ![](../assets/image_stim.svg)
 
 # Above we can see an example image stimulus. Each pixel of the image stimulus is a variable (`stim₊u_i`) that connects to a neuron of the visual cortex `VAC` Blox. Using `connection_rule(stim, VAC)` we can better see how this connection is implemented.
 
-g = MetaDiGraph()
-add_edge!(g, stim => VAC, weight=14) 
-add_edge!(g, ASC1 => VAC, weight=44)
-add_edge!(g, ASC1 => AC, weight=44)
-add_edge!(g, VAC => AC, weight=3, density=0.08)
+g = GraphSystem()
+add_connection!(g, stim => VAC, weight=14) 
+add_connection!(g, ASC1 => VAC, weight=44)
+add_connection!(g, ASC1 => AC, weight=44)
+add_connection!(g, VAC => AC, weight=3, density=0.08)
 
 ## define system and solve
-sys = system_from_graph(g, name=model_name; graphdynamics = true)
-prob = ODEProblem(sys, [], (0.0, 1000))
+prob = ODEProblem(g, [], (0.0, 1000))
 sol = solve(prob, Vern7());
 
 # > **_Exercise:_** : Use the plotting functions from above to visualize the simulation results for any Blox of your choice. 

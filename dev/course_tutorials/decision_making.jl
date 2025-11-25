@@ -70,37 +70,38 @@ spike_rate_B = (distribution=Normal(μ_B, σ), dt=dt_spike_rate) # spike rate di
 # The Bloxs we use here are subtypes of `CompositeBlox` and contain either `LIFExciNeuron`s or `LIFInhNeuron`s in them.
 
 # ## System Construction & Simulation
-# We construct the graph with all connections and weights according to [1]. Please note that the `system_from_graph` call and the subsequent `ODEProblem` construction will take some minutes (probably 4-5, depending on your machine) as the system size is larger compared to other examples. The `graphdynamics=true` flag that we set in `system_from_graph` though will greatly enhance performance here.
-g = MetaDiGraph()
-add_edge!(g, background_input => n_A; weight = 1);
-add_edge!(g, background_input => n_B; weight = 1);
-add_edge!(g, background_input => n_ns; weight = 1);
-add_edge!(g, background_input => n_inh; weight = 1);
+# We construct the graph with all connections and weights according to [1].
 
-add_edge!(g, stim_A => n_A; weight = 1);
-add_edge!(g, stim_B => n_B; weight = 1);
+@graph g begin
+    @connections begin
+        background_input => n_A, [weight = 1];
+        background_input => n_B, [weight = 1]
+        background_input => n_ns, [weight = 1]
+        background_input => n_inh, [weight = 1]
 
-add_edge!(g, n_A => n_B; weight = w₋);
-add_edge!(g, n_A => n_ns; weight = 1);
-add_edge!(g, n_A => n_inh; weight = 1);
+        stim_A => n_A, [weight = 1]
+        stim_B => n_B, [weight = 1]
 
-add_edge!(g, n_B => n_A; weight = w₋);
-add_edge!(g, n_B => n_ns; weight = 1);
-add_edge!(g, n_B => n_inh; weight = 1);
+        n_A => n_B, [weight = w₋]
+        n_A => n_ns, [weight = 1]
+        n_A => n_inh, [weight = 1]
 
-add_edge!(g, n_ns => n_A; weight = w₋);
-add_edge!(g, n_ns => n_B; weight = w₋);
-add_edge!(g, n_ns => n_inh; weight = 1);
+        n_B => n_A, [weight = w₋]
+        n_B => n_ns, [weight = 1]
+        n_B => n_inh, [weight = 1]
 
-add_edge!(g, n_inh => n_A; weight = 1);
-add_edge!(g, n_inh => n_B; weight = 1);
-add_edge!(g, n_inh => n_ns; weight = 1);
+        n_ns => n_A, [weight = w₋]
+        n_ns => n_B, [weight = w₋]
+        n_ns => n_inh, [weight = 1]
 
-sys = system_from_graph(g; name=model_name, graphdynamics = true);
-prob = ODEProblem(sys, [], tspan);
-sol = solve(prob, Euler(); dt = 0.01); 
+        n_inh => n_A, [weight = 1]
+        n_inh => n_B, [weight = 1]
+        n_inh => n_ns, [weight = 1]
+    end
+end
 
-# > **_NOTE_:** As mention in the PING circuit session too, setting `graphdynamics=true` will enable an alternative compilation mode for the neural system. Not every model is compatible with GraphDynamics.jl [2] yet, but for ones that are compatible, it is usually significantly faster to compile. This option will make the biggest difference when you care about very large numbers of neurons, or if you are running the same model with small changes to the number of neurons or connectivity graph many times.
+prob = ODEProblem(g, [], tspan);
+sol = solve(prob, Euler(); dt = 0.01);
 
 # ## Results
 

@@ -36,16 +36,12 @@ using Downloads ## to download image stimuli files
 nn1 = HHNeuronExci(name=Symbol("nrn1"), I_bg=0.5)
 
 # define graph and add the single neuron 'blox' as a single node into the graph
-g = MetaDiGraph() ## defines a graph
-add_blox!(g, nn1) ## adds the defined blocks into the graph
-
-# create an ODESystem from the graph
-@named sys = system_from_graph(g)
-length(unknowns(sys)) ## shows the number of variables in the simplified system
+g = GraphSystem() ## defines a graph
+add_node!(g, nn1) ## adds the defined blocks into the graph
 
 # To solve the system, we first create an Ordinary Differential Equation Problem and then solve it over the tspan of (0,1e) using a Vern7() solver.  The solution is saved every 0.1ms. The unit of time in Neuroblox is 1ms.
 
-prob = ODEProblem(sys, [], (0.0, 1000), [])
+prob = ODEProblem(g, [], (0.0, 1000), [])
 sol = solve(prob, Vern7(), saveat=0.1);
 
 # acessing the voltage timeseries from the neuron block and plotting the voltage
@@ -65,7 +61,6 @@ fig ## to display the figure
 ## While creating a system of multiple components (neurons in this case), each component should be defined within the same namespace. So first
 ## we define a global namespace.
 global_namespace=:g
-
 ## define three neurons, two excitatory and one inhibitory 
 
 nn1 = HHNeuronExci(name=Symbol("nrn1"), I_bg=0.4, namespace=global_namespace)
@@ -73,14 +68,13 @@ nn2 = HHNeuronInhib(name=Symbol("nrn2"), I_bg=0.1, namespace=global_namespace)
 nn3 = HHNeuronExci(name=Symbol("nrn3"), I_bg=1.4, namespace=global_namespace)
 
 ## defien graph and connect the nodes with the edges (synapses in this case), with the synaptic 'weights' specified as arguments
-g = MetaDiGraph()
-add_edge!(g, nn1 => nn2, weight = 1) ##connection from neuron 1 to neuron 2 (nn1 to nn2)
-add_edge!(g, nn2 => nn3, weight = 0.2) ##connection from neuron 2 to neuron 3 (nn2 to nn3)
-add_edge!(g, nn1 => nn3, weight = 0.5) ##connection from neuron 1 to neuron 3 (nn2 to nn3)
+g = GraphSystem(name=global_namespace)
+add_connection!(g, nn1 => nn2, weight = 1) ##connection from neuron 1 to neuron 2 (nn1 to nn2)
+add_connection!(g, nn2 => nn3, weight = 0.2) ##connection from neuron 2 to neuron 3 (nn2 to nn3)
+add_connection!(g, nn1 => nn3, weight = 0.5) ##connection from neuron 1 to neuron 3 (nn2 to nn3)
 
 ## create an ODESystem from the graph and then solve it using an ODE solver
-@named sys = system_from_graph(g)
-prob = ODEProblem(sys, [], (0.0, 1000), [])
+prob = ODEProblem(g, [], (0.0, 1000), [])
 sol = solve(prob, Vern7(), saveat=0.1);
 
 ## plotting membrane voltage activity of all neurons in a stacked form
@@ -100,22 +94,20 @@ n_inh = HHNeuronInhib(name = Symbol("inh"), namespace=global_namespace, G_syn = 
 
 ##creating an array of excitatory pyramidal neurons
 n_excis = [HHNeuronExci(
-                            name = Symbol("exci$i"),
-                            namespace=global_namespace, 
-                            G_syn = 3.0, 
-                            τ = 5,
-                            I_bg = 5*rand(), 
-                            ) for i = 1:N_exci]
+    name = Symbol("exci$i"),
+    namespace=global_namespace, 
+    G_syn = 3.0, 
+    τ = 5,
+    I_bg = 5*rand(), 
+) for i = 1:N_exci]
 
-g = MetaDiGraph()
+g = GraphSystem()
 
-for i in Base.OneTo(N_exci)
-    add_edge!(g, n_inh => n_excis[i], weight = 1.0)
-    add_edge!(g, n_excis[i] => n_inh, weight = 1.0)
+for i in 1:N_exci
+    add_connection!(g, n_inh => n_excis[i], weight = 1.0)
+    add_connection!(g, n_excis[i] => n_inh, weight = 1.0)
 end
-
-@named sys = system_from_graph(g; graphdynamics = true)
-prob = ODEProblem(sys, [], (0.0, 1000), [])
+prob = ODEProblem(g, [], (0.0, 1000), [])
 sol = solve(prob, Vern7(), saveat=0.1)
 stackplot(vcat(n_excis, n_inh), sol)
 
@@ -130,11 +122,10 @@ N_exci = 5 ##number of excitatory neurons in each WTA circuit
 wta1 = WinnerTakeAll(name=Symbol("wta1"), I_bg=5.0, N_exci=N_exci, namespace=global_namespace) ##for a single valued input current, each neuron of the WTA circuit will recieve a uniformly distributed random input from 0 to I_bg  
 wta2 = WinnerTakeAll(name=Symbol("wta2"), I_bg=4.0, N_exci=N_exci, namespace=global_namespace)
 
-g = MetaDiGraph()
-add_edge!(g, wta1 => wta2, weight=1, density=0.5) ##density keyword sets the connection probability from each excitatory neuron of source WTA circuit to each excitatory neuron of target WTA circuit
+g = GraphSystem()
+add_connection!(g, wta1 => wta2, weight=1, density=0.5) ##density keyword sets the connection probability from each excitatory neuron of source WTA circuit to each excitatory neuron of target WTA circuit
 
-sys = system_from_graph(g, name=global_namespace; graphdynamics = true)
-prob = ODEProblem(sys, [], (0.0, 1000), [])
+prob = ODEProblem(g, [], (0.0, 1000), [])
 sol = solve(prob, Vern7(), saveat=0.1)
 
 neuron_set = get_neurons([wta1, wta2]) ## extract neurons from a composite blocks 
@@ -157,35 +148,34 @@ density=0.01 ##connection density between WTA circuits
 
 ##creating array of WTA ciruits
 wtas = [WinnerTakeAll(;
-                           name=Symbol("wta$i"),
-                           namespace=global_namespace,
-                           N_exci=N_exci,
-                           G_syn_exci=G_syn_exci,
-                           G_syn_inhib=G_syn_inhib,
-                           I_bg = I_bg  
-                          ) for i = 1:N_wta]
+                      name=Symbol("wta$i"),
+                      namespace=global_namespace,
+                      N_exci=N_exci,
+                      G_syn_exci=G_syn_exci,
+                      G_syn_inhib=G_syn_inhib,
+                      I_bg = I_bg  
+                      ) for i = 1:N_wta]
 
 ##feed-forward interneurons (get input from other pyramidal cells and from the ascending system, largely controls the rhythm)
 n_ff_inh = HHNeuronInhib(;
-                             name=Symbol("ff_inh"),
-                             namespace=global_namespace,
-                             G_syn=G_syn_ff_inhib
-                            )
+                         name=Symbol("ff_inh"),
+                         namespace=global_namespace,
+                         G_syn=G_syn_ff_inhib
+                         )
 
-g = MetaDiGraph()
+g = GraphSystem()
 
 ## connecting WTA circuits to each other with given connection density, and feedforward interneuron connects to each WTA circuit 
 for i in 1:N_wta
     for j in 1:N_wta
         if j != i
-            add_edge!(g, wtas[i] => wtas[j], weight=1, density=density)
+            add_connection!(g, wtas[i] => wtas[j], weight=1, density=density)
         end
     end
-    add_edge!(g, n_ff_inh => wtas[i], weight=1)
+    add_connection!(g, n_ff_inh => wtas[i], weight=1)
 end
 
-sys = system_from_graph(g, name=global_namespace; graphdynamics = true)
-prob = ODEProblem(sys, [], (0.0, 1000), [])
+prob = ODEProblem(g, [], (0.0, 1000), [])
 sol = solve(prob, Vern7(), saveat=0.1)
 
 neuron_set = get_neurons(vcat(wtas, n_ff_inh)) ## extract neurons from a composite blocks
@@ -208,12 +198,12 @@ global_namespace=:g
 @named CB = Cortical(N_wta=10, N_exci=5, density=0.01, weight=1, I_bg_ar=7; namespace=global_namespace)
 
 ## define graph and connect ASC1->CB
-g = MetaDiGraph()
-add_edge!(g, ASC1 => CB, weight=44)
+g = GraphSystem()
+add_connection!(g, ASC1 => CB, weight=44)
 
 ## solve the system for time 0 to 1000 ms
-sys = system_from_graph(g, name=global_namespace; graphdynamics = true)
-prob = ODEProblem(sys, [], (0.0, 1000), []) ## tspan = (0,1000)
+
+prob = ODEProblem(g, [], (0.0, 1000), []) ## tspan = (0,1000)
 sol = solve(prob, Vern7(), saveat=0.1);
 
 # plot neuron time series
@@ -262,16 +252,16 @@ heatmap(pixels,colormap = :gray1) #input image matrix seen as heatmap
 
 # assemble the blox into a graph and set connections with their keword arguments like connection weight and connection density
 
-g = MetaDiGraph()
+g = GraphSystem()
 
-add_edge!(g, stim => VAC, weight=14) 
-add_edge!(g, ASC1 => VAC, weight=44)
-add_edge!(g, ASC1 => AC, weight=44)
-add_edge!(g, VAC => AC, weight=3, density=0.08)
+add_connection!(g, stim => VAC, weight=14) 
+add_connection!(g, ASC1 => VAC, weight=44)
+add_connection!(g, ASC1 => AC, weight=44)
+add_connection!(g, VAC => AC, weight=3, density=0.08)
 
 ## define system and solve
-sys = system_from_graph(g, name=global_namespace; graphdynamics = true)
-prob = ODEProblem(sys, [], (0.0, 1000), []) ## tspan = (0,1000)
+
+prob = ODEProblem(g, [], (0.0, 1000), []) ## tspan = (0,1000)
 sol = solve(prob, Vern7(), saveat=0.1);
 
 # Let us now plot neuron potentials, meanfield activity and powerspectrums for the VAC and AC blox.

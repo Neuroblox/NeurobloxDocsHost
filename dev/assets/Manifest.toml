@@ -2,7 +2,7 @@
 
 julia_version = "1.12.2"
 manifest_format = "2.0"
-project_hash = "e48119bd83584eacf91a6487e72d258e41e4fd6a"
+project_hash = "969087bacc0aa951ea4ede24c510cca2dc4d14c8"
 
 [[deps.ADTypes]]
 git-tree-sha1 = "8be2ae325471fc20b11c27bb34b518541d07dd3a"
@@ -536,9 +536,9 @@ version = "5.61.1"
 
 [[deps.DiffEqBase]]
 deps = ["ArrayInterface", "ConcreteStructs", "DocStringExtensions", "EnzymeCore", "FastBroadcast", "FastClosures", "FastPower", "FunctionWrappers", "FunctionWrappersWrappers", "LinearAlgebra", "Logging", "Markdown", "MuladdMacro", "PrecompileTools", "Printf", "RecursiveArrayTools", "Reexport", "SciMLBase", "SciMLOperators", "SciMLStructures", "Setfield", "Static", "StaticArraysCore", "Statistics", "SymbolicIndexingInterface", "TruncatedStacktraces"]
-git-tree-sha1 = "410de4b89beab68dce2adfb342fb4e73d20871ac"
+git-tree-sha1 = "d7259aa30ff9c4a512513d119882e3df3e656238"
 uuid = "2b5f629d-d688-5b77-993f-72d75c75574e"
-version = "6.191.0"
+version = "6.192.0"
 
     [deps.DiffEqBase.extensions]
     DiffEqBaseCUDAExt = "CUDA"
@@ -709,9 +709,9 @@ version = "0.9.5"
 
 [[deps.Documenter]]
 deps = ["ANSIColoredPrinters", "AbstractTrees", "Base64", "CodecZlib", "Dates", "DocStringExtensions", "Downloads", "Git", "IOCapture", "InteractiveUtils", "JSON", "Logging", "Markdown", "MarkdownAST", "Pkg", "PrecompileTools", "REPL", "RegistryInstances", "SHA", "TOML", "Test", "Unicode"]
-git-tree-sha1 = "70c521ca3a23c576e12655d15963977c9766c26b"
+git-tree-sha1 = "b37458ae37d8bdb643d763451585cd8d0e5b4a9e"
 uuid = "e30172f5-a6a5-5a46-863b-614d45cd2de4"
-version = "1.16.0"
+version = "1.16.1"
 
 [[deps.DomainSets]]
 deps = ["CompositeTypes", "IntervalSets", "LinearAlgebra", "StaticArrays"]
@@ -867,6 +867,16 @@ version = "1.2.0"
     Mooncake = "da2b9cff-9c12-43a0-ae48-6db2b0edb7d6"
     ReverseDiff = "37e2e3b7-166d-5795-8a7a-e32c996b4267"
     Tracker = "9f7883ad-71c0-57eb-9f7f-b5c9e6d3789c"
+
+[[deps.FieldViews]]
+deps = ["Accessors"]
+git-tree-sha1 = "5ce712f0a0071442cdc0f73fe918591811f6b498"
+uuid = "ff5a1669-b1f2-423e-bbd7-b7fa0f7e0224"
+version = "0.3.2"
+weakdeps = ["StaticArrays"]
+
+    [deps.FieldViews.extensions]
+    StaticArraysExt = "StaticArrays"
 
 [[deps.FileIO]]
 deps = ["Pkg", "Requires", "UUIDs"]
@@ -1085,10 +1095,10 @@ uuid = "c27321d9-0574-5035-807b-f59d2c89b15c"
 version = "1.3.1"
 
 [[deps.GraphDynamics]]
-deps = ["Accessors", "ConstructionBase", "DiffEqBase", "OhMyThreads", "OrderedCollections", "RecursiveArrayTools", "SciMLBase", "SparseArrays", "SymbolicIndexingInterface"]
+deps = ["Accessors", "ConstructionBase", "DiffEqBase", "FieldViews", "OhMyThreads", "OrderedCollections", "RecursiveArrayTools", "SciMLBase", "SparseArrays", "SymbolicIndexingInterface"]
 path = "GraphDynamics"
 uuid = "bcd5d0fe-e6b7-4ef1-9848-780c183c7f4c"
-version = "0.6.0"
+version = "0.7.0-DEV"
 weakdeps = ["ModelingToolkit", "Symbolics"]
 
     [deps.GraphDynamics.extensions]
@@ -1407,9 +1417,9 @@ version = "1.12.0"
 
 [[deps.JumpProcesses]]
 deps = ["ArrayInterface", "DataStructures", "DiffEqBase", "DiffEqCallbacks", "DocStringExtensions", "FunctionWrappers", "Graphs", "LinearAlgebra", "PoissonRandom", "Random", "RecursiveArrayTools", "Reexport", "SciMLBase", "Setfield", "StaticArrays", "SymbolicIndexingInterface", "UnPack"]
-git-tree-sha1 = "905a2a28770e23f3ed750306ef48eb8c46c3a002"
+git-tree-sha1 = "746d3ac930339ca8a37590892c98493fba89e9d3"
 uuid = "ccbc3e58-028d-4f4c-8cd5-9ae44345cda5"
-version = "9.19.1"
+version = "9.19.2"
 
     [deps.JumpProcesses.extensions]
     JumpProcessesKernelAbstractionsExt = ["Adapt", "KernelAbstractions"]
@@ -1427,9 +1437,9 @@ version = "0.6.10"
 
 [[deps.Krylov]]
 deps = ["LinearAlgebra", "Printf", "SparseArrays"]
-git-tree-sha1 = "d1fc961038207e43982851e57ee257adc37be5e8"
+git-tree-sha1 = "09895a8e17b0aa97df8964ed13c94d1b6d9de666"
 uuid = "ba0b0d4f-ebba-5204-a429-3ac8c609bfb7"
-version = "0.10.2"
+version = "0.10.3"
 
 [[deps.LAME_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl"]
@@ -1895,16 +1905,16 @@ uuid = "ca575930-c2e3-43a9-ace4-1e988b2c1908"
 version = "1.3.0"
 
 [[deps.Neuroblox]]
-deps = ["NeurobloxBase", "NeurobloxBasics", "NeurobloxDBS", "NeurobloxDBSPrivate", "NeurobloxPharma", "NeurobloxPharmaPrivate", "NeurobloxSynapticBlox", "Reexport"]
+deps = ["NeurobloxBase", "NeurobloxBasics", "NeurobloxDBS", "NeurobloxDBSPrivate", "NeurobloxPharma", "NeurobloxPharmaPrivate", "Reexport"]
 path = "."
 uuid = "769b91e5-4c60-41ee-bfae-153c84203cb2"
-version = "0.7.0"
+version = "0.8.0-DEV"
 
 [[deps.NeurobloxBase]]
 deps = ["Accessors", "DSP", "DiffEqCallbacks", "Distributions", "ExproniconLite", "GraphDynamics", "Graphs", "Interpolations", "LinearAlgebra", "MLStyle", "MetaGraphs", "ModelingToolkit", "OhMyThreads", "OrderedCollections", "Peaks", "Preferences", "Random", "RecursiveArrayTools", "Reexport", "SciMLBase", "SparseArrays", "Statistics", "StatsBase", "SymbolicIndexingInterface", "SymbolicUtils", "Symbolics", "Test"]
 path = "NeurobloxBase"
 uuid = "c1a47a78-a13f-4f42-9de5-c5b922306e53"
-version = "0.1.0"
+version = "0.2.0-DEV"
 weakdeps = ["CairoMakie", "Colors", "Makie"]
 
     [deps.NeurobloxBase.extensions]
@@ -1914,41 +1924,35 @@ weakdeps = ["CairoMakie", "Colors", "Makie"]
 deps = ["Accessors", "DiffEqCallbacks", "Distributions", "GraphDynamics", "Graphs", "MetaGraphs", "ModelingToolkit", "NeurobloxBase", "ProgressMeter", "Random", "RecursiveArrayTools", "Reexport", "SciMLBase", "SparseArrays", "StatsBase", "SymbolicUtils", "Symbolics"]
 path = "NeurobloxBasics"
 uuid = "6341abd9-5539-449d-87b3-7e81c4d50fb5"
-version = "0.1.0"
+version = "0.2.0-DEV"
 
 [[deps.NeurobloxDBS]]
 deps = ["Accessors", "DiffEqCallbacks", "Distributions", "GraphDynamics", "Graphs", "MetaGraphs", "NeurobloxBase", "Random", "RecursiveArrayTools", "Reexport", "SciMLBase", "SparseArrays", "StatsBase", "SymbolicUtils", "Symbolics"]
 path = "NeurobloxDBS"
 uuid = "d34949e2-e824-4448-b7f9-1a74e4d2565a"
-version = "0.1.0"
+version = "0.2.0-DEV"
 
 [[deps.NeurobloxDBSPrivate]]
 deps = ["Accessors", "CairoMakie", "DiffEqBase", "GraphDynamics", "NeurobloxBase", "NeurobloxBasics", "NeurobloxDBS", "OrderedCollections", "OrdinaryDiffEqTsit5", "Reexport", "SciMLBase", "StochasticDiffEq", "YAML"]
 path = "NeurobloxDBSPrivate"
 uuid = "bdfd818c-c048-435e-9abc-ef02bd9abebf"
-version = "0.1.0"
+version = "0.2.0-DEV"
 
 [[deps.NeurobloxPharma]]
 deps = ["Accessors", "CSV", "DataFrames", "DiffEqCallbacks", "Distributions", "GraphDynamics", "Graphs", "LogExpFunctions", "MetaGraphs", "ModelingToolkit", "NeurobloxBase", "ProgressMeter", "Random", "RecursiveArrayTools", "Reexport", "SciMLBase", "SparseArrays", "StatsBase", "SymbolicUtils", "Symbolics"]
 path = "NeurobloxPharma"
 uuid = "6d6291d7-c437-44bd-acf4-438a4f54bfaa"
-version = "0.1.0"
+version = "0.2.0-DEV"
 weakdeps = ["UnicodePlots"]
 
     [deps.NeurobloxPharma.extensions]
     UnicodePlotsExt = "UnicodePlots"
 
 [[deps.NeurobloxPharmaPrivate]]
-deps = ["Accessors", "CSV", "DataFrames", "DiffEqCallbacks", "Distributions", "GraphDynamics", "Graphs", "LogExpFunctions", "MetaGraphs", "ModelingToolkit", "NeurobloxBase", "NeurobloxPharma", "ProgressMeter", "Random", "RecursiveArrayTools", "Reexport", "SciMLBase", "SparseArrays", "StatsBase", "SymbolicUtils", "Symbolics"]
+deps = ["Accessors", "CSV", "DataFrames", "DiffEqCallbacks", "Distributions", "GraphDynamics", "Graphs", "LogExpFunctions", "MetaGraphs", "ModelingToolkit", "NaNMath", "NeurobloxBase", "NeurobloxPharma", "ProgressMeter", "Random", "RecursiveArrayTools", "Reexport", "SciMLBase", "SparseArrays", "StatsBase", "SymbolicUtils", "Symbolics"]
 path = "NeurobloxPharmaPrivate"
 uuid = "58ac089b-67af-4add-8f86-e409aa08e46d"
-version = "0.1.0"
-
-[[deps.NeurobloxSynapticBlox]]
-deps = ["Accessors", "Distributions", "GraphDynamics", "ModelingToolkit", "NeurobloxBase", "NeurobloxBasics", "NeurobloxPharma", "Reexport", "StatsBase"]
-path = "NeurobloxSynapticBlox"
-uuid = "07666d11-74ed-43ff-badd-c2050c738c55"
-version = "0.1.0"
+version = "0.2.0-DEV"
 
 [[deps.NonlinearSolve]]
 deps = ["ADTypes", "ArrayInterface", "BracketingNonlinearSolve", "CommonSolve", "ConcreteStructs", "DiffEqBase", "DifferentiationInterface", "FastClosures", "FiniteDiff", "ForwardDiff", "LineSearch", "LinearAlgebra", "LinearSolve", "NonlinearSolveBase", "NonlinearSolveFirstOrder", "NonlinearSolveQuasiNewton", "NonlinearSolveSpectralMethods", "PrecompileTools", "Preferences", "Reexport", "SciMLBase", "SimpleNonlinearSolve", "SparseArrays", "SparseMatrixColorings", "StaticArraysCore", "SymbolicIndexingInterface"]
@@ -3456,9 +3460,9 @@ version = "2.0.4+0"
 
 [[deps.libpng_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl", "Zlib_jll"]
-git-tree-sha1 = "07b6a107d926093898e82b3b1db657ebe33134ec"
+git-tree-sha1 = "5cb3c5d039f880c0b3075803c8bf45cb95ae1e91"
 uuid = "b53b4c65-9356-5827-b1ea-8c7a1a84506f"
-version = "1.6.50+0"
+version = "1.6.51+0"
 
 [[deps.libsixel_jll]]
 deps = ["Artifacts", "JLLWrappers", "JpegTurbo_jll", "Libdl", "libpng_jll"]

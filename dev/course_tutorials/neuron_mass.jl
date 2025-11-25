@@ -112,11 +112,12 @@ connection_rule(inp, nm, weight=1)
 
 # This source simply adds a fixed current to the input variable (`nm₊jcn`) of the downstream (destination) Blox. 
 
-g = MetaDiGraph()
-add_edge!(g, inp => nm, weight = 1)
-
-@named sys = system_from_graph(g)
-prob = ODEProblem(sys, [], tspan)
+@graph g begin
+    @connections begin
+        inp => nm, [weight = 1]
+    end
+end
+prob = ODEProblem(g, [], tspan)
 sol = solve(prob, Tsit5())
 
 fig, ax = plot(sol);
@@ -187,14 +188,16 @@ function connection_spike_affects(source::BernoulliSpikes, ifn::IFNeuron, conn)
 end
 
 tspan = (0, 500)
-@named s = BernoulliSpikes(0.05, tspan, 5)
-@named ifn = IFNeuron()
-
-g = MetaDiGraph()
-add_edge!(g, s => ifn, weight=1)
-@named sys = system_from_graph(g)
-
-prob = ODEProblem(sys, [], tspan)
+@graph g begin
+    @nodes begin
+        s = BernoulliSpikes(0.05, tspan, 5)
+        ifn = IFNeuron()
+    end
+    @connections begin
+        s => ifn, [weight=1]
+    end
+end
+prob = ODEProblem(g, [], tspan)
 sol = solve(prob, Tsit5())
 
 fig = rasterplot(ifn, sol);
@@ -305,7 +308,6 @@ save(joinpath("../assets/", "stim_protocol.svg"), fig); # hide
 # Now let's finally connect our `ProtocolDBS` source to an HH excitatory neuron and simulate
 
 @named nn = HHNeuronExci(I_bg=0.4)
-
 g = GraphSystem()
 add_connection!(g, dbs => nn, weight = 10.0)
 prob = ODEProblem(g, [], tspan)
