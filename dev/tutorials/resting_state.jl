@@ -37,19 +37,21 @@ wm_sparse = SparseMatrixCSC(wm)
 # After the connectivity structure, it's time to define the neural mass components of our model and then use the weight matrix to connect them together into our final system.
 
 ## create an array of neural mass models
-blox = [Generic2dOscillator(name=Symbol(region_names[i]),bn=sqrt(5e-4)) for i in 1:N_bloxs]
+@graph g begin
+    @nodes blox = [Generic2dOscillator(bn=sqrt(5e-4)) for i in 1:N_bloxs]
+end
 
-## add neural mass models to Graph and connect using the connection matrix
-g = MetaDiGraph()
-add_blox!.(Ref(g), blox)
+## add connections between the neurons according to `wm`
+
 create_adjacency_edges!(g, wm)
-
-@named sys = system_from_graph(g);
 
 # To solve the system, we first create an Stochastic Differential Equation Problem and then solve it using a EulerHeun solver. The solution is saved every 0.5 ms. The unit of time in Neuroblox is 1 ms.
 
 tspan = (0.0, 6e5)
-prob = SDEProblem(sys,rand(-2:0.1:4,76*2), tspan, [])
+
+u0map = Iterators.flatten([(osc.V => rand(-2:0.1:4), osc.W => rand(-2:0.1:4)) for osc ∈ blox])
+
+prob = SDEProblem(g, u0map, tspan, [])
 sol = solve(prob, EulerHeun(), dt=0.5, saveat=5);
 
 # Let us now plot the voltage potential of the first couple of components. We can extract the voltage timeseries of a blox from the solution object using the `voltage_timeseries` function.

@@ -65,65 +65,47 @@ I_bath = -0.7; ## External inhibitory bath for inhibitory neurons - value from p
 # # Creating a Network in Neuroblox
 # Creating and running a network of neurons in Neuroblox consists of three steps: defining the neurons, defining the graph of connections between the neurons, and simulating the system represented by the graph.
 
-# ## Define the Neurons
-# The neurons from Börgers et al. [1] are implemented in Neuroblox as `PINGNeuronExci` and `PINGNeuronInhib`. We can specify their initial current drives and create the neurons as follows:
 
-exci_driven = [PINGNeuronExci(name=Symbol("ED$i"), I_ext=rand(I_driveE) + rand(I_base)) for i in 1:NE_driven] ## In-line loop to create the driven excitatory neurons, named ED1, ED2, etc.
-exci_other  = [PINGNeuronExci(name=Symbol("EO$i"), I_ext=rand(I_base) + rand(I_undriven)) for i in 1:NE_other] ## In-line loop to create the undriven excitatory neurons, named EO1, EO2, etc.
-exci        = [exci_driven; exci_other] ## Concatenate the driven and undriven excitatory neurons into a single vector for convenience
-inhib       = [PINGNeuronInhib(name=Symbol("ID$i"), I_ext=rand(I_driveI) + rand(I_base) + I_bath) for i in 1:NI_driven]; ## In-line loop to create the inhibitory neurons, named ID1, ID2, etc.
+
+
+# ## Define the Neurons and Graph of Network Connections
+# The neurons from Börgers et al. [1] are implemented in Neuroblox as `PINGNeuronExci` and `PINGNeuronInhib`. We can specify their initial current drives and create the neurons, and wire up connections between them as follows:
+
+@graph g begin
+    @nodes begin
+        exci_driven = [PINGNeuronExci(I_ext=rand(I_driveE) + rand(I_base)) for i in 1:NE_driven] ## In-line loop to create the driven excitatory neurons, named ED1, ED2, etc.
+        exci_other  = [PINGNeuronExci(I_ext=rand(I_base) + rand(I_undriven)) for i in 1:NE_other] ## In-line loop to create the undriven excitatory neurons, named EO1, EO2, etc.
+        inhib       = [PINGNeuronInhib(I_ext=rand(I_driveI) + rand(I_base) + I_bath) for i in 1:NI_driven]; ## In-line loop to create the inhibitory neurons, named ID1, ID2, etc.
+    end
+    exci = [exci_driven; exci_other] ## Concatenate the driven and undriven excitatory neurons into a single vector for convenience
+    @connections begin
+        for ne ∈ exci
+            for ni ∈ inhib
+                ne => ni, [weight=g_EI/N] ## Add the E -> I connections
+                ni => ne, [weight=g_IE/N] ## Add the I -> E connections
+            end
+        end
+        for ni1 ∈ inhib
+            for ni2 ∈ inhib
+                ni1 => ni2, [weight=g_II/N] ## Add the I -> I connections
+            end
+        end
+    end
+end
 
 # > **_NOTE_:** If you want to explore the details of these Bloxs, try typing ``?PINGNeuronExci`` or ``?PINGNeuronInhib`` in your Julia REPL 
 # > to see the full details of the blocks. If you really want to dig into the details, 
 # > type ``@edit PINGNeuronExci()`` to open the source code and see how the equations are written.
 
-# ## Define the Graph of Network Connections
-# This portion illustrates how we go about creating a network of neuronal connections.
-
-g = MetaDiGraph() ## Initialize the graph
-
-for ne ∈ exci
-    for ni ∈ inhib
-        add_edge!(g, ne => ni; weight=g_EI/N) ## Add the E -> I connections
-        add_edge!(g, ni => ne; weight=g_IE/N) ## Add the I -> E connections
-    end
-end
-
-for ni1 ∈ inhib
-    for ni2 ∈ inhib
-        add_edge!(g, ni1 => ni2; weight=g_II/N); ## Add the I -> I connections
-    end
-end
-
-# ## Alternative Graph Creation
-# If you are creating a very large network of neurons, it may be more efficient to add all of the nodes first and then all of the edges via an adjacency matrix. 
-# To illustrate this, here is **an alternative to the graph construction we have just performed above** that will initialize the same graph.
-g = MetaDiGraph() ## Initialize the graph
-add_blox!.(Ref(g), [exci; inhib]) ## Add all the neurons to the graph
-adj = zeros(N_total, N_total) ## Initialize the adjacency matrix
-for i ∈ 1:NE_driven + NE_other
-    for j ∈ 1:NI_driven
-        adj[i, NE_driven + NE_other + j] = g_EI/N
-        adj[NE_driven + NE_other + j, i] = g_IE/N
-    end
-end
-for i ∈ 1:NI_driven
-    for j ∈ 1:NI_driven
-        adj[NE_driven + NE_other + i, NE_driven + NE_other + j] = g_II/N
-    end
-end
-create_adjacency_edges!(g, adj);
 
 # ## Simulate the Network
 # Now that we have the neurons and the graph, we can simulate the network. We use the `system_from_graph` function to create a system of ODEs from the graph and then solve it.
 # We choose to solve this system using the ``Tsit5()`` solver. If you're coming from Matlab, this is a more efficient solver analogous to ``ode45``. It's a good first try for systems that aren't really stiff. If you want to try other solvers, we'd recommend trying with ``Vern7()`` (higher precision but still efficient). If you're **really** interested in solver choices, one of the great things about Julia is the [wide variety of solvers available.](https://docs.sciml.ai/DiffEqDocs/stable/solvers/ode_solve/)
 
 tspan = (0.0, 300.0) ## Time span for the simulation - run for 300ms to match the Börgers et al. [1] Figure 1.
-@named sys = system_from_graph(g, graphdynamics=true)
-prob = ODEProblem(sys, [], tspan) ## Create the problem to solve
+prob = ODEProblem(g, [], tspan) ## Create the problem to solve
 sol = solve(prob, Tsit5(), saveat=0.1); ## Solve the problem and save at 0.1ms resolution.
 
-# > **_NOTE_:** Setting `graphdynamics=true` will enable an alternative compilation mode for the neural system. Not every model is compatible with GraphDynamics.jl [4] yet, but for ones that are compatible, it is usually significantly faster to compile. This option will make the biggest difference when you care about very large numbers of neurons, or if you are running the same model with small changes to the number of neurons or connectivity graph many times.
 # # Plotting the Results
 # Now that we have a whole simulation, let's plot the results and see how they line up with the original figures. We're looking to reproduce the dynamics shown in Figure 1 of Börgers et al. [1].
 # To create raster plots in Neuroblox for the excitatory and inhibitory populations, it is as simple as:

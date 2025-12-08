@@ -141,8 +141,7 @@ add_connection!(g, msn => gpe, weight = weight_MSN_GPe, density = density_MSN_GP
 add_connection!(g, gpe => stn, weight = weight_GPe_STN, density = density_GPe_STN)
 add_connection!(g, stn => fsi, weight = weight_STN_FSI, density = density_STN_FSI)
 
-@named sys = system_from_graph(g; graphdynamics = true)
-prob = SDEProblem(sys, [], tspan, [])
+prob = SDEProblem(g, [], tspan, [])
 ens_prob = EnsembleProblem(prob)
 ens_sol = solve(ens_prob, RKMil(), dt=dt, saveat = dt, trajectories = 3);
 

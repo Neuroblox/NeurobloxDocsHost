@@ -78,67 +78,65 @@ using CairoMakie
 # We define the connection weights as specified in Table 2 of [1], and the signs (excitatory vs inhibitory) based on the connections in Figure 1.
 # Note that Julia can use any unicode character as a variable name, so we can use arrows in the names of the weights. If you're typing these from scratch, you can access these by typing ``\rightarrow``. For more examples, check out the [Julia documentation](https://docs.julialang.org/en/v1/manual/unicode-input/).
 # We also use the ``@parameters`` macro to define the common connection parameters, which we can then use to define the connections. This is a macro from [ModelingToolkit](https://docs.sciml.ai/ModelingToolkit/stable/tutorials/ode_modeling/) in Julia, which you should look at if you want to build more general models.
-g = MetaDiGraph() ## define an empty graph
 
-params = @parameters C_Cor=3 C_BGTh=3 C_Cor➡BGTh=9.75 C_BGTh➡Cor=9.75 ## define common connection parameters using healthy parameter range
+C_Cor=3 ## define common connection parameters using healthy parameter range
+C_BGTh=3
+C_Cor➡BGTh=9.75
+C_BGTh➡Cor=9.75 
 
-## Create connections
+## Create a graph of connections
 
-## thalamocortical connection
-add_edge!(g, Th => EI; weight = C_BGTh➡Cor)
+@graph g begin
+    @connections begin
+        ## thalamocortical connection
+        Th => EI, [weight = C_BGTh➡Cor]
 
-## remaining cortical → subcortical connections
-add_edge!(g, PY => STN; weight = C_Cor➡BGTh)
-add_edge!(g, PY => D1; weight = C_BGTh➡Cor)
-add_edge!(g, PY => D2; weight = C_BGTh➡Cor)
-add_edge!(g, PY => FSI; weight = C_BGTh➡Cor)
+        ## remaining cortical → subcortical connections
+        PY => STN, [weight = C_Cor➡BGTh]
+        PY => D1, [weight = C_BGTh➡Cor]
+        PY => D2, [weight = C_BGTh➡Cor]
+        PY => FSI, [weight = C_BGTh➡Cor]
 
-## basal ganglia ↔ thalamus connections
-add_edge!(g, STN => GPE; weight = C_BGTh)
-add_edge!(g, STN => GPI; weight = C_BGTh)
-add_edge!(g, GPE => STN; weight = -0.5*C_BGTh)
-add_edge!(g, GPE => GPE; weight = -0.5*C_BGTh)
-add_edge!(g, GPE => GPI; weight = -0.5*C_BGTh)
-add_edge!(g, GPE => FSI; weight = -0.5*C_BGTh)
-add_edge!(g, FSI => D1; weight = -0.5*C_BGTh)
-add_edge!(g, FSI => D2; weight = -0.5*C_BGTh)
-add_edge!(g, FSI => FSI; weight = -0.5*C_BGTh)
-add_edge!(g, D1 => D1; weight = -0.5*C_BGTh)
-add_edge!(g, D1 => D2; weight = -0.5*C_BGTh)
-add_edge!(g, D1 => GPI; weight = -0.5*C_BGTh)
-add_edge!(g, D2 => D2; weight = -0.5*C_BGTh)
-add_edge!(g, D2 => D1; weight = -0.5*C_BGTh)
-add_edge!(g, D2 => GPE; weight = -0.5*C_BGTh)
-add_edge!(g, GPI => Th; weight = -0.5*C_BGTh)
+        ## basal ganglia ↔ thalamus connections
+        STN => GPE, [weight = C_BGTh]
+        STN => GPI, [weight = C_BGTh]
+        GPE => STN, [weight = -0.5*C_BGTh]
+        GPE => GPE, [weight = -0.5*C_BGTh]
+        GPE => GPI, [weight = -0.5*C_BGTh]
+        GPE => FSI, [weight = -0.5*C_BGTh]
+        FSI => D1, [weight = -0.5*C_BGTh]
+        FSI => D2, [weight = -0.5*C_BGTh]
+        FSI => FSI, [weight = -0.5*C_BGTh]
+        D1 => D1, [weight = -0.5*C_BGTh]
+        D1 => D2, [weight = -0.5*C_BGTh]
+        D1 => GPI, [weight = -0.5*C_BGTh]
+        D2 => D2, [weight = -0.5*C_BGTh]
+        D2 => D1, [weight = -0.5*C_BGTh]
+        D2 => GPE, [weight = -0.5*C_BGTh]
+        GPI => Th, [weight = -0.5*C_BGTh]
 
-## corticocortical connections
-add_edge!(g, PY => EI; weight = 6*C_Cor)
-add_edge!(g, PY => II; weight = 1.5*C_Cor)
-add_edge!(g, EI => PY; weight = 4.8*C_Cor)
-add_edge!(g, II => PY; weight = -1.5*C_Cor)
-add_edge!(g, II => II; weight = -3.3*C_Cor);
-
-# ## Creating the Model
-
-# Let's build the complete model:
-
-@named final_system = system_from_graph(g);
-
-# This creates a differential equations system from our graph representation using ModelingToolkit and symbolically simplifies it for efficient computation.
+        ## corticocortical connections
+        PY => EI, [weight = 6*C_Cor]
+        PY => II, [weight = 1.5*C_Cor]
+        EI => PY, [weight = 4.8*C_Cor]
+        II => PY, [weight = -1.5*C_Cor]
+        II => II, [weight = -3.3*C_Cor]
+    end
+end
 
 # ## Simulating the Model
 
-# Lastly, we create the ``ODEProblem``` for our system, select an algorithm, in this case ``Tsit5()`` (see discussion in the previous tutorial about solver choices if you're interested), and simulate 1 second of brain activity.
+# Finally, we create the ``ODEProblem``` for our system, select an algorithm, in this case ``Tsit5()`` (see discussion in the previous tutorial about solver choices if you're interested), and simulate 1 second of brain activity. Calling `ODEProblem` on our `GraphSystem` uses GraphDynamics.jl to create an efficient numerical representation of our system's coupled differential equations.
 
 sim_dur = 1000.0 ## Simulate for 1 second
-prob = ODEProblem(final_system, [], (0.0, sim_dur)) ## Create the problem to solve
+prob = ODEProblem(g, [], (0.0, sim_dur)) ## Create the problem to solve
 sol = solve(prob, Tsit5(), saveat=0.1); ## Solve the problem and save every 0.1ms
 
 # ## Visualizing the results
 # Let's interrogate the solution to see what we have. For the purposes of this tutorial, we'll focus on the striatal oscillations.
 # In this simple model, we should see relatively sharp on/off transitions in the striatal populations. To test this, let's use [Symbolic Indexing](https://docs.sciml.ai/SymbolicIndexingInterface/stable/usage/) to access the states we're interested in: the ``y`` state of the D1 neuron population.
 
-idx_func = ModelingToolkit.getu(sol, D1.system.y); ## gets the state index of the D1 neuron population in the solution object
+idx_func = getu(sol, D1.y); ## gets the state index of the D1 neuron population in the solution object
 
 # Now use this indexing function to plot the solution in a Makie plot ([read more about Makie in the docs](https://docs.makie.org/stable/tutorials/getting-started)).
 
