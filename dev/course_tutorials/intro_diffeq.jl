@@ -19,8 +19,6 @@
 # ## Lotka-Volterra System
 
 ## Import the packages we need
-using ModelingToolkit ## for symbolic system definition
-using ModelingToolkit: t_nounits as t, D_nounits as D ## generic symbolic time variable and derivative operator 
 using OrdinaryDiffEqDefault, OrdinaryDiffEqTsit5 ## for ODE solvers
 using CairoMakie ## for plotting
 
