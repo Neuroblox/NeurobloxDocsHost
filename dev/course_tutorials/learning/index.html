@@ -47,159 +47,7 @@ adjacency(fig[1,1], agent; title=&quot;Initial weights&quot;, colorrange=(0,7))
 run_experiment!(agent, env; t_warmup=200.0, alg=Vern7())
 
 adjacency(fig[1,2], agent; title=&quot;Final weights&quot;, colorrange=(0,7))
-fig</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">Precompiling packages...
-   4184.3 ms  ? LinearSolve → LinearSolveSparseArraysExt
-   4898.3 ms  ? NonlinearSolveQuasiNewton
-   7944.9 ms  ? NonlinearSolveFirstOrder
-  10975.0 ms  ? OrdinaryDiffEqDifferentiation
-   9150.8 ms  ? NonlinearSolveQuasiNewton → NonlinearSolveQuasiNewtonForwardDiffExt
-   6107.3 ms  ? OrdinaryDiffEqDifferentiation → OrdinaryDiffEqDifferentiationSparseArraysExt
-   6101.5 ms  ? NonlinearSolve
-   6075.4 ms  ? OrdinaryDiffEqRosenbrock
-   6992.2 ms  ? OrdinaryDiffEqNonlinearSolve
-   6046.8 ms  ? OrdinaryDiffEqSDIRK
-   7010.6 ms  ? OrdinaryDiffEqBDF
-Info Given OrdinaryDiffEqDefault was explicitly requested, output will be shown live 
-WARNING: Method definition init_cacheval(LinearSolve.QRFactorization{P} where P, SciMLOperators.AbstractSciMLOperator{T} where T, Any, Any, Any, Any, Int64, Any, Any, Union{Bool, LinearSolve.LinearVerbosity{__T_default_lu_fallback, __T_no_right_preconditioning, __T_using_IterativeSolvers, __T_IterativeSolvers_iterations, __T_KrylovKit_verbosity, __T_KrylovJL_verbosity, __T_HYPRE_verbosity, __T_pardiso_verbosity, __T_blas_errors, __T_blas_invalid_args, __T_blas_info, __T_blas_success, __T_condition_number, __T_convergence_failure, __T_solver_failure, __T_max_iters} where __T_max_iters where __T_solver_failure where __T_convergence_failure where __T_condition_number where __T_blas_success where __T_blas_info where __T_blas_invalid_args where __T_blas_errors where __T_pardiso_verbosity where __T_HYPRE_verbosity where __T_KrylovJL_verbosity where __T_KrylovKit_verbosity where __T_IterativeSolvers_iterations where __T_using_IterativeSolvers where __T_no_right_preconditioning where __T_default_lu_fallback}, LinearSolve.OperatorAssumptions{T} where T) in module LinearSolve at /home/docker/.julia/packages/LinearSolve/WRutJ/src/factorization.jl:338 overwritten in module LinearSolveSparseArraysExt at /home/docker/.julia/packages/LinearSolve/WRutJ/ext/LinearSolveSparseArraysExt.jl:315.
-ERROR: Method overwriting is not permitted during Module precompilation. Use `__precompile__(false)` to opt-out of precompilation.
-   6126.4 ms  ? OrdinaryDiffEqDefault
-WARNING: Method definition init_cacheval(LinearSolve.QRFactorization{P} where P, SciMLOperators.AbstractSciMLOperator{T} where T, Any, Any, Any, Any, Int64, Any, Any, Union{Bool, LinearSolve.LinearVerbosity{__T_default_lu_fallback, __T_no_right_preconditioning, __T_using_IterativeSolvers, __T_IterativeSolvers_iterations, __T_KrylovKit_verbosity, __T_KrylovJL_verbosity, __T_HYPRE_verbosity, __T_pardiso_verbosity, __T_blas_errors, __T_blas_invalid_args, __T_blas_info, __T_blas_success, __T_condition_number, __T_convergence_failure, __T_solver_failure, __T_max_iters} where __T_max_iters where __T_solver_failure where __T_convergence_failure where __T_condition_number where __T_blas_success where __T_blas_info where __T_blas_invalid_args where __T_blas_errors where __T_pardiso_verbosity where __T_HYPRE_verbosity where __T_KrylovJL_verbosity where __T_KrylovKit_verbosity where __T_IterativeSolvers_iterations where __T_using_IterativeSolvers where __T_no_right_preconditioning where __T_default_lu_fallback}, LinearSolve.OperatorAssumptions{T} where T) in module LinearSolve at /home/docker/.julia/packages/LinearSolve/WRutJ/src/factorization.jl:338 overwritten in module LinearSolveSparseArraysExt at /home/docker/.julia/packages/LinearSolve/WRutJ/ext/LinearSolveSparseArraysExt.jl:315.
-ERROR: Method overwriting is not permitted during Module precompilation. Use `__precompile__(false)` to opt-out of precompilation.
-Precompiling packages...
-   2995.8 ms  ? LinearSolve → LinearSolveSparseArraysExt
-   5050.8 ms  ? OrdinaryDiffEqDifferentiation
-   5379.8 ms  ? OrdinaryDiffEqDifferentiation → OrdinaryDiffEqDifferentiationSparseArraysExt
-Info Given OrdinaryDiffEqRosenbrock was explicitly requested, output will be shown live 
-WARNING: Method definition init_cacheval(LinearSolve.QRFactorization{P} where P, SciMLOperators.AbstractSciMLOperator{T} where T, Any, Any, Any, Any, Int64, Any, Any, Union{Bool, LinearSolve.LinearVerbosity{__T_default_lu_fallback, __T_no_right_preconditioning, __T_using_IterativeSolvers, __T_IterativeSolvers_iterations, __T_KrylovKit_verbosity, __T_KrylovJL_verbosity, __T_HYPRE_verbosity, __T_pardiso_verbosity, __T_blas_errors, __T_blas_invalid_args, __T_blas_info, __T_blas_success, __T_condition_number, __T_convergence_failure, __T_solver_failure, __T_max_iters} where __T_max_iters where __T_solver_failure where __T_convergence_failure where __T_condition_number where __T_blas_success where __T_blas_info where __T_blas_invalid_args where __T_blas_errors where __T_pardiso_verbosity where __T_HYPRE_verbosity where __T_KrylovJL_verbosity where __T_KrylovKit_verbosity where __T_IterativeSolvers_iterations where __T_using_IterativeSolvers where __T_no_right_preconditioning where __T_default_lu_fallback}, LinearSolve.OperatorAssumptions{T} where T) in module LinearSolve at /home/docker/.julia/packages/LinearSolve/WRutJ/src/factorization.jl:338 overwritten in module LinearSolveSparseArraysExt at /home/docker/.julia/packages/LinearSolve/WRutJ/ext/LinearSolveSparseArraysExt.jl:315.
-ERROR: Method overwriting is not permitted during Module precompilation. Use `__precompile__(false)` to opt-out of precompilation.
-   5094.3 ms  ? OrdinaryDiffEqRosenbrock
-WARNING: Method definition init_cacheval(LinearSolve.QRFactorization{P} where P, SciMLOperators.AbstractSciMLOperator{T} where T, Any, Any, Any, Any, Int64, Any, Any, Union{Bool, LinearSolve.LinearVerbosity{__T_default_lu_fallback, __T_no_right_preconditioning, __T_using_IterativeSolvers, __T_IterativeSolvers_iterations, __T_KrylovKit_verbosity, __T_KrylovJL_verbosity, __T_HYPRE_verbosity, __T_pardiso_verbosity, __T_blas_errors, __T_blas_invalid_args, __T_blas_info, __T_blas_success, __T_condition_number, __T_convergence_failure, __T_solver_failure, __T_max_iters} where __T_max_iters where __T_solver_failure where __T_convergence_failure where __T_condition_number where __T_blas_success where __T_blas_info where __T_blas_invalid_args where __T_blas_errors where __T_pardiso_verbosity where __T_HYPRE_verbosity where __T_KrylovJL_verbosity where __T_KrylovKit_verbosity where __T_IterativeSolvers_iterations where __T_using_IterativeSolvers where __T_no_right_preconditioning where __T_default_lu_fallback}, LinearSolve.OperatorAssumptions{T} where T) in module LinearSolve at /home/docker/.julia/packages/LinearSolve/WRutJ/src/factorization.jl:338 overwritten in module LinearSolveSparseArraysExt at /home/docker/.julia/packages/LinearSolve/WRutJ/ext/LinearSolveSparseArraysExt.jl:315.
-ERROR: Method overwriting is not permitted during Module precompilation. Use `__precompile__(false)` to opt-out of precompilation.
-Precompiling packages...
-Info Given LinearSolveSparseArraysExt was explicitly requested, output will be shown live 
-WARNING: Method definition init_cacheval(LinearSolve.QRFactorization{P} where P, SciMLOperators.AbstractSciMLOperator{T} where T, Any, Any, Any, Any, Int64, Any, Any, Union{Bool, LinearSolve.LinearVerbosity{__T_default_lu_fallback, __T_no_right_preconditioning, __T_using_IterativeSolvers, __T_IterativeSolvers_iterations, __T_KrylovKit_verbosity, __T_KrylovJL_verbosity, __T_HYPRE_verbosity, __T_pardiso_verbosity, __T_blas_errors, __T_blas_invalid_args, __T_blas_info, __T_blas_success, __T_condition_number, __T_convergence_failure, __T_solver_failure, __T_max_iters} where __T_max_iters where __T_solver_failure where __T_convergence_failure where __T_condition_number where __T_blas_success where __T_blas_info where __T_blas_invalid_args where __T_blas_errors where __T_pardiso_verbosity where __T_HYPRE_verbosity where __T_KrylovJL_verbosity where __T_KrylovKit_verbosity where __T_IterativeSolvers_iterations where __T_using_IterativeSolvers where __T_no_right_preconditioning where __T_default_lu_fallback}, LinearSolve.OperatorAssumptions{T} where T) in module LinearSolve at /home/docker/.julia/packages/LinearSolve/WRutJ/src/factorization.jl:338 overwritten in module LinearSolveSparseArraysExt at /home/docker/.julia/packages/LinearSolve/WRutJ/ext/LinearSolveSparseArraysExt.jl:315.
-ERROR: Method overwriting is not permitted during Module precompilation. Use `__precompile__(false)` to opt-out of precompilation.
-   2972.3 ms  ? LinearSolve → LinearSolveSparseArraysExt
-WARNING: Method definition init_cacheval(LinearSolve.QRFactorization{P} where P, SciMLOperators.AbstractSciMLOperator{T} where T, Any, Any, Any, Any, Int64, Any, Any, Union{Bool, LinearSolve.LinearVerbosity{__T_default_lu_fallback, __T_no_right_preconditioning, __T_using_IterativeSolvers, __T_IterativeSolvers_iterations, __T_KrylovKit_verbosity, __T_KrylovJL_verbosity, __T_HYPRE_verbosity, __T_pardiso_verbosity, __T_blas_errors, __T_blas_invalid_args, __T_blas_info, __T_blas_success, __T_condition_number, __T_convergence_failure, __T_solver_failure, __T_max_iters} where __T_max_iters where __T_solver_failure where __T_convergence_failure where __T_condition_number where __T_blas_success where __T_blas_info where __T_blas_invalid_args where __T_blas_errors where __T_pardiso_verbosity where __T_HYPRE_verbosity where __T_KrylovJL_verbosity where __T_KrylovKit_verbosity where __T_IterativeSolvers_iterations where __T_using_IterativeSolvers where __T_no_right_preconditioning where __T_default_lu_fallback}, LinearSolve.OperatorAssumptions{T} where T) in module LinearSolve at /home/docker/.julia/packages/LinearSolve/WRutJ/src/factorization.jl:338 overwritten in module LinearSolveSparseArraysExt at /home/docker/.julia/packages/LinearSolve/WRutJ/ext/LinearSolveSparseArraysExt.jl:315.
-ERROR: Method overwriting is not permitted during Module precompilation. Use `__precompile__(false)` to opt-out of precompilation.
-Precompiling packages...
-   2970.1 ms  ? LinearSolve → LinearSolveSparseArraysExt
-Info Given OrdinaryDiffEqDifferentiation was explicitly requested, output will be shown live 
-┌ Warning: Module LinearSolveSparseArraysExt with build ID ffffffff-ffff-ffff-29f5-e975785c7d59 is missing from the cache.
-│ This may mean LinearSolveSparseArraysExt [acf9803d-64eb-5f69-b965-a71e3e6e1ed4] does not support precompilation but is imported by a module that does.
-└ @ Base loading.jl:2638
-   2426.2 ms  ? OrdinaryDiffEqDifferentiation
-   2768.7 ms  ? OrdinaryDiffEqDifferentiation → OrdinaryDiffEqDifferentiationSparseArraysExt
-┌ Warning: Module LinearSolveSparseArraysExt with build ID ffffffff-ffff-ffff-29f5-e975785c7d59 is missing from the cache.
-│ This may mean LinearSolveSparseArraysExt [acf9803d-64eb-5f69-b965-a71e3e6e1ed4] does not support precompilation but is imported by a module that does.
-└ @ Base loading.jl:2638
-Precompiling packages...
-   2972.6 ms  ? LinearSolve → LinearSolveSparseArraysExt
-   2444.5 ms  ? OrdinaryDiffEqDifferentiation
-Info Given OrdinaryDiffEqDifferentiationSparseArraysExt was explicitly requested, output will be shown live 
-┌ Warning: Module OrdinaryDiffEqDifferentiation with build ID ffffffff-ffff-ffff-6929-ea001de0e56b is missing from the cache.
-│ This may mean OrdinaryDiffEqDifferentiation [4302a76b-040a-498a-8c04-15b101fed76b] does not support precompilation but is imported by a module that does.
-└ @ Base loading.jl:2638
-    297.8 ms  ? OrdinaryDiffEqDifferentiation → OrdinaryDiffEqDifferentiationSparseArraysExt
-┌ Warning: Module OrdinaryDiffEqDifferentiation with build ID ffffffff-ffff-ffff-6929-ea001de0e56b is missing from the cache.
-│ This may mean OrdinaryDiffEqDifferentiation [4302a76b-040a-498a-8c04-15b101fed76b] does not support precompilation but is imported by a module that does.
-└ @ Base loading.jl:2638
-Precompiling packages...
-   2979.4 ms  ? LinearSolve → LinearSolveSparseArraysExt
-   2135.2 ms  ? NonlinearSolveQuasiNewton
-   2207.8 ms  ? NonlinearSolveFirstOrder
-   2444.8 ms  ? OrdinaryDiffEqDifferentiation
-    283.5 ms  ? OrdinaryDiffEqDifferentiation → OrdinaryDiffEqDifferentiationSparseArraysExt
-   3090.1 ms  ? NonlinearSolveQuasiNewton → NonlinearSolveQuasiNewtonForwardDiffExt
-   3052.6 ms  ? NonlinearSolve
-   4126.5 ms  ? OrdinaryDiffEqNonlinearSolve
-   1202.6 ms  ? OrdinaryDiffEqSDIRK
-Info Given OrdinaryDiffEqBDF was explicitly requested, output will be shown live 
-┌ Warning: Module OrdinaryDiffEqDifferentiation with build ID ffffffff-ffff-ffff-6929-ea001de0e56b is missing from the cache.
-│ This may mean OrdinaryDiffEqDifferentiation [4302a76b-040a-498a-8c04-15b101fed76b] does not support precompilation but is imported by a module that does.
-└ @ Base loading.jl:2638
-   2167.5 ms  ? OrdinaryDiffEqBDF
-┌ Warning: Module OrdinaryDiffEqDifferentiation with build ID ffffffff-ffff-ffff-6929-ea001de0e56b is missing from the cache.
-│ This may mean OrdinaryDiffEqDifferentiation [4302a76b-040a-498a-8c04-15b101fed76b] does not support precompilation but is imported by a module that does.
-└ @ Base loading.jl:2638
-Precompiling packages...
-   2972.0 ms  ? LinearSolve → LinearSolveSparseArraysExt
-   2162.5 ms  ? NonlinearSolveQuasiNewton
-   2183.6 ms  ? NonlinearSolveFirstOrder
-   2448.2 ms  ? OrdinaryDiffEqDifferentiation
-    298.1 ms  ? OrdinaryDiffEqDifferentiation → OrdinaryDiffEqDifferentiationSparseArraysExt
-   3080.6 ms  ? NonlinearSolveQuasiNewton → NonlinearSolveQuasiNewtonForwardDiffExt
-   3039.1 ms  ? NonlinearSolve
-   4123.2 ms  ? OrdinaryDiffEqNonlinearSolve
-Info Given OrdinaryDiffEqSDIRK was explicitly requested, output will be shown live 
-┌ Warning: Module OrdinaryDiffEqDifferentiation with build ID ffffffff-ffff-ffff-6929-ea001de0e56b is missing from the cache.
-│ This may mean OrdinaryDiffEqDifferentiation [4302a76b-040a-498a-8c04-15b101fed76b] does not support precompilation but is imported by a module that does.
-└ @ Base loading.jl:2638
-   1200.7 ms  ? OrdinaryDiffEqSDIRK
-┌ Warning: Module OrdinaryDiffEqDifferentiation with build ID ffffffff-ffff-ffff-6929-ea001de0e56b is missing from the cache.
-│ This may mean OrdinaryDiffEqDifferentiation [4302a76b-040a-498a-8c04-15b101fed76b] does not support precompilation but is imported by a module that does.
-└ @ Base loading.jl:2638
-Precompiling packages...
-   2980.2 ms  ? LinearSolve → LinearSolveSparseArraysExt
-   2149.4 ms  ? NonlinearSolveQuasiNewton
-   2199.5 ms  ? NonlinearSolveFirstOrder
-   2450.3 ms  ? OrdinaryDiffEqDifferentiation
-    291.5 ms  ? OrdinaryDiffEqDifferentiation → OrdinaryDiffEqDifferentiationSparseArraysExt
-   3092.9 ms  ? NonlinearSolveQuasiNewton → NonlinearSolveQuasiNewtonForwardDiffExt
-   3062.2 ms  ? NonlinearSolve
-Info Given OrdinaryDiffEqNonlinearSolve was explicitly requested, output will be shown live 
-┌ Warning: Module LinearSolveSparseArraysExt with build ID ffffffff-ffff-ffff-29f5-e975785c7d59 is missing from the cache.
-│ This may mean LinearSolveSparseArraysExt [acf9803d-64eb-5f69-b965-a71e3e6e1ed4] does not support precompilation but is imported by a module that does.
-└ @ Base loading.jl:2638
-   4145.9 ms  ? OrdinaryDiffEqNonlinearSolve
-┌ Warning: Module LinearSolveSparseArraysExt with build ID ffffffff-ffff-ffff-29f5-e975785c7d59 is missing from the cache.
-│ This may mean LinearSolveSparseArraysExt [acf9803d-64eb-5f69-b965-a71e3e6e1ed4] does not support precompilation but is imported by a module that does.
-└ @ Base loading.jl:2638
-Precompiling packages...
-   2982.2 ms  ? LinearSolve → LinearSolveSparseArraysExt
-   2160.1 ms  ? NonlinearSolveQuasiNewton
-   2189.3 ms  ? NonlinearSolveFirstOrder
-   3088.5 ms  ? NonlinearSolveQuasiNewton → NonlinearSolveQuasiNewtonForwardDiffExt
-Info Given NonlinearSolve was explicitly requested, output will be shown live 
-┌ Warning: Module LinearSolveSparseArraysExt with build ID ffffffff-ffff-ffff-29f5-e975785c7d59 is missing from the cache.
-│ This may mean LinearSolveSparseArraysExt [acf9803d-64eb-5f69-b965-a71e3e6e1ed4] does not support precompilation but is imported by a module that does.
-└ @ Base loading.jl:2638
-   3020.2 ms  ? NonlinearSolve
-┌ Warning: Module LinearSolveSparseArraysExt with build ID ffffffff-ffff-ffff-29f5-e975785c7d59 is missing from the cache.
-│ This may mean LinearSolveSparseArraysExt [acf9803d-64eb-5f69-b965-a71e3e6e1ed4] does not support precompilation but is imported by a module that does.
-└ @ Base loading.jl:2638
-Precompiling packages...
-   2995.0 ms  ? LinearSolve → LinearSolveSparseArraysExt
-Info Given NonlinearSolveFirstOrder was explicitly requested, output will be shown live 
-┌ Warning: Module LinearSolveSparseArraysExt with build ID ffffffff-ffff-ffff-29f5-e975785c7d59 is missing from the cache.
-│ This may mean LinearSolveSparseArraysExt [acf9803d-64eb-5f69-b965-a71e3e6e1ed4] does not support precompilation but is imported by a module that does.
-└ @ Base loading.jl:2638
-   2199.2 ms  ? NonlinearSolveFirstOrder
-┌ Warning: Module LinearSolveSparseArraysExt with build ID ffffffff-ffff-ffff-29f5-e975785c7d59 is missing from the cache.
-│ This may mean LinearSolveSparseArraysExt [acf9803d-64eb-5f69-b965-a71e3e6e1ed4] does not support precompilation but is imported by a module that does.
-└ @ Base loading.jl:2638
-Precompiling packages...
-   2989.5 ms  ? LinearSolve → LinearSolveSparseArraysExt
-Info Given NonlinearSolveQuasiNewton was explicitly requested, output will be shown live 
-┌ Warning: Module LinearSolveSparseArraysExt with build ID ffffffff-ffff-ffff-29f5-e975785c7d59 is missing from the cache.
-│ This may mean LinearSolveSparseArraysExt [acf9803d-64eb-5f69-b965-a71e3e6e1ed4] does not support precompilation but is imported by a module that does.
-└ @ Base loading.jl:2638
-   2154.3 ms  ? NonlinearSolveQuasiNewton
-┌ Warning: Module LinearSolveSparseArraysExt with build ID ffffffff-ffff-ffff-29f5-e975785c7d59 is missing from the cache.
-│ This may mean LinearSolveSparseArraysExt [acf9803d-64eb-5f69-b965-a71e3e6e1ed4] does not support precompilation but is imported by a module that does.
-└ @ Base loading.jl:2638
-Precompiling packages...
-   2986.1 ms  ? LinearSolve → LinearSolveSparseArraysExt
-   2131.0 ms  ? NonlinearSolveQuasiNewton
-Info Given NonlinearSolveQuasiNewtonForwardDiffExt was explicitly requested, output will be shown live 
-┌ Warning: Module NonlinearSolveQuasiNewton with build ID ffffffff-ffff-ffff-d7c2-00166e74f482 is missing from the cache.
-│ This may mean NonlinearSolveQuasiNewton [9a2c21bd-3a47-402d-9113-8faf9a0ee114] does not support precompilation but is imported by a module that does.
-└ @ Base loading.jl:2638
-    925.5 ms  ? NonlinearSolveQuasiNewton → NonlinearSolveQuasiNewtonForwardDiffExt
-┌ Warning: Module NonlinearSolveQuasiNewton with build ID ffffffff-ffff-ffff-d7c2-00166e74f482 is missing from the cache.
-│ This may mean NonlinearSolveQuasiNewton [9a2c21bd-3a47-402d-9113-8faf9a0ee114] does not support precompilation but is imported by a module that does.
-└ @ Base loading.jl:2638
-┌ Warning: No action selection provided
+fig</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">┌ Warning: No action selection provided
 └ @ NeurobloxBase ~/actions-runner/_work/NeurobloxDev/NeurobloxDev/NeurobloxBase/src/reinforcement_learning.jl:97</code></pre><p><img src="../../assets/adj_open.svg" alt/> Notice how the weight values in the upper left corner (connections with <code>HebbianPlasticity</code>) have changed after simulation.</p><h2 id="Cortico-Striatal-Circuit-Performing-Category-Learning"><a class="docs-heading-anchor" href="#Cortico-Striatal-Circuit-Performing-Category-Learning">Cortico-Striatal Circuit Performing Category Learning</a><a id="Cortico-Striatal-Circuit-Performing-Category-Learning-1"></a><a class="docs-heading-anchor-permalink" href="#Cortico-Striatal-Circuit-Performing-Category-Learning" title="Permalink"></a></h2><p>This is one simplified biological instantiation of an RL system. It is carrying out a simple RL behavior but not faithfully simulating physiology. The experiment we are simulating here is the category learning experiment [Antzoulatos2014] which was successfully modeled through a detailed corticostriatal model [2].</p><pre><code class="language-julia hljs">time_block_dur = 90.0 ## ms (size of discrete time blocks)
 N_trials = 100 ## number of trials
 trial_dur = 1000 ## ms
@@ -252,9 +100,9 @@ fig = Figure(title=&quot;Adjacency matrix&quot;, size = (1600, 800))
 
 adjacency(fig[1,1], agent; title = &quot;Before Learning&quot;, colorrange=(0,0.2))
 
-trace = run_experiment!(agent, env; t_warmup=200.0, alg=Vern7(), verbose=true)</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">(trial = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10  …  91, 92, 93, 94, 95, 96, 97, 98, 99, 100], correct = Bool[0, 0, 0, 1, 0, 0, 1, 1, 0, 0  …  0, 0, 0, 0, 0, 0, 0, 1, 0, 1], action = [1, 2, 2, 2, 2, 1, 2, 2, 1, 1  …  1, 2, 1, 1, 2, 1, 1, 2, 2, 1], time = [7.794944495, 2.101082006, 2.132814765, 2.092015326, 2.123245331, 2.303783696, 2.095823465, 3.419402926, 2.206806678, 2.202947024  …  2.057999747, 2.029817834, 2.076650838, 2.090867177, 2.081534032, 2.016732481, 2.238642926, 3.402887686, 2.031498638, 2.136226955])</code></pre><p><code>trace</code> is a vector of <code>NamedTuple</code>s containing useful outcomes for each trial of the experiment:</p><pre><code class="language-julia hljs">trace.trial ## trial indices
+trace = run_experiment!(agent, env; t_warmup=200.0, alg=Vern7(), verbose=true)</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">(trial = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10  …  91, 92, 93, 94, 95, 96, 97, 98, 99, 100], correct = Bool[0, 0, 0, 1, 0, 0, 1, 1, 0, 0  …  0, 0, 0, 0, 0, 0, 0, 1, 0, 1], action = [1, 2, 2, 2, 2, 1, 2, 2, 1, 1  …  1, 2, 1, 1, 2, 1, 1, 2, 2, 1], time = [7.854177691, 3.31328864, 2.051436415, 2.026392561, 2.174247595, 3.188897431, 3.231520877, 2.036875829, 2.038616332, 2.168500413  …  2.149916619, 3.120196953, 2.049386905, 2.173927867, 3.163423884, 2.030143943, 2.152495188, 3.160139591, 2.045320835, 2.190910564])</code></pre><p><code>trace</code> is a vector of <code>NamedTuple</code>s containing useful outcomes for each trial of the experiment:</p><pre><code class="language-julia hljs">trace.trial ## trial indices
 trace.correct ## whether the response was correct or not on each trial
 trace.action; ## what responce was made on each trial, 1 is left and 2 is right
 
 adjacency(fig[1,2], agent; title = &quot;After Learning&quot;, colorrange=(0,0.2))
-fig</code></pre><p><img src="../../assets/adj_RL.svg" alt/></p><p>Notice the changes in weight values after the RL experiment.</p><h2 id="Challenge-Problems"><a class="docs-heading-anchor" href="#Challenge-Problems">Challenge Problems</a><a id="Challenge-Problems-1"></a><a class="docs-heading-anchor-permalink" href="#Challenge-Problems" title="Permalink"></a></h2><ul><li>Visualize the model&#39;s performance in the category learning task as a function of time (trials). Hint: For correct trials <code>trace.correct = 1</code> and for incorrect trials <code>trace.correct = 0</code>.</li><li>Since this is an oversimplified instantiation of a cortico-striatal model, it is highly sensitive to the parameters, such that if we change the values of <code>TAN</code> parameters (maximum activity <code>κ</code>), or learning rates in <code>HebbianModulationPlasticity</code> (learning rate constant <code>K</code>), the system won’t be able to learn. Try playing with these parameters and figure out at what range of these parameters the model works.</li></ul><h2 id="References"><a class="docs-heading-anchor" href="#References">References</a><a id="References-1"></a><a class="docs-heading-anchor-permalink" href="#References" title="Permalink"></a></h2><ul><li>[1] Pathak A., Brincat S., Organtzidis H., Strey H., Senneff S., Antzoulatos E., Mujica-Parodi L., Miller E., Granger R. Biomimetic model of corticostriatal micro-assemblies discovers new neural code., bioRxiv 2023.11.06.565902, 2024</li><li>[2] Antzoulatos EG, Miller EK. Increases in functional connectivity between prefrontal cortex and striatum during category learning. Neuron. 2014 Jul 2;83(1):216-25. doi: 10.1016/j.neuron.2014.05.005. Epub 2014 Jun 12. PMID: 24930701; PMCID: PMC4098789.</li></ul><hr/><p><em>This page was generated using <a href="https://github.com/fredrikekre/Literate.jl">Literate.jl</a>.</em></p></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../decision_making/">« Decision Making in a Circuit Model</a><a class="docs-footer-nextpage" href="../../release_notes/">Release Notes »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.16.1 on <span class="colophon-date" title="Thursday 11 December 2025 21:16">Thursday 11 December 2025</span>. Using Julia version 1.12.2.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
+fig</code></pre><p><img src="../../assets/adj_RL.svg" alt/></p><p>Notice the changes in weight values after the RL experiment.</p><h2 id="Challenge-Problems"><a class="docs-heading-anchor" href="#Challenge-Problems">Challenge Problems</a><a id="Challenge-Problems-1"></a><a class="docs-heading-anchor-permalink" href="#Challenge-Problems" title="Permalink"></a></h2><ul><li>Visualize the model&#39;s performance in the category learning task as a function of time (trials). Hint: For correct trials <code>trace.correct = 1</code> and for incorrect trials <code>trace.correct = 0</code>.</li><li>Since this is an oversimplified instantiation of a cortico-striatal model, it is highly sensitive to the parameters, such that if we change the values of <code>TAN</code> parameters (maximum activity <code>κ</code>), or learning rates in <code>HebbianModulationPlasticity</code> (learning rate constant <code>K</code>), the system won’t be able to learn. Try playing with these parameters and figure out at what range of these parameters the model works.</li></ul><h2 id="References"><a class="docs-heading-anchor" href="#References">References</a><a id="References-1"></a><a class="docs-heading-anchor-permalink" href="#References" title="Permalink"></a></h2><ul><li>[1] Pathak A., Brincat S., Organtzidis H., Strey H., Senneff S., Antzoulatos E., Mujica-Parodi L., Miller E., Granger R. Biomimetic model of corticostriatal micro-assemblies discovers new neural code., bioRxiv 2023.11.06.565902, 2024</li><li>[2] Antzoulatos EG, Miller EK. Increases in functional connectivity between prefrontal cortex and striatum during category learning. Neuron. 2014 Jul 2;83(1):216-25. doi: 10.1016/j.neuron.2014.05.005. Epub 2014 Jun 12. PMID: 24930701; PMCID: PMC4098789.</li></ul><hr/><p><em>This page was generated using <a href="https://github.com/fredrikekre/Literate.jl">Literate.jl</a>.</em></p></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../decision_making/">« Decision Making in a Circuit Model</a><a class="docs-footer-nextpage" href="../../release_notes/">Release Notes »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.16.1 on <span class="colophon-date" title="Friday 12 December 2025 15:14">Friday 12 December 2025</span>. Using Julia version 1.12.2.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
