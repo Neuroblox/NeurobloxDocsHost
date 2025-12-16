@@ -37,7 +37,6 @@ image_set = CSV.read(Downloads.download("raw.githubusercontent.com/Neuroblox/Neu
 ## t_stimulus: how long the stimulus is on (in ms)
 ## t_pause : how long the stimulus is off (in ms)
 
-model_name = :g
 @graph g begin
     @nodes begin
         stim = ImageStimulus(image_set;  t_stimulus=trial_dur, t_pause=0); 
@@ -57,8 +56,8 @@ model_name = :g
         VAC => AC, [weight=3, density=0.1, learning_rule = hebbian_cort] ## pass learning rule as a keyword argument
     end
 end
-agent = Agent(g; name=:g);
-env = ClassificationEnvironment(stim, N_trials; name=:env, namespace=model_name);
+agent = Agent(g);
+env = ClassificationEnvironment(stim, N_trials);
 
 fig = Figure(size = (1600, 800))
 
@@ -84,16 +83,16 @@ image_set = CSV.read(Downloads.download("raw.githubusercontent.com/Neuroblox/Neu
 ## additional Striatum Bloxs
 @graph g begin
     @nodes begin
-        STR1 = Striatum(; namespace=model_name, N_inhib=5) 
-        STR2 = Striatum(; namespace=model_name, N_inhib=5) 
+        STR1 = Striatum(; N_inhib=5) 
+        STR2 = Striatum(; N_inhib=5) 
     
-        tan_pop1 = TAN(κ=10; namespace=model_name) 
-        tan_pop2 = TAN(κ=10; namespace=model_name) 
+        tan_pop1 = TAN(κ=10) 
+        tan_pop2 = TAN(κ=10) 
 	
-        SNcb = SNc(κ_DA=1; namespace=model_name) 
+        SNcb = SNc(κ_DA=1)
 
         ## action selection Blox, necessary for making a choice
-        AS = GreedyPolicy(; namespace=model_name, t_decision=2*time_block_dur) 
+        AS = GreedyPolicy(; t_decision=2*time_block_dur) 
     end 
 ## learning rules
 hebbian_mod = HebbianModulationPlasticity(K=0.06, decay=0.01, α=2.5, θₘ=1, modulator=SNcb, t_pre=trial_dur, t_post=trial_dur, t_mod=time_block_dur)
@@ -122,9 +121,9 @@ hebbian_cort = HebbianPlasticity(K=5e-4, W_lim=7, t_pre=trial_dur, t_post=trial_
 end
 # The last two connections add the ability to output actions. The `AS` Blox is a `GreedyPolicy` meaning that it will compare the activity of both Striatum Bloxs `STR1` and `STR2` and select the highest value. If `STR1` wins then the left choice is made and if `STR2` wins then the model chooses the right direction as the true dot movement direction. 
 
-agent = Agent(g; name=model_name, t_block = time_block_dur); ## define agent
+agent = Agent(g; t_block = time_block_dur); ## define agent
 
-env = ClassificationEnvironment(stim, N_trials; name=:env, namespace=model_name)
+env = ClassificationEnvironment(stim, N_trials)
 
 fig = Figure(title="Adjacency matrix", size = (1600, 800))
 
