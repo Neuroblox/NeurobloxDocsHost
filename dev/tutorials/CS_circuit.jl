@@ -124,19 +124,24 @@ save(joinpath(@__DIR__(), "../assets/", "cort_stack.svg"), fig); # hide
 # The next step is to expand the cortical model we just created by adding a Blox representing an ascending system (ASC1 in [1]) to it. 
 # We define the ascending system using a Next Generation Neural Mass model as described in [2]. The neural mass parameters are fixed to generate a 16 Hz modulating frequency in the cortical neurons.  
 
-model_name = :g
+@graph g begin
+    @nodes begin
+        ASC1 = NextGenerationEI(; Cₑ=2*26, Cᵢ=26, v_synₑₑ=10.0, v_synₑᵢ=-10.0, v_synᵢₑ=10.0, v_synᵢᵢ=-10.0, alpha_invₑₑ=10.0/26, alpha_invₑᵢ=0.8/26, alpha_invᵢₑ=10.0/26, alpha_invᵢᵢ=0.8/26, kₑᵢ=0.6*26, kᵢₑ=0.6*26)
+        CB = Cortical(
+            N_wta=10, ## number of WinnerTakeAll circuits
+            N_exci=5, ## number of pyramidal neurons in each WinnerTakeAll circuit
+            density=0.01, 
+            weight=1, 
+            I_bg_ar=7
+        )
+    end
+    @connections begin
+        ASC1 => CB, [weight=44]
+    end
+end
 
-@named ASC1 = NextGenerationEI(;namespace=model_name, Cₑ=2*26, Cᵢ=26, v_synₑₑ=10.0, v_synₑᵢ=-10.0, v_synᵢₑ=10.0, v_synᵢᵢ=-10.0, alpha_invₑₑ=10.0/26, alpha_invₑᵢ=0.8/26, alpha_invᵢₑ=10.0/26, alpha_invᵢᵢ=0.8/26, kₑᵢ=0.6*26, kᵢₑ=0.6*26);
-
-# Similar to `WinnerTakeAllBlox`, the cortical model we created above by connecting multiple WTAs together is implemented as a single Blox in Neuroblox. This is the `CorticalBlox` and it models a superficial layer cortical microcircuit.
-# So `CorticalBlox` is a hierarchical Blox which holds a feedforward interneuron and multiple `WinnerTakeAllBlox` which in turn hold multiple excitatory neurons and one feedback interneuron each.
-
-## number if WTA circuits = N_wta=45
-## number of pyramidal neurons in each WTA circuit = N_exci = 5
-@named CB = Cortical(N_wta=10, N_exci=5, density=0.01, weight=1, I_bg_ar=7; namespace=model_name)
-
-g = GraphSystem()
-add_connection!(g, ASC1 => CB, weight=44)
+# Similar to `WinnerTakeAll`, the cortical model we created above by connecting multiple WTAs together is implemented as a single Blox in Neuroblox. This is the `Cortical` and it models a superficial layer cortical microcircuit.
+# So `Cortical` is a hierarchical Blox which holds a feedforward interneuron and multiple `WinnerTakeAllBlox` which in turn hold multiple excitatory neurons and one feedback interneuron each.
 
 ## solve the system for time 0 to 1000 ms
 prob = ODEProblem(g, [], (0.0, 1000)) 
@@ -169,24 +174,12 @@ save(joinpath(@__DIR__(), "../assets/", "cort_power.svg"), fig); # hide
 #nb # ![Extended circuit with Cortex, Brainstem and Image Stimulus components](../assets/CS_extended.png)
 # *Figure 3: Extended circuit with Cortex, Brainstem and Image Stimulus components.*
 
-@named VAC = Cortical(namespace=model_name, N_wta=10, N_exci=5,  density=0.01, weight=1) 
-@named AC = Cortical(namespace=model_name, N_wta=10, N_exci=5, density=0.01, weight=1) 
-## ascending system blox, modulating frequency set to 16 Hz
-@named ASC1 = NextGenerationEI(namespace=model_name, Cₑ=2*26,Cᵢ=1*26, Δₑ=0.5, Δᵢ=0.5, η_0ₑ=10.0, v_synₑₑ=10.0, v_synₑᵢ=-10.0, v_synᵢₑ=10.0, v_synᵢᵢ=-10.0, alpha_invₑₑ=10.0/26, alpha_invₑᵢ=0.8/26, alpha_invᵢₑ=10.0/26, alpha_invᵢᵢ=0.8/26, kₑᵢ=0.6*26, kᵢₑ=0.6*26) 
-
 using CSV ## to read data from CSV files
 using DataFrames ## to format the data into DataFrames
 using Downloads ## to download image stimuli files
 
 image_set = CSV.read(Downloads.download("raw.githubusercontent.com/Neuroblox/NeurobloxDocsHost/refs/heads/main/data/image_example.csv"), DataFrame) ## reading data into DataFrame format
 image_sample = 2 ## set which image to input (from 1 to 1000)
-
-@named stim = ImageStimulus(
-    image_set[[image_sample], :], 
-    namespace=model_name, 
-    t_stimulus = 1000, ## how long the stimulus is on (in msec)
-    t_pause = 0 ## how long the stimulus is off after `t_stimulus` (in msec)
-); 
 
 ## access the desired image sample, exclude the last row that is a category label
 pixels = Array(image_set[image_sample, 1:end-1])
@@ -199,11 +192,25 @@ save(joinpath(@__DIR__(), "../assets/", "image_stim.svg"), fig); # hide
 
 # Above we can see an example image stimulus. Each pixel of the image stimulus is a variable (`stim₊u_i`) that connects to a neuron of the visual cortex `VAC` Blox. Using `connection_rule(stim, VAC)` we can better see how this connection is implemented.
 
-g = GraphSystem()
-add_connection!(g, stim => VAC, weight=14) 
-add_connection!(g, ASC1 => VAC, weight=44)
-add_connection!(g, ASC1 => AC, weight=44)
-add_connection!(g, VAC => AC, weight=3, density=0.08)
+@graph g begin
+    @nodes begin 
+        stim = ImageStimulus(
+            image_set[[image_sample], :], 
+            t_stimulus = 1000, ## how long the stimulus is on (in msec)
+            t_pause = 0 ## how long the stimulus is off after `t_stimulus` (in msec)
+        )
+        VAC = Cortical(N_wta=10, N_exci=5,  density=0.01, weight=1) 
+        AC = Cortical(N_wta=10, N_exci=5, density=0.01, weight=1) 
+        ## ascending system blox, modulating frequency set to 16 Hz
+        ASC1 = NextGenerationEI(Cₑ=2*26,Cᵢ=1*26, Δₑ=0.5, Δᵢ=0.5, η_0ₑ=10.0, v_synₑₑ=10.0, v_synₑᵢ=-10.0, v_synᵢₑ=10.0, v_synᵢᵢ=-10.0, alpha_invₑₑ=10.0/26, alpha_invₑᵢ=0.8/26, alpha_invᵢₑ=10.0/26, alpha_invᵢᵢ=0.8/26, kₑᵢ=0.6*26, kᵢₑ=0.6*26) 
+    end
+    @connections begin
+        stim => VAC, [weight=14] 
+        ASC1 => VAC, [weight=44]
+        ASC1 => AC, [weight=44]
+        VAC => AC, [weight=3, density=0.08]
+    end
+end
 
 ## define system and solve
 prob = ODEProblem(g, [], (0.0, 1000))

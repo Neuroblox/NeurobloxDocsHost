@@ -56,49 +56,43 @@ dt_spike_rate = 50 # update interval for the stimulus spike rate [ms]
 spike_rate_A = (distribution=Normal(μ_A, σ), dt=dt_spike_rate) # spike rate distribution for selective population A
 spike_rate_B = (distribution=Normal(μ_B, σ), dt=dt_spike_rate) # spike rate distribution for selective population B
 
-@named background_input = PoissonSpikeTrain(spike_rate, tspan; namespace = model_name); ## background input
-
-@named stim_A = PoissonSpikeTrain(spike_rate_A, tspan; namespace = model_name); ## stimulation inputs to selective population A
-@named stim_B = PoissonSpikeTrain(spike_rate_B, tspan; namespace = model_name); ## stimulation inputs to selective population B
-
-@named n_A = LIFExciCircuit(; namespace = model_name, N_neurons = N_E_selective, weight = w₊, exci_scaling_factor, inh_scaling_factor);
-@named n_B = LIFExciCircuit(; namespace = model_name, N_neurons = N_E_selective, weight = w₊, exci_scaling_factor, inh_scaling_factor) ;
-@named n_ns = LIFExciCircuit(; namespace = model_name, N_neurons = N_E_nonselective, weight = 1.0, exci_scaling_factor, inh_scaling_factor);
-@named n_inh = LIFInhCircuit(; namespace = model_name, N_neurons = N_I, weight = 1.0, exci_scaling_factor, inh_scaling_factor);
-
-# As we can see, each selective population `n_A` and `n_B` receives a separate spike train input `stim_A` and `stim_B` respectively. These inputs model visual processing that is selective for the left and right dot directions. All Bloxs also receive background inputs of the same rate from neurons we do not explicitly model.
-# The Bloxs we use here are subtypes of `CompositeBlox` and contain either `LIFExciNeuron`s or `LIFInhNeuron`s in them.
-
 # ## System Construction & Simulation
 # We construct the graph with all connections and weights according to [1].
 
 @graph g begin
+    @nodes begin
+        background_input = PoissonSpikeTrain(spike_rate, tspan) ## background input
+        stim_A = PoissonSpikeTrain(spike_rate_A, tspan) ## stimulation inputs to selective population A
+        stim_B = PoissonSpikeTrain(spike_rate_B, tspan) ## stimulation inputs to selective population B
+        n_A = LIFExciCircuit(; N_neurons = N_E_selective, weight = w₊, exci_scaling_factor, inh_scaling_factor)
+        n_B = LIFExciCircuit(; N_neurons = N_E_selective, weight = w₊, exci_scaling_factor, inh_scaling_factor)
+        n_ns = LIFExciCircuit(; N_neurons = N_E_nonselective, weight = 1.0, exci_scaling_factor, inh_scaling_factor)
+        n_inh = LIFInhCircuit(; N_neurons = N_I, weight = 1.0, exci_scaling_factor, inh_scaling_factor)
+    end
     @connections begin
-        background_input => n_A, [weight = 1];
+        background_input => n_A, [weight = 1]
         background_input => n_B, [weight = 1]
         background_input => n_ns, [weight = 1]
         background_input => n_inh, [weight = 1]
-
         stim_A => n_A, [weight = 1]
         stim_B => n_B, [weight = 1]
-
         n_A => n_B, [weight = w₋]
         n_A => n_ns, [weight = 1]
         n_A => n_inh, [weight = 1]
-
         n_B => n_A, [weight = w₋]
         n_B => n_ns, [weight = 1]
         n_B => n_inh, [weight = 1]
-
         n_ns => n_A, [weight = w₋]
         n_ns => n_B, [weight = w₋]
         n_ns => n_inh, [weight = 1]
-
         n_inh => n_A, [weight = 1]
         n_inh => n_B, [weight = 1]
         n_inh => n_ns, [weight = 1]
     end
 end
+
+# As we can see, each selective population `n_A` and `n_B` receives a separate spike train input `stim_A` and `stim_B` respectively. These inputs model visual processing that is selective for the left and right dot directions. All Bloxs also receive background inputs of the same rate from neurons we do not explicitly model.
+# The Bloxs we use here are subtypes of `CompositeBlox` and contain either `LIFExciNeuron`s or `LIFInhNeuron`s in them.
 
 prob = ODEProblem(g, [], tspan);
 sol = solve(prob, Euler(); dt = 0.01);

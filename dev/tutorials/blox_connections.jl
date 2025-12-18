@@ -29,6 +29,8 @@
 
 using Neuroblox
 using OrdinaryDiffEqTsit5
+using Symbolics
+using Latexify
 
 @named lif = LIFNeuron()
 
@@ -49,7 +51,7 @@ equations(lif)
 # The first one will print only the connection equations 
 @named ifn = IFNeuron() ## create an Integrate-and-Fire neuron, simpler than the `LIFNeuron`
 
-connection_equations(lif, ifn, weight=1, connection_rule="basic")
+connection_equations(BasicConnection(weight=1), lif, ifn)
 # While the second function prints out all fields that take part in the connection rule
 connection_rule(lif, ifn, weight=1, connection_rule="psp")
 # The `weight` and `connection_rule` are keyword arguments that can be ommitted. If we ommit them then we will get a message informing us about the default values that they take. The `connection_rule` argument applies to connections between `Neuron` types; `"basic"` is a simple weighted connection and `"psp"` applies a postsynaptic potential type of connection. The output of both `connection_equations` and `connection_rule` functions now seems very similar. However `connection_rule` will be more useful later on when we start using more complex Bloxs and connection rules that do more than just adding an equation and a symbolic weight.
