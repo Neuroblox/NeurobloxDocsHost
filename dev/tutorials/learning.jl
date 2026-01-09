@@ -148,5 +148,5 @@ save(joinpath("../assets/", "adj_RL.svg"), fig); # hide
 # - Since this is an oversimplified instantiation of a cortico-striatal model, it is highly sensitive to the parameters, such that if we change the values of `TAN` parameters (maximum activity `κ`), or learning rates in `HebbianModulationPlasticity` (learning rate constant `K`), the system won’t be able to learn. Try playing with these parameters and figure out at what range of these parameters the model works.
 
 # ## References
-# - [1] Pathak A., Brincat S., Organtzidis H., Strey H., Senneff S., Antzoulatos E., Mujica-Parodi L., Miller E., Granger R. Biomimetic model of corticostriatal micro-assemblies discovers new neural code., bioRxiv 2023.11.06.565902, 2024
+# - [1]  Pathak, A., Brincat, S.L., Organtzidis, H. et al. Biomimetic model of corticostriatal micro-assemblies discovers a neural code. Nat Commun 2025. https://doi.org/10.1038/s41467-025-67076-x
 # - [2] Antzoulatos EG, Miller EK. Increases in functional connectivity between prefrontal cortex and striatum during category learning. Neuron. 2014 Jul 2;83(1):216-25. doi: 10.1016/j.neuron.2014.05.005. Epub 2014 Jun 12. PMID: 24930701; PMCID: PMC4098789.
