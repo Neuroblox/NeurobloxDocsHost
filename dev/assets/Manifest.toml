@@ -2,7 +2,7 @@
 
 julia_version = "1.12.2"
 manifest_format = "2.0"
-project_hash = "d3985d922d5fca04a7ecf6d0336c3b2985513407"
+project_hash = "00a0a19e372fe69e9dd1aedc4e7caae5b838d83d"
 
 [[deps.ADTypes]]
 git-tree-sha1 = "f7304359109c768cf32dc5fa2d371565bb63b68a"
@@ -1034,7 +1034,7 @@ uuid = "7746bdde-850d-59dc-9ae8-88ece973131d"
 version = "2.86.2+0"
 
 [[deps.GraphDynamics]]
-deps = ["Accessors", "ConstructionBase", "DiffEqBase", "FieldViews", "OhMyThreads", "OrderedCollections", "RecursiveArrayTools", "SciMLBase", "SparseArrays", "SymbolicIndexingInterface"]
+deps = ["Accessors", "ConstructionBase", "DiffEqBase", "FieldViews", "OhMyThreads", "OrderedCollections", "Polyester", "RecursiveArrayTools", "SciMLBase", "SparseArrays", "SymbolicIndexingInterface"]
 path = "GraphDynamics"
 uuid = "bcd5d0fe-e6b7-4ef1-9848-780c183c7f4c"
 version = "0.7.0-DEV"
