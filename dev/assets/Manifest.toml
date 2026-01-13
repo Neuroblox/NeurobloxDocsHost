@@ -2900,9 +2900,9 @@ weakdeps = ["ChainRulesCore", "InverseFunctions"]
 
 [[deps.StochasticDiffEq]]
 deps = ["ADTypes", "Adapt", "ArrayInterface", "DataStructures", "DiffEqBase", "DiffEqNoiseProcess", "DocStringExtensions", "FastPower", "FiniteDiff", "ForwardDiff", "JumpProcesses", "LevyArea", "LinearAlgebra", "Logging", "MuladdMacro", "OrdinaryDiffEqCore", "OrdinaryDiffEqDifferentiation", "OrdinaryDiffEqNonlinearSolve", "Random", "RecursiveArrayTools", "Reexport", "SciMLBase", "SciMLOperators", "SimpleNonlinearSolve", "SparseArrays", "StaticArrays"]
-git-tree-sha1 = "29d0a574b3cadc6d81e6419075bcd0bcbde28185"
+git-tree-sha1 = "d24537c04013ab0f6fa17c17f06594bac9ad61f2"
 uuid = "789caeaf-c7a9-5a7d-9973-96adeb23e2a0"
-version = "6.89.0"
+version = "6.90.0"
 
 [[deps.StrideArraysCore]]
 deps = ["ArrayInterface", "CloseOpenIntervals", "IfElse", "LayoutPointers", "LinearAlgebra", "ManualMemory", "SIMDTypes", "Static", "StaticArrayInterface", "ThreadingUtilities"]
