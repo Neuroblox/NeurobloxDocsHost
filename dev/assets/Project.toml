@@ -11,6 +11,7 @@ LinearAlgebra = "37e2e46d-f89d-539d-b4ee-838fcccc9c8e"
 Literate = "98b081ad-f1c9-55d3-8b20-4c87d4299306"
 MAT = "23992714-dd62-5051-b70f-ba57cb901cac"
 Neuroblox = "769b91e5-4c60-41ee-bfae-153c84203cb2"
+NeurobloxPharmaPrivate = "58ac089b-67af-4add-8f86-e409aa08e46d"
 OrderedCollections = "bac558e1-5e72-5ebc-8fee-abe8a469f55d"
 OrdinaryDiffEqDefault = "50262376-6c5a-4cf5-baba-aaf4f84d72d7"
 OrdinaryDiffEqLowOrderRK = "1344f307-1e59-4825-a18e-ace9aa3fa4c6"
@@ -27,6 +28,7 @@ SymbolicIndexingInterface = "2efcf032-c050-4f8e-a9bb-153293bab1f5"
 [sources]
 GraphDynamics = {path = "../GraphDynamics"}
 Neuroblox = {path = ".."}
+NeurobloxPharmaPrivate = {path = "../NeurobloxPharmaPrivate"}
 
 [compat]
 Documenter = "1"
