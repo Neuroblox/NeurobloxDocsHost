@@ -1831,7 +1831,7 @@ uuid = "bdfd818c-c048-435e-9abc-ef02bd9abebf"
 version = "0.2.0-DEV"
 
 [[deps.NeurobloxPharma]]
-deps = ["Accessors", "CSV", "DataFrames", "DiffEqCallbacks", "Distributions", "GraphDynamics", "LogExpFunctions", "NeurobloxBase", "ProgressMeter", "Random", "RecursiveArrayTools", "Reexport", "SciMLBase", "SparseArrays", "StatsBase"]
+deps = ["Accessors", "CSV", "DataFrames", "DiffEqCallbacks", "Distributions", "GraphDynamics", "LogExpFunctions", "NaNMath", "NeurobloxBase", "ProgressMeter", "Random", "RecursiveArrayTools", "Reexport", "SciMLBase", "SparseArrays", "StatsBase"]
 path = "NeurobloxPharma"
 uuid = "6d6291d7-c437-44bd-acf4-438a4f54bfaa"
 version = "0.2.0-DEV"
