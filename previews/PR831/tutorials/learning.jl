@@ -25,12 +25,13 @@ using Random ## for generating random variables
 using CairoMakie ## for customized plotting recipies for blox
 using CSV ## to read data from CSV files
 using Downloads ## to download image stimuli files
+using StructArrays
 
 N_trials = 10 ## number of trials
 trial_dur = 1000 ## in ms
 
 ## download the stimulus images 
-image_set = CSV.File(Downloads.download("raw.githubusercontent.com/Neuroblox/NeurobloxDocsHost/refs/heads/main/data/stimuli_set.csv")) ## reading data into CSV file format
+image_set = CSV.read(Downloads.download("raw.githubusercontent.com/Neuroblox/NeurobloxDocsHost/refs/heads/main/data/stimuli_set.csv"), StructArray) ## reading data into CSV file format
 
 ## define stimulus Blox
 ## t_stimulus: how long the stimulus is on (in ms)
