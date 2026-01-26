@@ -27,8 +27,6 @@ StructArrays = "09ab397b-f2b6-538f-b94a-2f83cf4a842a"
 SymbolicIndexingInterface = "2efcf032-c050-4f8e-a9bb-153293bab1f5"
 
 [sources]
-GraphDynamics = {path = "../GraphDynamics"}
-Neuroblox = {path = ".."}
 NeurobloxPharmaPrivate = {path = "../NeurobloxPharmaPrivate"}
 
 [compat]
