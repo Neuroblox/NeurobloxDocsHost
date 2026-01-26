@@ -29,8 +29,8 @@ using OrdinaryDiffEqVerner ## to build the ODE problem and solve it, gain access
 using Random ## for generating random variables
 using CairoMakie ## for customized plotting recipies for blox
 using CSV ## to read data from CSV files
-using DataFrames ## to format the data into DataFrames
 using Downloads ## to download image stimuli files
+using StructArrays
 
 # define a single excitatory neuron 'blox' with steady input current I_bg = 0.5 microA/cm2
 nn1 = HHNeuronExci(name=Symbol("nrn1"), I_bg=0.5)
@@ -236,17 +236,17 @@ global_namespace=:g
 
 # create an image source block which takes image data from a .csv file and gives input to visual cortex
 
-image_set = CSV.read(Downloads.download("raw.githubusercontent.com/Neuroblox/NeurobloxDocsHost/refs/heads/main/data/image_example.csv"), DataFrame) ## reading data into DataFrame format
+image_set = CSV.read(Downloads.download("raw.githubusercontent.com/Neuroblox/NeurobloxDocsHost/refs/heads/main/data/image_example.csv"), StructArray) ## reading data into CSV file format
 image_sample = 2 ## set which image to input (from 1 to 1000)
 
 ## define stimulus source blox
 ## t_stimulus: how long the stimulus is on (in msec)
 ## t_pause : how long th estimulus is off (in msec)
-@named stim = ImageStimulus(image_set[[image_sample], :]; namespace=global_namespace, t_stimulus=1000, t_pause=0); 
+@named stim = ImageStimulus(image_set[[image_sample]]; namespace=global_namespace, t_stimulus=1000, t_pause=0); 
 
 
 # plot the image that the visual cortex 'sees'
-pixels = Array(image_set[image_sample, 1:end-1])## access the desired image sample from respective row
+pixels = collect(image_set[image_sample])[1:end-1] ## access the desired image sample from respective row
 pixels = reshape(pixels, 15, 15)## reshape into 15 X 15 square image matrix
 heatmap(pixels,colormap = :gray1) #input image matrix seen as heatmap
 
