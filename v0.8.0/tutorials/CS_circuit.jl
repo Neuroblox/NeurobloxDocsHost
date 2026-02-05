@@ -175,14 +175,14 @@ save(joinpath(@__DIR__(), "../assets/", "cort_power.svg"), fig); # hide
 # *Figure 3: Extended circuit with Cortex, Brainstem and Image Stimulus components.*
 
 using CSV ## to read data from CSV files
+using DataFrames ## to format the data into DataFrames
 using Downloads ## to download image stimuli files
-using StructArrays
 
-image_set = CSV.read(Downloads.download("raw.githubusercontent.com/Neuroblox/NeurobloxDocsHost/refs/heads/main/data/image_example.csv"), StructArray) ## reading data into CSV file format
+image_set = CSV.read(Downloads.download("raw.githubusercontent.com/Neuroblox/NeurobloxDocsHost/refs/heads/main/data/image_example.csv"), DataFrame) ## reading data into DataFrame format
 image_sample = 2 ## set which image to input (from 1 to 1000)
 
 ## access the desired image sample, exclude the last row that is a category label
-pixels = collect(image_set[image_sample])[1:end-1]
+pixels = Array(image_set[image_sample, 1:end-1])
 ## reshape into 15 X 15 square image matrix
 pixels = reshape(pixels, 15, 15)
 ## plot the image that the visual cortex 'sees'
@@ -195,7 +195,7 @@ save(joinpath(@__DIR__(), "../assets/", "image_stim.svg"), fig); # hide
 @graph g begin
     @nodes begin 
         stim = ImageStimulus(
-            image_set[[image_sample]],
+            image_set[[image_sample], :], 
             t_stimulus = 1000, ## how long the stimulus is on (in msec)
             t_pause = 0 ## how long the stimulus is off after `t_stimulus` (in msec)
         )

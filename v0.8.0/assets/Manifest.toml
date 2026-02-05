@@ -1,8 +1,8 @@
 # This file is machine-generated - editing it directly is not advised
 
-julia_version = "1.12.4"
+julia_version = "1.12.2"
 manifest_format = "2.0"
-project_hash = "16b7f711b2f40aa9418e4f2df2273ae21f80d628"
+project_hash = "64bb4a843b5821edc6bbc4ff90a5ae26b448760f"
 
 [[deps.ADTypes]]
 git-tree-sha1 = "f7304359109c768cf32dc5fa2d371565bb63b68a"
@@ -1032,9 +1032,9 @@ version = "3.7.0+0"
 
 [[deps.Git_jll]]
 deps = ["Artifacts", "Expat_jll", "JLLWrappers", "LibCURL_jll", "Libdl", "Libiconv_jll", "OpenSSL_jll", "PCRE2_jll", "Zlib_jll"]
-git-tree-sha1 = "46bd50c245fe49ed87377c014a928a549b9ef7ed"
+git-tree-sha1 = "dc34a3e3d96b4ed305b641e626dc14c12b7824b8"
 uuid = "f8c6e375-362e-5223-8a59-34ff63f689eb"
-version = "2.52.0+0"
+version = "2.53.0+0"
 
 [[deps.Glib_jll]]
 deps = ["Artifacts", "GettextRuntime_jll", "JLLWrappers", "Libdl", "Libffi_jll", "Libiconv_jll", "Libmount_jll", "PCRE2_jll", "Zlib_jll"]
@@ -1759,7 +1759,7 @@ version = "0.3.7"
 
 [[deps.MozillaCACerts_jll]]
 uuid = "14a3606d-f60d-562e-9121-12d972cd8159"
-version = "2025.11.4"
+version = "2025.5.20"
 
 [[deps.MuladdMacro]]
 git-tree-sha1 = "cac9cc5499c25554cba55cd3c30543cff5ca4fab"
@@ -1840,17 +1840,17 @@ uuid = "bdfd818c-c048-435e-9abc-ef02bd9abebf"
 version = "0.2.0"
 
 [[deps.NeurobloxPharma]]
-deps = ["Accessors", "CSV", "DiffEqCallbacks", "Distributions", "GraphDynamics", "LogExpFunctions", "NaNMath", "NeurobloxBase", "ProgressMeter", "Random", "RecursiveArrayTools", "Reexport", "SciMLBase", "SparseArrays", "StatsBase", "StructArrays", "Tables"]
+deps = ["Accessors", "CSV", "DataFrames", "DiffEqCallbacks", "Distributions", "GraphDynamics", "LogExpFunctions", "NaNMath", "NeurobloxBase", "ProgressMeter", "Random", "RecursiveArrayTools", "Reexport", "SciMLBase", "SparseArrays", "StatsBase"]
 path = "NeurobloxPharma"
 uuid = "6d6291d7-c437-44bd-acf4-438a4f54bfaa"
-version = "0.2.1-DEV"
+version = "0.2.0"
 weakdeps = ["UnicodePlots"]
 
     [deps.NeurobloxPharma.extensions]
     UnicodePlotsExt = "UnicodePlots"
 
 [[deps.NeurobloxPharmaPrivate]]
-deps = ["Accessors", "CSV", "DiffEqCallbacks", "Distributions", "GraphDynamics", "LogExpFunctions", "NaNMath", "NeurobloxBase", "NeurobloxPharma", "OrderedCollections", "ProgressMeter", "Random", "RecursiveArrayTools", "Reexport", "SciMLBase", "SparseArrays", "StatsBase"]
+deps = ["Accessors", "CSV", "DataFrames", "DiffEqCallbacks", "Distributions", "GraphDynamics", "LogExpFunctions", "NaNMath", "NeurobloxBase", "NeurobloxPharma", "OrderedCollections", "ProgressMeter", "Random", "RecursiveArrayTools", "Reexport", "SciMLBase", "SparseArrays", "StatsBase"]
 path = "NeurobloxPharmaPrivate"
 uuid = "58ac089b-67af-4add-8f86-e409aa08e46d"
 version = "0.2.0"
@@ -2057,18 +2057,16 @@ uuid = "6ad6398a-0878-4a85-9266-38940aa047c8"
 version = "1.16.0"
 
 [[deps.OrdinaryDiffEqCore]]
-deps = ["ADTypes", "Accessors", "Adapt", "ArrayInterface", "ConcreteStructs", "DataStructures", "DiffEqBase", "DocStringExtensions", "EnumX", "FastBroadcast", "FastClosures", "FastPower", "FillArrays", "FunctionWrappersWrappers", "InteractiveUtils", "LinearAlgebra", "Logging", "MacroTools", "MuladdMacro", "Polyester", "PrecompileTools", "Preferences", "RecursiveArrayTools", "Reexport", "SciMLBase", "SciMLLogging", "SciMLOperators", "SciMLStructures", "Static", "StaticArrayInterface", "StaticArraysCore", "SymbolicIndexingInterface", "TruncatedStacktraces"]
-git-tree-sha1 = "b5d6f3ac96d3b61e5e9b6eafdbdf1fb739d367d6"
+deps = ["ADTypes", "Accessors", "Adapt", "ArrayInterface", "ConcreteStructs", "DataStructures", "DiffEqBase", "DocStringExtensions", "EnumX", "EnzymeCore", "FastBroadcast", "FastClosures", "FastPower", "FillArrays", "FunctionWrappersWrappers", "InteractiveUtils", "LinearAlgebra", "Logging", "MacroTools", "MuladdMacro", "Polyester", "PrecompileTools", "Preferences", "RecursiveArrayTools", "Reexport", "SciMLBase", "SciMLLogging", "SciMLOperators", "SciMLStructures", "Static", "StaticArrayInterface", "StaticArraysCore", "SymbolicIndexingInterface", "TruncatedStacktraces"]
+git-tree-sha1 = "6ccf0c6b8fea7079940d1eaa1b8cb94270dba0aa"
 uuid = "bbf590c4-e513-4bbe-9b18-05decba2e5d8"
-version = "3.4.1"
+version = "3.4.2"
 
     [deps.OrdinaryDiffEqCore.extensions]
-    OrdinaryDiffEqCoreEnzymeCoreExt = "EnzymeCore"
     OrdinaryDiffEqCoreMooncakeExt = "Mooncake"
     OrdinaryDiffEqCoreSparseArraysExt = "SparseArrays"
 
     [deps.OrdinaryDiffEqCore.weakdeps]
-    EnzymeCore = "f151be2c-9106-41f4-ab19-57ee4f262869"
     Mooncake = "da2b9cff-9c12-43a0-ae48-6db2b0edb7d6"
     SparseArrays = "2f01184e-e22b-5df5-ae63-d93ebab69eaf"
 
@@ -2303,7 +2301,7 @@ version = "0.44.2+0"
 [[deps.Pkg]]
 deps = ["Artifacts", "Dates", "Downloads", "FileWatching", "LibGit2", "Libdl", "Logging", "Markdown", "Printf", "Random", "SHA", "TOML", "Tar", "UUIDs", "p7zip_jll"]
 uuid = "44cfe95a-1eb2-52ea-b672-e2afdf69b78f"
-version = "1.12.1"
+version = "1.12.0"
 weakdeps = ["REPL"]
 
     [deps.Pkg.extensions]

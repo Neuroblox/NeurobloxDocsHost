@@ -24,14 +24,14 @@ using OrdinaryDiffEqDefault, OrdinaryDiffEqVerner ## to build the ODE problem an
 using Random ## for generating random variables
 using CairoMakie ## for customized plotting recipies for blox
 using CSV ## to read data from CSV files
+using DataFrames ## to format the data into DataFrames
 using Downloads ## to download image stimuli files
-using StructArrays
 
 N_trials = 10 ## number of trials
 trial_dur = 1000 ## in ms
 
 ## download the stimulus images 
-image_set = CSV.read(Downloads.download("raw.githubusercontent.com/Neuroblox/NeurobloxDocsHost/refs/heads/main/data/stimuli_set.csv"), StructArray) ## reading data into CSV file format
+image_set = CSV.read(Downloads.download("raw.githubusercontent.com/Neuroblox/NeurobloxDocsHost/refs/heads/main/data/stimuli_set.csv"), DataFrame) ## reading data into DataFrame format
 
 ## define stimulus Blox
 ## t_stimulus: how long the stimulus is on (in ms)
@@ -77,6 +77,8 @@ save(joinpath("../assets/", "adj_open.svg"), fig); # hide
 time_block_dur = 90.0 ## ms (size of discrete time blocks)
 N_trials = 100 ## number of trials
 trial_dur = 1000 ## ms
+
+image_set = CSV.read(Downloads.download("raw.githubusercontent.com/Neuroblox/NeurobloxDocsHost/refs/heads/main/data/stimuli_set.csv"), DataFrame) ## reading data into DataFrame format
 
 ## additional Striatum Bloxs
 @graph g begin
