@@ -1038,9 +1038,9 @@ version = "2.53.0+0"
 
 [[deps.Glib_jll]]
 deps = ["Artifacts", "GettextRuntime_jll", "JLLWrappers", "Libdl", "Libffi_jll", "Libiconv_jll", "Libmount_jll", "PCRE2_jll", "Zlib_jll"]
-git-tree-sha1 = "6b4d2dc81736fe3980ff0e8879a9fc7c33c44ddf"
+git-tree-sha1 = "24f6def62397474a297bfcec22384101609142ed"
 uuid = "7746bdde-850d-59dc-9ae8-88ece973131d"
-version = "2.86.2+0"
+version = "2.86.3+0"
 
 [[deps.GraphDynamics]]
 deps = ["Accessors", "ConstructionBase", "DiffEqBase", "FieldViews", "OhMyThreads", "OrderedCollections", "Polyester", "RecursiveArrayTools", "SciMLBase", "SparseArrays", "SymbolicIndexingInterface"]
@@ -1636,9 +1636,9 @@ version = "1.2.0"
 
 [[deps.MAT]]
 deps = ["CodecZlib", "Dates", "HDF5", "OrderedCollections", "PooledArrays", "SparseArrays", "StringEncodings", "Tables"]
-git-tree-sha1 = "dc4920291ef8e4aead248e7133da4cb0429e27e3"
+git-tree-sha1 = "6f8434aa453c31d5a12c376d297449afa5112404"
 uuid = "23992714-dd62-5051-b70f-ba57cb901cac"
-version = "0.11.4"
+version = "0.11.5"
 
 [[deps.MKL_jll]]
 deps = ["Artifacts", "IntelOpenMP_jll", "JLLWrappers", "LazyArtifacts", "Libdl", "oneTBB_jll"]
@@ -2624,9 +2624,9 @@ version = "0.1.0"
 
 [[deps.SciMLBase]]
 deps = ["ADTypes", "Accessors", "Adapt", "ArrayInterface", "CommonSolve", "ConstructionBase", "Distributed", "DocStringExtensions", "EnumX", "FunctionWrappersWrappers", "IteratorInterfaceExtensions", "LinearAlgebra", "Logging", "Markdown", "Moshi", "PreallocationTools", "PrecompileTools", "Preferences", "Printf", "RecipesBase", "RecursiveArrayTools", "Reexport", "RuntimeGeneratedFunctions", "SciMLLogging", "SciMLOperators", "SciMLPublic", "SciMLStructures", "StaticArraysCore", "Statistics", "SymbolicIndexingInterface"]
-git-tree-sha1 = "1b007ef25d4c18da29f956c2cad0a45f1c98f0f3"
+git-tree-sha1 = "2390984f1129ceecf109b56a3cc461721d913a80"
 uuid = "0bca4576-84f4-4d90-8ffe-ffa030f20462"
-version = "2.136.0"
+version = "2.137.0"
 
     [deps.SciMLBase.extensions]
     SciMLBaseChainRulesCoreExt = "ChainRulesCore"
