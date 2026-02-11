@@ -73,11 +73,15 @@ prob_EI = @experiment prob begin
         p_I = 1.5 ## GABA factor
         p_E = 3.0 ## AMPA factor
     end
-    GABA_A_Synapse, τ₂ -> τ₂ * p_I
-    GABA_A_Synapse, G_syn -> G_syn * p_I
+    GABA_A_Synapse, begin
+        τ₂ -> τ₂ * p_I
+        G_syn -> G_syn * p_I
+    end
 
-    Glu_AMPA_Synapse, τ₂ -> τ₂ * p_E
-    Glu_AMPA_Synapse, G_syn -> G_syn * p_E
+    Glu_AMPA_Synapse, begin
+        τ₂ -> τ₂ * p_E
+        G_syn -> G_syn * p_E
+    end
 end
 
 # After solving the circuit model in its control condition, we design an `@experiment` above to simulate an intervention on both the GABA A and the AMPA receptors, which are the default receptos in the `Cortical` blox. This way we change the E-I balance of the circuit by affecting both components.
