@@ -45,9 +45,9 @@ image_set = CSV.read(Downloads.download("raw.githubusercontent.com/Neuroblox/Neu
     ## learning rule
     hebbian_cort = HebbianPlasticity(K=5e-4, W_lim=15, t_pre=trial_dur, t_post=trial_dur) 
     @connections begin
-        stim => VAC, [weight=14] 
-        ASC1 => VAC, [weight=44]
-        ASC1 => AC, [weight=44]
+        stim => VAC, (weight=14)
+        ASC1 => VAC, (weight=44)
+        ASC1 => AC, (weight=44)
         VAC => AC, HypergeometricRule(weight=3, density=0.1, learning_rule = hebbian_cort) ## pass learning rule as a keyword argument
     end
 end
@@ -91,22 +91,22 @@ trial_dur = 1000 ## ms
 hebbian_mod = HebbianModulationPlasticity(K=0.06, decay=0.01, α=2.5, θₘ=1, modulator=SNcb, t_pre=trial_dur, t_post=trial_dur, t_mod=time_block_dur)
 hebbian_cort = HebbianPlasticity(K=5e-4, W_lim=7, t_pre=trial_dur, t_post=trial_dur) 
     @connections begin
-        stim => VAC, [weight=14] 
-        ASC1 => VAC, [weight=44]
-        ASC1 => AC, [weight=44]
+        stim => VAC, (weight=14) 
+        ASC1 => VAC, (weight=44)
+        ASC1 => AC, (weight=44)
         VAC => AC, HypergeometricRule(weight=3, density=0.1, learning_rule = hebbian_cort)
         AC => STR1, HypergeometricRule(weight = 0.075, density =  0.04, learning_rule =  hebbian_mod)
         AC => STR2, HypergeometricRule(weight =  0.075, density =  0.04, learning_rule =  hebbian_mod) 
         tan_pop1 => STR1, EventRule(weight = 1, t_event = time_block_dur)
         tan_pop2 => STR2, EventRule(weight = 1, t_event = time_block_dur)
-        STR1 => tan_pop1, [weight = 1]
-        STR2 => tan_pop1, [weight = 1]
-        STR1 => tan_pop2, [weight = 1]
-        STR2 => tan_pop2, [weight = 1]
+        STR1 => tan_pop1, (weight = 1)
+        STR2 => tan_pop1, (weight = 1)
+        STR1 => tan_pop2, (weight = 1)
+        STR2 => tan_pop2, (weight = 1)
         STR1 => STR2, EventRule(weight = 1, t_event = 2*time_block_dur)
         STR2 => STR1, EventRule(weight = 1, t_event = 2*time_block_dur)
-        STR1 => SNcb, [weight = 1] 
-        STR2 => SNcb, [weight = 1]  
+        STR1 => SNcb, (weight = 1) 
+        STR2 => SNcb, (weight = 1)  
         ## action selection connections
         STR1 => AS;
         STR2 => AS;

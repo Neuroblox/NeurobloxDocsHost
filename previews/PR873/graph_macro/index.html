@@ -15,7 +15,7 @@ end</code></pre><p>or</p><pre><code class="language-julia hljs">@graph name begi
     @connections begin
         (...)
     end
-end</code></pre><p>Build a <code>GraphSystem</code> from a list of nodes corresponding to blox and a set of connections between the nodes. </p><p>Nodes are defined using normal julia assignment syntax, and connections are defined using pair syntax, followed by an optional list of keyword arguments for the connection.</p><pre><code class="language-julia hljs">@graph begin
+end</code></pre><p>Build a <code>GraphSystem</code> from a list of nodes corresponding to blox and a set of connections between the nodes. </p><p>Nodes are defined using normal julia assignment syntax, and connections are defined using pair syntax, followed by an optional tuple of keyword arguments for the connection.</p><pre><code class="language-julia hljs">@graph begin
     @nodes begin
         nn1 = HHNeuronExci(name=Symbol(&quot;nrn1&quot;), I_bg=3)
         nn2 = HHNeuronExci(name=Symbol(&quot;nrn2&quot;), I_bg=2)
@@ -23,9 +23,9 @@ end</code></pre><p>Build a <code>GraphSystem</code> from a list of nodes corresp
     end
 
     @connections begin
-        nn1 =&gt; nn2, [weight = 1]
-        nn2 =&gt; nn3, [weight = 1]
-        nn3 =&gt; nn1, [weight = 0.2]
+        nn1 =&gt; nn2, (weight = 1)
+        nn2 =&gt; nn3, (weight = 1)
+        nn3 =&gt; nn1, (weight = 0.2)
     end
 end</code></pre><p>The <code>name</code> kwarg of the nodes will be set equal to the variable they&#39;re assigned to, and their <code>namespace</code> equal to the <code>name</code> of the outer graph (default <code>nothing</code>).</p><p>One can insert normal Julia code outside of the <code>@nodes</code> and <code>@connections</code> blox to improve readability or perform other logic:</p><pre><code class="language-julia hljs">@graph begin
     μ_E = 1.5
@@ -61,7 +61,7 @@ end</code></pre><p>to manually pick the names assigned to the inhibitory neurons
 
     @connections begin
         for (n1, n2) in zip(neurons, neurons)
-            n1 =&gt; n2, [weight = 1]
+            n1 =&gt; n2, (weight = 1)
         end
     end
-end</code></pre></article><nav class="docs-footer"><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.16.1 on <span class="colophon-date" title="Wednesday 11 February 2026 16:17">Wednesday 11 February 2026</span>. Using Julia version 1.12.5.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
+end</code></pre></article><nav class="docs-footer"><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.16.1 on <span class="colophon-date" title="Thursday 12 February 2026 14:35">Thursday 12 February 2026</span>. Using Julia version 1.12.5.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>

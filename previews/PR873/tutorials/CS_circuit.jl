@@ -29,8 +29,8 @@ using CairoMakie
     end
     @connections begin
         for exci_neuron ∈ [exci1, exci2, exci3, exci5]
-            inh => exci_neuron, [weight = 1]
-            exci_neuron => inh, [weight = 1]
+            inh => exci_neuron, (weight = 1)
+            exci_neuron => inh, (weight = 1)
         end
     end
 end
@@ -100,7 +100,7 @@ density = 0.01 ## connection density between WTA circuits
                     wtas[i] => wtas[j], DensityRule(weight=1, density=density)
                 end
             end
-            n_ff_inh => wtas[i], [weight=1]
+            n_ff_inh => wtas[i], (weight=1)
         end
     end
 end
@@ -136,7 +136,7 @@ save(joinpath(@__DIR__(), "../assets/", "cort_stack.svg"), fig); # hide
         )
     end
     @connections begin
-        ASC1 => CB, [weight=44]
+        ASC1 => CB, (weight=44)
     end
 end
 
@@ -205,9 +205,9 @@ save(joinpath(@__DIR__(), "../assets/", "image_stim.svg"), fig); # hide
         ASC1 = NextGenerationEI(Cₑ=2*26,Cᵢ=1*26, Δₑ=0.5, Δᵢ=0.5, η_0ₑ=10.0, v_synₑₑ=10.0, v_synₑᵢ=-10.0, v_synᵢₑ=10.0, v_synᵢᵢ=-10.0, alpha_invₑₑ=10.0/26, alpha_invₑᵢ=0.8/26, alpha_invᵢₑ=10.0/26, alpha_invᵢᵢ=0.8/26, kₑᵢ=0.6*26, kᵢₑ=0.6*26) 
     end
     @connections begin
-        stim => VAC, [weight=14] 
-        ASC1 => VAC, [weight=44]
-        ASC1 => AC, [weight=44]
+        stim => VAC, (weight=14) 
+        ASC1 => VAC, (weight=44)
+        ASC1 => AC, (weight=44)
         VAC => AC, HypergeometricRule(weight=3, density=0.08)
     end
 end

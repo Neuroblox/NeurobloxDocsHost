@@ -69,9 +69,9 @@ nn3 = HHNeuronExci(name=Symbol("nrn3"), I_bg=1.4, namespace=global_namespace)
 
 ## defien graph and connect the nodes with the edges (synapses in this case), with the synaptic 'weights' specified as arguments
 g = GraphSystem(name=global_namespace)
-add_connection!(g, nn1, DefaultRule(weight = 1.), nn2) ##connection from neuron 1 to neuron 2 (nn1 to nn2)
-add_connection!(g, nn2, DefaultRule(weight = 0.2), nn3) ##connection from neuron 2 to neuron 3 (nn2 to nn3)
-add_connection!(g, nn1, DefaultRule(weight = 0.5), nn3) ##connection from neuron 1 to neuron 3 (nn2 to nn3)
+add_connection!(g, nn1, nn2, DefaultRule(weight = 1.)) ##connection from neuron 1 to neuron 2 (nn1 to nn2)
+add_connection!(g, nn2, nn3, DefaultRule(weight = 0.2)) ##connection from neuron 2 to neuron 3 (nn2 to nn3)
+add_connection!(g, nn1, nn3, DefaultRule(weight = 0.5)) ##connection from neuron 1 to neuron 3 (nn2 to nn3)
 
 ## create an ODESystem from the graph and then solve it using an ODE solver
 prob = ODEProblem(g, [], (0.0, 1000), [])
@@ -104,8 +104,8 @@ n_excis = [HHNeuronExci(
 g = GraphSystem()
 
 for i in 1:N_exci
-    add_connection!(g, n_inh, DefaultRule(weight = 1.0), n_excis[i])
-    add_connection!(g, n_excis[i], DefaultRule(weight = 1.0), n_inh)
+    add_connection!(g, n_inh, n_excis[i], DefaultRule(weight = 1.0))
+    add_connection!(g, n_excis[i], n_inh, DefaultRule(weight = 1.0))
 end
 prob = ODEProblem(g, [], (0.0, 1000), [])
 sol = solve(prob, Vern7(), saveat=0.1)
@@ -123,7 +123,7 @@ wta1 = WinnerTakeAll(name=Symbol("wta1"), I_bg=5.0, N_exci=N_exci, namespace=glo
 wta2 = WinnerTakeAll(name=Symbol("wta2"), I_bg=4.0, N_exci=N_exci, namespace=global_namespace)
 
 g = GraphSystem()
-add_connection!(g, wta1, DensityRule(weight = 1, density = 0.5), wta2) ##density keyword sets the connection probability from each excitatory neuron of source WTA circuit to each excitatory neuron of target WTA circuit
+add_connection!(g, wta1, wta2, DensityRule(density = 0.5, weight = 1)) ##density keyword sets the connection probability from each excitatory neuron of source WTA circuit to each excitatory neuron of target WTA circuit
 
 prob = ODEProblem(g, [], (0.0, 1000), [])
 sol = solve(prob, Vern7(), saveat=0.1)
@@ -169,10 +169,10 @@ g = GraphSystem()
 for i in 1:N_wta
     for j in 1:N_wta
         if j != i
-            add_connection!(g, wtas[i], DensityRule(weight = 1, density = density), wtas[j])
+            add_connection!(g, wtas[i], wtas[j], DensityRule(density = density, weight = 1))
         end
     end
-    add_connection!(g, n_ff_inh, DefaultRule(weight = 1), wtas[i])
+    add_connection!(g, n_ff_inh, wtas[i], DefaultRule(weight = 1))
 end
 
 prob = ODEProblem(g, [], (0.0, 1000), [])
@@ -199,7 +199,7 @@ global_namespace=:g
 
 ## define graph and connect ASC1->CB
 g = GraphSystem()
-add_connection!(g, ASC1, DefaultRule(weight = 44), CB)
+add_connection!(g, ASC1, CB, DefaultRule(weight = 44))
 
 ## solve the system for time 0 to 1000 ms
 
@@ -254,10 +254,10 @@ heatmap(pixels,colormap = :gray1) #input image matrix seen as heatmap
 
 g = GraphSystem()
 
-add_connection!(g, stim, DefaultRule(weight = 14), VAC) 
-add_connection!(g, ASC1, DefaultRule(weight = 44), VAC)
-add_connection!(g, ASC1, DefaultRule(weight = 44), AC)
-add_connection!(g, VAC, HypergeometricRule(weight = 3, density = 0.08), AC)
+add_connection!(g, stim, VAC, DefaultRule(weight = 14)) 
+add_connection!(g, ASC1, VAC, DefaultRule(weight = 44))
+add_connection!(g, ASC1, AC, DefaultRule(weight = 44))
+add_connection!(g, VAC, AC, HypergeometricRule(density = 0.08, weight = 3))
 
 ## define system and solve
 

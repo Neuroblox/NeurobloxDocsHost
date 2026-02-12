@@ -114,7 +114,7 @@ connection_rule(inp, nm, weight=1)
 
 @graph g begin
     @connections begin
-        inp => nm, [weight = 1]
+        inp => nm, (weight = 1)
     end
 end
 prob = ODEProblem(g, [], tspan)
@@ -194,7 +194,7 @@ tspan = (0, 500)
         ifn = IFNeuron()
     end
     @connections begin
-        s => ifn, [weight=1]
+        s => ifn, (weight=1)
     end
 end
 prob = ODEProblem(g, [], tspan)
@@ -309,7 +309,7 @@ save(joinpath("../assets/", "stim_protocol.svg"), fig); # hide
 
 @named nn = HHNeuronExci(I_bg=0.4)
 g = GraphSystem()
-add_connection!(g, dbs, DBSConnection(10.0), nn)
+add_connection!(g, dbs, nn, DBSConnection(10.0))
 prob = ODEProblem(g, [], tspan)
 
 transitions_inds = detect_transitions(ts, stimulus; atol=0.001)
