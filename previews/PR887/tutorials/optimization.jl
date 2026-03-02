@@ -17,16 +17,17 @@
 using Neuroblox
 using OrdinaryDiffEqTsit5
 using Optimization ## the general interface for solving optimization problems
+using OptimizationOptimJL ## provides LBFGS and other Optim.jl solvers
+using ForwardDiff ## enables AutoForwardDiff() for exact gradient computation
 using CairoMakie
-using SymbolicIndexingInterface ## a package to handle parameter changes in our ODEProblem on every optimization iteration
 using Distributions
 using Random
 
 Random.seed!(1)
 
-@named nm = NextGenerationEI(; kₑₑ=2, kᵢᵢ=1.5, kₑᵢ=5.5, kᵢₑ=7);
-
-sys = system(nm)
+@graph g begin
+    @nodes nm = NextGenerationEI(; kₑₑ=2, kᵢᵢ=1.5, kₑᵢ=5.5, kᵢₑ=7)
+end
 
 tspan = (0, 100)
 t_save = first(tspan):last(tspan) ## define the exact timepoints when data/simulation will be saved
@@ -34,10 +35,10 @@ t_save = first(tspan):last(tspan) ## define the exact timepoints when data/simul
 ## ground truth parameter values, ideally the ones to be retrieved after optimization
 p_ground_truth = [2, 1.5, 5.5, 7]
 prob = ODEProblem(
-    sys, 
-    [], 
-    tspan, 
-    [nm.kₑₑ => p_ground_truth[1], nm.kᵢᵢ => p_ground_truth[2], nm.kₑᵢ => p_ground_truth[3], nm.kᵢₑ => p_ground_truth[4]]; 
+    g,
+    [],
+    tspan,
+    [nm.kₑₑ => p_ground_truth[1], nm.kᵢᵢ => p_ground_truth[2], nm.kₑᵢ => p_ground_truth[3], nm.kᵢₑ => p_ground_truth[4]];
     saveat=t_save
 )
 
@@ -49,83 +50,80 @@ noise_distribution = Normal(0, 0.1)
 data .+= rand(noise_distribution, size(data));
 
 # ## Initial Guess for Parameters
-# For most optimization methods we need to provide an initial guess for the parameters to be fitted. Let's add a guess and visualize the result of using these parameters in our model compared to the ground truth data.
-## define a setter function to easily change parameter values during each optimization iteration
-setter! = setp(sys, [nm.kₑₑ, nm.kᵢᵢ, nm.kₑᵢ, nm.kᵢₑ]) 
+# For most optimization methods we need to provide an initial guess for the parameters to be fitted. We use `make_component_array` to build a nested `ComponentVector` that carries symbolic parameter names alongside their values. This vector is a flat `AbstractArray` compatible with any optimizer, while still letting us access parameters by name (e.g. `v0.g.nm.kₑₑ`). The original `prob` is never mutated; `remake_params` creates a fresh `ODEProblem` from the updated vector on every call.
+## Build a ComponentVector for the parameters to be optimized and set initial guess values
+v0 = make_component_array(prob, [nm.kₑₑ, nm.kᵢᵢ, nm.kₑᵢ, nm.kᵢₑ])
+v0.g.nm.kₑₑ = 0.2; v0.g.nm.kᵢᵢ = 3.3; v0.g.nm.kₑᵢ = 2.0; v0.g.nm.kᵢₑ = 3.5
+sol = solve(remake_params(prob, v0), Tsit5())
 
-## initial guess for the parameters to be optimized
-p0 = [0.2, 3.3, 2, 3.5]
-setter!(prob, p0)
-sol = solve(prob, Tsit5())
-
-states = unknowns(sys)
+state_names = state_symbols(typeof(nm))
+state_syms_namespaced = [getproperty(nm, s) for s in state_names]
 fig = Figure(size = (1600, 800), fontsize=22)
 axs = [
-    Axis(fig[1,1], title=String(Symbol(states[1]))),
-    Axis(fig[1,2], title=String(Symbol(states[2]))),
-    Axis(fig[2,1], title=String(Symbol(states[3]))),
-    Axis(fig[2,2], title=String(Symbol(states[4]))),
-    Axis(fig[3,1], title=String(Symbol(states[5]))),
-    Axis(fig[3,2], title=String(Symbol(states[6]))),
-    Axis(fig[4,1], title=String(Symbol(states[7]))),
-    Axis(fig[4,2], title=String(Symbol(states[8])))
+    Axis(fig[1,1], title=String(state_names[1])),
+    Axis(fig[1,2], title=String(state_names[2])),
+    Axis(fig[2,1], title=String(state_names[3])),
+    Axis(fig[2,2], title=String(state_names[4])),
+    Axis(fig[3,1], title=String(state_names[5])),
+    Axis(fig[3,2], title=String(state_names[6])),
+    Axis(fig[4,1], title=String(state_names[7])),
+    Axis(fig[4,2], title=String(state_names[8]))
 ]
-for (i,s) in enumerate(states)
+for (i,s) in enumerate(state_syms_namespaced)
     lines!(axs[i], data[s], label="Data")
     lines!(axs[i], sol[s], label="Initial Guess")
 end
 colsize!(fig.layout, 1, Relative(1/2))
 Legend(fig[5,1], last(axs))
 fig
-save(joinpath("../assets/", "opt_init.svg"), fig); # hide
+save(joinpath(@__DIR__(), "../assets/", "opt_init.svg"), fig); # hide
 #!nb # ![](../assets/opt_init.svg)
 
 # ## Parameter Fit using Optimization
-# We are now ready to define the loss function and the optimization problem and then solve it to get the optimized values for the four coupling parameters.
+# We are now ready to define the loss function and the optimization problem and then solve it to get the optimized values for the four coupling parameters. The loss function is pure: it calls `remake_params` to create a new `ODEProblem` on each iteration rather than mutating a shared one. This is required for `AutoForwardDiff()`, which traces through the ODE solve by wrapping parameter values in `Dual` numbers.
 ## define the least squares loss function
-function loss(p, data, prob)
-    setter!(prob, p)
-    sol = solve(prob, Tsit5())
+function loss(v, data, prob)
+    prob2 = remake_params(prob, v)
+    sol = solve(prob2, Tsit5())
 
     return sum(abs2, sol .- data)
 end
 
-## Use finite differences to calculate gradients of the loss function
-objective = OptimizationFunction((p, data) -> loss(p, data, prob), AutoFiniteDiff())
-prob_opt = OptimizationProblem(objective, p0, data)
+## Use forward-mode automatic differentiation to compute gradients
+objective = OptimizationFunction((v, data) -> loss(v, data, prob), AutoForwardDiff())
+prob_opt = OptimizationProblem(objective, v0, data)
 ## run the optimization using the LBFGS optimizer
-res = solve(prob_opt, Optimization.LBFGS())
+res = solve(prob_opt, LBFGS())
 ## print the return code to check that the optimization was successful
 @show res.retcode
 
 # ## Results
-# Since the least squares optimization was run successfully, we can use the returned parameters as the ones that best fit the data. First of all let's compare them to the ground truth.
+# Since the least squares optimization was run successfully, we can use the returned parameters as the ones that best fit the data. First of all let's compare them to the ground truth. `res.u` is a `ComponentVector` with the same nested structure as `v0`, so the fitted values can be read by name (e.g. `res.u.g.nm.kₑₑ`).
 println("Ground truth parameters are $(p_ground_truth)")
 println("Fitted parameters are $(res.u)")
-# We observe that the fitted parameters are close to the groudn truth ones, certainly much closer than our initial guess.
+# We observe that the fitted parameters are close to the ground truth ones, certainly much closer than our initial guess.
 # Let's now simulate the model using these optimized parameters and compare the timeseries with the original data.
-setter!(prob, res.u)
-sol = solve(prob, Tsit5())
+sol = solve(remake_params(prob, res.u), Tsit5())
 
 fig = Figure(size = (1600, 800), fontsize=22)
 axs = [
-    Axis(fig[1,1], title=String(Symbol(states[1]))),
-    Axis(fig[1,2], title=String(Symbol(states[2]))),
-    Axis(fig[2,1], title=String(Symbol(states[3]))),
-    Axis(fig[2,2], title=String(Symbol(states[4]))),
-    Axis(fig[3,1], title=String(Symbol(states[5]))),
-    Axis(fig[3,2], title=String(Symbol(states[6]))),
-    Axis(fig[4,1], title=String(Symbol(states[7]))),
-    Axis(fig[4,2], title=String(Symbol(states[8])))
+    Axis(fig[1,1], title=String(state_names[1])),
+    Axis(fig[1,2], title=String(state_names[2])),
+    Axis(fig[2,1], title=String(state_names[3])),
+    Axis(fig[2,2], title=String(state_names[4])),
+    Axis(fig[3,1], title=String(state_names[5])),
+    Axis(fig[3,2], title=String(state_names[6])),
+    Axis(fig[4,1], title=String(state_names[7])),
+    Axis(fig[4,2], title=String(state_names[8]))
 ]
-for (i,s) in enumerate(states)
+for (i,s) in enumerate(state_syms_namespaced)
     lines!(axs[i], data[s], label="Data")
     lines!(axs[i], sol[s], label="Optimized Solution")
 end
 colsize!(fig.layout, 1, Relative(1/2))
 Legend(fig[5,1], last(axs))
 fig
-save(joinpath("../assets/", "opt_final.svg"), fig); # hide
+save(joinpath(@__DIR__(), "../assets/", "opt_final.svg"), fig); # hide
 #!nb # ![](../assets/opt_final.svg)
 # Notice how the simulation using the fitted parameters is much closer to the ground truth data compared to the previous figure where we compared the data to a simulation using our initial guess. 
 # The parameter fitting worked on two levels; the parameter values are close to the ground truth, and the simulation results when using them come close to the data. So even though the parameters do not exactly match their ground truth values, we notice that the simulation results closely match the underlying data, excluding the added observation noise. 
