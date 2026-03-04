@@ -50,11 +50,11 @@ noise_distribution = Normal(0, 0.1)
 data .+= rand(noise_distribution, size(data));
 
 # ## Initial Guess for Parameters
-# For most optimization methods we need to provide an initial guess for the parameters to be fitted. We use `make_component_array` to build a nested `ComponentVector` that carries symbolic parameter names alongside their values. This vector is a flat `AbstractArray` compatible with any optimizer, while still letting us access parameters by name (e.g. `v0.g.nm.kₑₑ`). The original `prob` is never mutated; `remake_params` creates a fresh `ODEProblem` from the updated vector on every call.
+# For most optimization methods we need to provide an initial guess for the parameters to be fitted. We use `extract_vars` to build a nested `ComponentVector` that carries symbolic parameter names alongside their values. This vector is a flat `AbstractArray` compatible with any optimizer, while still letting us access parameters by name (e.g. `v0.g.nm.kₑₑ`). The original `prob` is never mutated; `apply_vars` creates a fresh `ODEProblem` from the updated vector on every call.
 ## Build a ComponentVector for the parameters to be optimized and set initial guess values
-v0 = make_component_array(prob, [nm.kₑₑ, nm.kᵢᵢ, nm.kₑᵢ, nm.kᵢₑ])
+v0 = extract_vars(prob, [nm.kₑₑ, nm.kᵢᵢ, nm.kₑᵢ, nm.kᵢₑ])
 v0.g.nm.kₑₑ = 0.2; v0.g.nm.kᵢᵢ = 3.3; v0.g.nm.kₑᵢ = 2.0; v0.g.nm.kᵢₑ = 3.5
-sol = solve(remake_params(prob, v0), Tsit5())
+sol = solve(apply_vars(prob, v0), Tsit5())
 
 state_names = state_symbols(typeof(nm))
 state_syms_namespaced = [getproperty(nm, s) for s in state_names]
@@ -80,10 +80,10 @@ save(joinpath(@__DIR__(), "../assets/", "opt_init.svg"), fig); # hide
 #!nb # ![](../assets/opt_init.svg)
 
 # ## Parameter Fit using Optimization
-# We are now ready to define the loss function and the optimization problem and then solve it to get the optimized values for the four coupling parameters. The loss function is pure: it calls `remake_params` to create a new `ODEProblem` on each iteration rather than mutating a shared one. This is required for `AutoForwardDiff()`, which traces through the ODE solve by wrapping parameter values in `Dual` numbers.
+# We are now ready to define the loss function and the optimization problem and then solve it to get the optimized values for the four coupling parameters. The loss function is pure: it calls `apply_vars` to create a new `ODEProblem` on each iteration rather than mutating a shared one. This is required for `AutoForwardDiff()`, which traces through the ODE solve by wrapping parameter values in `Dual` numbers.
 ## define the least squares loss function
 function loss(v, data, prob)
-    prob2 = remake_params(prob, v)
+    prob2 = apply_vars(prob, v)
     sol = solve(prob2, Tsit5())
 
     return sum(abs2, sol .- data)
@@ -103,7 +103,7 @@ println("Ground truth parameters are $(p_ground_truth)")
 println("Fitted parameters are $(res.u)")
 # We observe that the fitted parameters are close to the ground truth ones, certainly much closer than our initial guess.
 # Let's now simulate the model using these optimized parameters and compare the timeseries with the original data.
-sol = solve(remake_params(prob, res.u), Tsit5())
+sol = solve(apply_vars(prob, res.u), Tsit5())
 
 fig = Figure(size = (1600, 800), fontsize=22)
 axs = [
