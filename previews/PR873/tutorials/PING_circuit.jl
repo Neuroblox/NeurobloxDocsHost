@@ -30,8 +30,6 @@ using Distributions
 using Random 
 using CairoMakie
 
-const PINGConnection = NeurobloxBasics.PINGConnection
-
 # ## Initialization 
 # Set the random seed to reproduce the plots as shown here exactly. If you want to probe how random variability changes the network, simply omit this line.
 Random.seed!(42);
