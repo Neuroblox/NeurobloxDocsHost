@@ -19,12 +19,12 @@ DensityRule(; density, rng = default_rng(), kwargs...) = DensityRule(density, rn
 
     neurons_dst = dst.excis
     neurons_src = src.excis
-    subrule = make_rule(neurons_src[1], neurons_dst[1]; kwargs...)
 
     for ns in src.excis
         idxs = findall(rand(rng, N_dst) .&lt;= density)
         for i in idxs
-            system_wiring_rule!(g, ns, neurons_dst[i], DefaultRule(; kwargs...))
+            subrule = make_rule(ns, neurons_dst[i]; kwargs...)
+            system_wiring_rule!(g, ns, neurons_dst[i], subrule)
         end
     end
 end</code></pre><p>Note that we have used <code>make_rule</code> to define the connection rule for the neurons inside the circuits, and when we call <code>system_wiring_rule!</code> for the individual neurons, the <code>subrule</code> is what is passed in.</p><p>Suppose now that we have made some completely new neuron type which has some completely new connection rule. To make this work with the existing <code>DensityRule</code>, we should write dispatches to <code>make_rule</code>, and define how to wire our new neurons by writing a dispatch to <code>system_wiring_rule!</code>:</p><pre><code class="language-julia hljs">struct MyNeuron
@@ -39,4 +39,4 @@ function system_wiring_rule!(src::MyNeuron, dst::MyNeuron, conn::MyNeuronRule)
     ...
 end
 
-make_rule(::MyNeuron, ::MyNeuron; kwargs...) = MyNeuronRule(; kwargs...)</code></pre></article><nav class="docs-footer"><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.17.0 on <span class="colophon-date" title="Thursday 5 March 2026 17:48">Thursday 5 March 2026</span>. Using Julia version 1.12.5.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
+make_rule(::MyNeuron, ::MyNeuron; kwargs...) = MyNeuronRule(; kwargs...)</code></pre></article><nav class="docs-footer"><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.17.0 on <span class="colophon-date" title="Thursday 5 March 2026 22:19">Thursday 5 March 2026</span>. Using Julia version 1.12.5.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
