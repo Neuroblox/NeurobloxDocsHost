@@ -86,7 +86,7 @@ density_FSI_MSN = 0.15 ## fraction of FSIs connecting to the MSN population
 weight_FSI_MSN = ḡ_FSI_MSN / (N_FSI * density_FSI_MSN) ## normalized synaptic weight
 
 g = GraphSystem()
-add_connection!(g, fsi => msn, weight = weight_FSI_MSN, density = density_FSI_MSN)
+add_connection!(g, fsi, msn, IndegreeConstrainedRule(; density = density_FSI_MSN, weight = weight_FSI_MSN))
 
 prob = SDEProblem(g, [], tspan, [])
 ens_prob = EnsembleProblem(prob)
@@ -136,10 +136,10 @@ weight_GPe_STN = ḡ_GPe_STN / (N_GPe * density_GPe_STN)
 weight_STN_FSI = ḡ_STN_FSI / (N_STN * density_STN_FSI)
 
 g = GraphSystem()
-add_connection!(g, fsi => msn, weight = weight_FSI_MSN, density = density_FSI_MSN)
-add_connection!(g, msn => gpe, weight = weight_MSN_GPe, density = density_MSN_GPe)
-add_connection!(g, gpe => stn, weight = weight_GPe_STN, density = density_GPe_STN)
-add_connection!(g, stn => fsi, weight = weight_STN_FSI, density = density_STN_FSI)
+add_connection!(g, fsi, msn, IndegreeConstrainedRule(;density = density_FSI_MSN, weight = weight_FSI_MSN))
+add_connection!(g, msn, gpe, IndegreeConstrainedRule(;density = density_MSN_GPe, weight = weight_MSN_GPe))
+add_connection!(g, gpe, stn, IndegreeConstrainedRule(;density = density_GPe_STN, weight = weight_GPe_STN))
+add_connection!(g, stn, fsi, IndegreeConstrainedRule(;density = density_STN_FSI, weight = weight_STN_FSI))
 
 prob = SDEProblem(g, [], tspan, [])
 ens_prob = EnsembleProblem(prob)
@@ -198,10 +198,10 @@ fig
 weight_FSI_MSN = ḡ_FSI_MSN / (N_FSI * density_FSI_MSN) ## normalized synaptic weight
 
 g = GraphSystem()
-add_connection!(g, fsi => msn, weight = weight_FSI_MSN, density = density_FSI_MSN)
-add_connection!(g, msn => gpe, weight = weight_MSN_GPe, density = density_MSN_GPe)
-add_connection!(g, gpe => stn, weight = weight_GPe_STN, density = density_GPe_STN)
-add_connection!(g, stn => fsi, weight = weight_STN_FSI, density = density_STN_FSI)
+add_connection!(g, fsi, msn, IndegreeConstrainedRule(; density = density_FSI_MSN, weight = weight_FSI_MSN))
+add_connection!(g, msn, gpe, IndegreeConstrainedRule(; density = density_MSN_GPe, weight = weight_MSN_GPe))
+add_connection!(g, gpe, stn, IndegreeConstrainedRule(; density = density_GPe_STN, weight = weight_GPe_STN))
+add_connection!(g, stn, fsi, IndegreeConstrainedRule(; density = density_STN_FSI, weight = weight_STN_FSI))
 
 prob = SDEProblem(g, [], tspan, [])
 ens_prob = EnsembleProblem(prob)

@@ -29,9 +29,9 @@ nn3 = HHNeuronExci(name=Symbol(&quot;nrn3&quot;), I_bg=1.4, namespace=global_nam
 
 # defien graph and connect the nodes with the edges (synapses in this case), with the synaptic &#39;weights&#39; specified as arguments
 g = GraphSystem(name=global_namespace)
-add_connection!(g, nn1 =&gt; nn2, weight = 1) ##connection from neuron 1 to neuron 2 (nn1 to nn2)
-add_connection!(g, nn2 =&gt; nn3, weight = 0.2) ##connection from neuron 2 to neuron 3 (nn2 to nn3)
-add_connection!(g, nn1 =&gt; nn3, weight = 0.5) ##connection from neuron 1 to neuron 3 (nn2 to nn3)
+add_connection!(g, nn1, nn2, DefaultRule(weight = 1.)) ##connection from neuron 1 to neuron 2 (nn1 to nn2)
+add_connection!(g, nn2, nn3, DefaultRule(weight = 0.2)) ##connection from neuron 2 to neuron 3 (nn2 to nn3)
+add_connection!(g, nn1, nn3, DefaultRule(weight = 0.5)) ##connection from neuron 1 to neuron 3 (nn2 to nn3)
 
 # create an ODESystem from the graph and then solve it using an ODE solver
 prob = ODEProblem(g, [], (0.0, 1000), [])
@@ -56,8 +56,8 @@ n_excis = [HHNeuronExci(
 g = GraphSystem()
 
 for i in 1:N_exci
-    add_connection!(g, n_inh =&gt; n_excis[i], weight = 1.0)
-    add_connection!(g, n_excis[i] =&gt; n_inh, weight = 1.0)
+    add_connection!(g, n_inh, n_excis[i], DefaultRule(weight = 1.0))
+    add_connection!(g, n_excis[i], n_inh, DefaultRule(weight = 1.0))
 end
 prob = ODEProblem(g, [], (0.0, 1000), [])
 sol = solve(prob, Vern7(), saveat=0.1)
@@ -67,13 +67,13 @@ wta1 = WinnerTakeAll(name=Symbol(&quot;wta1&quot;), I_bg=5.0, N_exci=N_exci, nam
 wta2 = WinnerTakeAll(name=Symbol(&quot;wta2&quot;), I_bg=4.0, N_exci=N_exci, namespace=global_namespace)
 
 g = GraphSystem()
-add_connection!(g, wta1 =&gt; wta2, weight=1, density=0.5) ##density keyword sets the connection probability from each excitatory neuron of source WTA circuit to each excitatory neuron of target WTA circuit
+add_connection!(g, wta1, wta2, DensityRule(density = 0.5, weight = 1)) ##density keyword sets the connection probability from each excitatory neuron of source WTA circuit to each excitatory neuron of target WTA circuit
 
 prob = ODEProblem(g, [], (0.0, 1000), [])
 sol = solve(prob, Vern7(), saveat=0.1)
 
 neuron_set = get_neurons([wta1, wta2]) ## extract neurons from a composite blocks
-stackplot(neuron_set,sol)</code></pre><img src="6af03ac0.png" alt="Example block output"/><h2 id="Creating-a-single-cortical-superficial-layer-block-by-connecting-multiple-WTA-circuits"><a class="docs-heading-anchor" href="#Creating-a-single-cortical-superficial-layer-block-by-connecting-multiple-WTA-circuits">Creating a single cortical superficial layer block by connecting multiple WTA circuits</a><a id="Creating-a-single-cortical-superficial-layer-block-by-connecting-multiple-WTA-circuits-1"></a><a class="docs-heading-anchor-permalink" href="#Creating-a-single-cortical-superficial-layer-block-by-connecting-multiple-WTA-circuits" title="Permalink"></a></h2><p>This model is SCORT in [1] and looks like this <img src="../../assets/neural_assembly_4.png" alt="fig4"/></p><pre><code class="language-julia hljs">global_namespace=:g
+stackplot(neuron_set,sol)</code></pre><img src="aa7fffe2.png" alt="Example block output"/><h2 id="Creating-a-single-cortical-superficial-layer-block-by-connecting-multiple-WTA-circuits"><a class="docs-heading-anchor" href="#Creating-a-single-cortical-superficial-layer-block-by-connecting-multiple-WTA-circuits">Creating a single cortical superficial layer block by connecting multiple WTA circuits</a><a id="Creating-a-single-cortical-superficial-layer-block-by-connecting-multiple-WTA-circuits-1"></a><a class="docs-heading-anchor-permalink" href="#Creating-a-single-cortical-superficial-layer-block-by-connecting-multiple-WTA-circuits" title="Permalink"></a></h2><p>This model is SCORT in [1] and looks like this <img src="../../assets/neural_assembly_4.png" alt="fig4"/></p><pre><code class="language-julia hljs">global_namespace=:g
 N_wta=10 ## number of WTA circuits
 # parameters
 N_exci=5   ##number of pyramidal neurons in each lateral inhibition (WTA) circuit
@@ -106,17 +106,17 @@ g = GraphSystem()
 for i in 1:N_wta
     for j in 1:N_wta
         if j != i
-            add_connection!(g, wtas[i] =&gt; wtas[j], weight=1, density=density)
+            add_connection!(g, wtas[i], wtas[j], DensityRule(density = density, weight = 1))
         end
     end
-    add_connection!(g, n_ff_inh =&gt; wtas[i], weight=1)
+    add_connection!(g, n_ff_inh, wtas[i], DefaultRule(weight = 1))
 end
 
 prob = ODEProblem(g, [], (0.0, 1000), [])
 sol = solve(prob, Vern7(), saveat=0.1)
 
 neuron_set = get_neurons(vcat(wtas, n_ff_inh)) ## extract neurons from a composite blocks
-stackplot(neuron_set, sol)</code></pre><img src="e81b631c.png" alt="Example block output"/><p>Sugestion : try different connection densities and weights and see how it affects the population activity.</p><h2 id="Connecting-the-cortical-superficial-layer-block-to-an-ascending-system-block"><a class="docs-heading-anchor" href="#Connecting-the-cortical-superficial-layer-block-to-an-ascending-system-block">Connecting the cortical superficial layer block to an ascending system block</a><a id="Connecting-the-cortical-superficial-layer-block-to-an-ascending-system-block-1"></a><a class="docs-heading-anchor-permalink" href="#Connecting-the-cortical-superficial-layer-block-to-an-ascending-system-block" title="Permalink"></a></h2><p>Now we will expand on the SCORT block of the previous section by defining a block representing an ascending system (ASC1 in [1]) and then connecting the two blocks together.</p><pre><code class="language-julia hljs">global_namespace=:g
+stackplot(neuron_set, sol)</code></pre><img src="60d3fae2.png" alt="Example block output"/><p>Sugestion : try different connection densities and weights and see how it affects the population activity.</p><h2 id="Connecting-the-cortical-superficial-layer-block-to-an-ascending-system-block"><a class="docs-heading-anchor" href="#Connecting-the-cortical-superficial-layer-block-to-an-ascending-system-block">Connecting the cortical superficial layer block to an ascending system block</a><a id="Connecting-the-cortical-superficial-layer-block-to-an-ascending-system-block-1"></a><a class="docs-heading-anchor-permalink" href="#Connecting-the-cortical-superficial-layer-block-to-an-ascending-system-block" title="Permalink"></a></h2><p>Now we will expand on the SCORT block of the previous section by defining a block representing an ascending system (ASC1 in [1]) and then connecting the two blocks together.</p><pre><code class="language-julia hljs">global_namespace=:g
 
 # define ascending system block using a Next Generation Neural Mass model as described in Byrne et. al. 2020.
 # the parameters are fixed to generate a 16 Hz modulating frequency in the cortical neurons
@@ -128,7 +128,7 @@ stackplot(neuron_set, sol)</code></pre><img src="e81b631c.png" alt="Example bloc
 
 # define graph and connect ASC1-&gt;CB
 g = GraphSystem()
-add_connection!(g, ASC1 =&gt; CB, weight=44)
+add_connection!(g, ASC1, CB, DefaultRule(weight = 44))
 
 # solve the system for time 0 to 1000 ms
 
@@ -154,10 +154,10 @@ image_sample = 2 ## set which image to input (from 1 to 1000)
 pixels = reshape(pixels, 15, 15)## reshape into 15 X 15 square image matrix
 heatmap(pixels,colormap = :gray1) #input image matrix seen as heatmap</code></pre><img src="517cf051.png" alt="Example block output"/><p>assemble the blox into a graph and set connections with their keword arguments like connection weight and connection density</p><pre><code class="language-julia hljs">g = GraphSystem()
 
-add_connection!(g, stim =&gt; VAC, weight=14)
-add_connection!(g, ASC1 =&gt; VAC, weight=44)
-add_connection!(g, ASC1 =&gt; AC, weight=44)
-add_connection!(g, VAC =&gt; AC, weight=3, density=0.08)
+add_connection!(g, stim, VAC, DefaultRule(weight = 14))
+add_connection!(g, ASC1, VAC, DefaultRule(weight = 44))
+add_connection!(g, ASC1, AC, DefaultRule(weight = 44))
+add_connection!(g, VAC, AC, HypergeometricRule(density = 0.08, weight = 3))
 
 # define system and solve
 
@@ -175,4 +175,4 @@ stackplot(AC_neuron_set[1:n_neurons], sol)</code></pre><img src="4ab9a7a7.png" a
 fig = Figure();
 ax = Axis(fig[1,1]; xlabel = &quot;time (ms)&quot;, ylabel = &quot;Voltage (mv)&quot;)
 lines!(ax, sol.t, mnv)
-fig ## to display the figure</code></pre><img src="512bb47e.png" alt="Example block output"/><p>and finally the AC powerspectrum</p><pre><code class="language-julia hljs">powerspectrumplot(AC, sol)</code></pre><img src="885a477e.png" alt="Example block output"/><p>Sugestion : Try changing the image samples and notice the change in the spatial firing patterns in VAC and AC neurons. One can make multiple cortical blocks simillar to AC and connect them in various connection topologies. All of them can directly or indirectly get input from VAC.</p><h2 id="References"><a class="docs-heading-anchor" href="#References">References</a><a id="References-1"></a><a class="docs-heading-anchor-permalink" href="#References" title="Permalink"></a></h2><p>[1] Pathak, A., Brincat, S.L., Organtzidis, H. et al. Biomimetic model of corticostriatal micro-assemblies discovers a neural code. Nat Commun (2025). https://doi.org/10.1038/s41467-025-67076-x</p><hr/><p><em>This page was generated using <a href="https://github.com/fredrikekre/Literate.jl">Literate.jl</a>.</em></p></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../basal_ganglia/">« Basal Ganglia Model and Parkinson&#39;s Disease Simulation</a><a class="docs-footer-nextpage" href="../../tutorials/receptors/">Receptor Dynamics and Interventions »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.17.0 on <span class="colophon-date" title="Wednesday 4 March 2026 21:13">Wednesday 4 March 2026</span>. Using Julia version 1.12.5.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
+fig ## to display the figure</code></pre><img src="512bb47e.png" alt="Example block output"/><p>and finally the AC powerspectrum</p><pre><code class="language-julia hljs">powerspectrumplot(AC, sol)</code></pre><img src="885a477e.png" alt="Example block output"/><p>Sugestion : Try changing the image samples and notice the change in the spatial firing patterns in VAC and AC neurons. One can make multiple cortical blocks simillar to AC and connect them in various connection topologies. All of them can directly or indirectly get input from VAC.</p><h2 id="References"><a class="docs-heading-anchor" href="#References">References</a><a id="References-1"></a><a class="docs-heading-anchor-permalink" href="#References" title="Permalink"></a></h2><p>[1] Pathak, A., Brincat, S.L., Organtzidis, H. et al. Biomimetic model of corticostriatal micro-assemblies discovers a neural code. Nat Commun (2025). https://doi.org/10.1038/s41467-025-67076-x</p><hr/><p><em>This page was generated using <a href="https://github.com/fredrikekre/Literate.jl">Literate.jl</a>.</em></p></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../basal_ganglia/">« Basal Ganglia Model and Parkinson&#39;s Disease Simulation</a><a class="docs-footer-nextpage" href="../../tutorials/receptors/">Receptor Dynamics and Interventions »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.17.0 on <span class="colophon-date" title="Friday 6 March 2026 13:28">Friday 6 March 2026</span>. Using Julia version 1.12.5.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>

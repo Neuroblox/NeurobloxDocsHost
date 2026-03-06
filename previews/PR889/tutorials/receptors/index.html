@@ -9,9 +9,9 @@ using CairoMakie
         ni = HHNeuronInhib(; I_bg=0.4)
     end
     @connections begin
-        ne =&gt; ni , [weight=0.1, synapse=Glu_AMPA_Synapse(name=:ampa)]
-        ne =&gt; ni , [weight=0.1, synapse=NMDA_Synapse(name=:nmda)]
-        ni =&gt; ne , [weight=1, synapse=GABA_A_Synapse(name=:gabaa)]
+        ne =&gt; ni , (weight=0.1, synapse=Glu_AMPA_Synapse(name=:ampa))
+        ne =&gt; ni , (weight=0.1, synapse=NMDA_Synapse(name=:nmda))
+        ni =&gt; ne , (weight=1, synapse=GABA_A_Synapse(name=:gabaa))
      end
 end</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">GraphSystem(...2 nodes and 3 connections...)</code></pre><p>Using the <code>stackplot</code> recipe we plot the voltage of both neurons (blue for excitatory and red for inhibitory).</p><pre><code class="language-julia hljs">prob = ODEProblem(g, [], (0, 1000))
 sol = solve(prob, Vern7())
@@ -22,9 +22,9 @@ stackplot([ne, ni], sol)</code></pre><img src="93206c8a.png" alt="Example block 
         ni = HHNeuronInhib(; I_bg=0.4)
     end
     @connections begin
-        ne =&gt; ni , [weight=0.1, synapse=Glu_AMPA_Synapse(name=:glu)]
-        ne =&gt; ni , [weight=0.1, synapse=NMDA_Synapse(name=:nmda)]
-        ni =&gt; ne , [weight=1, synapse=GABA_B_Synapse(name=:gabab)]
+        ne =&gt; ni , (weight=0.1, synapse=Glu_AMPA_Synapse(name=:glu))
+        ne =&gt; ni , (weight=0.1, synapse=NMDA_Synapse(name=:nmda))
+        ni =&gt; ne , (weight=1, synapse=GABA_B_Synapse(name=:gabab))
     end
 end
 prob = ODEProblem(g, [], (0, 1000))
@@ -36,7 +36,7 @@ stackplot([ne, ni], sol)</code></pre><img src="6d147a1d.png" alt="Example block 
         Layer_2_3 = Cortical(N_wta=20, N_exci=5, density=0.05, weight=1, I_bg_ar=4, G_syn_inhib=4, τ_inhib=70, G_syn_ff_inhib=1.5)
     end
     @connections begin
-        Brainstem =&gt; Layer_2_3, [weight = 20]
+        Brainstem =&gt; Layer_2_3, (weight = 20)
     end
 end
 
@@ -87,4 +87,4 @@ ax = Axis(fig[1,1], title=&quot;Cortical LFP&quot;)
 meanfield!(ax, Layer_2_3, sol; label=&quot;Control&quot;)
 meanfield!(ax, Layer_2_3, sol_EI; color=:red, label=&quot;E-I Intervention&quot;)
 axislegend(position=:rt, framevisible = false)
-fig</code></pre><img src="6d4bbb53.png" alt="Example block output"/><p>We solved the experiment problem and then used the solution objects to plot the cortical LFP activity for both conditions.</p><hr/><p><em>This page was generated using <a href="https://github.com/fredrikekre/Literate.jl">Literate.jl</a>.</em></p></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../../examples/neural_assembly/">« Bottom-up construction of a neural assembly</a><a class="docs-footer-nextpage" href="../PING_circuit/">Pyramidal-Interneuron Gamma network »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.17.0 on <span class="colophon-date" title="Wednesday 4 March 2026 21:13">Wednesday 4 March 2026</span>. Using Julia version 1.12.5.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
+fig</code></pre><img src="6d4bbb53.png" alt="Example block output"/><p>We solved the experiment problem and then used the solution objects to plot the cortical LFP activity for both conditions.</p><hr/><p><em>This page was generated using <a href="https://github.com/fredrikekre/Literate.jl">Literate.jl</a>.</em></p></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../../examples/neural_assembly/">« Bottom-up construction of a neural assembly</a><a class="docs-footer-nextpage" href="../PING_circuit/">Pyramidal-Interneuron Gamma network »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.17.0 on <span class="colophon-date" title="Friday 6 March 2026 13:28">Friday 6 March 2026</span>. Using Julia version 1.12.5.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>

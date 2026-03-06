@@ -70,24 +70,24 @@ spike_rate_B = (distribution=Normal(μ_B, σ), dt=dt_spike_rate) # spike rate di
         n_inh = LIFInhCircuit(; N_neurons = N_I, weight = 1.0, exci_scaling_factor, inh_scaling_factor)
     end
     @connections begin
-        background_input => n_A, [weight = 1]
-        background_input => n_B, [weight = 1]
-        background_input => n_ns, [weight = 1]
-        background_input => n_inh, [weight = 1]
-        stim_A => n_A, [weight = 1]
-        stim_B => n_B, [weight = 1]
-        n_A => n_B, [weight = w₋]
-        n_A => n_ns, [weight = 1]
-        n_A => n_inh, [weight = 1]
-        n_B => n_A, [weight = w₋]
-        n_B => n_ns, [weight = 1]
-        n_B => n_inh, [weight = 1]
-        n_ns => n_A, [weight = w₋]
-        n_ns => n_B, [weight = w₋]
-        n_ns => n_inh, [weight = 1]
-        n_inh => n_A, [weight = 1]
-        n_inh => n_B, [weight = 1]
-        n_inh => n_ns, [weight = 1]
+        background_input => n_A, (weight = 1)
+        background_input => n_B, (weight = 1)
+        background_input => n_ns, (weight = 1)
+        background_input => n_inh, (weight = 1)
+        stim_A => n_A, (weight = 1)
+        stim_B => n_B, (weight = 1)
+        n_A => n_B, (weight = w₋)
+        n_A => n_ns, (weight = 1)
+        n_A => n_inh, (weight = 1)
+        n_B => n_A, (weight = w₋)
+        n_B => n_ns, (weight = 1)
+        n_B => n_inh, (weight = 1)
+        n_ns => n_A, (weight = w₋)
+        n_ns => n_B, (weight = w₋)
+        n_ns => n_inh, (weight = 1)
+        n_inh => n_A, (weight = 1)
+        n_inh => n_B, (weight = 1)
+        n_inh => n_ns, (weight = 1)
     end
 end
 

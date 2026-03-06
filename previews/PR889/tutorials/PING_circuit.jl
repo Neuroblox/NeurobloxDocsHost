@@ -81,13 +81,13 @@ I_bath = -0.7; ## External inhibitory bath for inhibitory neurons - value from p
     @connections begin
         for ne ∈ exci
             for ni ∈ inhib
-                ne => ni, [weight=g_EI/N] ## Add the E -> I connections
-                ni => ne, [weight=g_IE/N] ## Add the I -> E connections
+                ne => ni, PINGConnection(g_EI/N) ## Add the E -> I connections
+                ni => ne, PINGConnection(g_IE/N) ## Add the I -> E connections
             end
         end
         for ni1 ∈ inhib
             for ni2 ∈ inhib
-                ni1 => ni2, [weight=g_II/N] ## Add the I -> I connections
+                ni1 => ni2, PINGConnection(g_II/N) ## Add the I -> I connections
             end
         end
     end

@@ -17,9 +17,9 @@ using CairoMakie
         ni = HHNeuronInhib(; I_bg=0.4)
     end
     @connections begin
-        ne => ni , [weight=0.1, synapse=Glu_AMPA_Synapse(name=:ampa)]
-        ne => ni , [weight=0.1, synapse=NMDA_Synapse(name=:nmda)]
-        ni => ne , [weight=1, synapse=GABA_A_Synapse(name=:gabaa)]
+        ne => ni , (weight=0.1, synapse=Glu_AMPA_Synapse(name=:ampa))
+        ne => ni , (weight=0.1, synapse=NMDA_Synapse(name=:nmda))
+        ni => ne , (weight=1, synapse=GABA_A_Synapse(name=:gabaa))
      end
 end
 
@@ -38,9 +38,9 @@ stackplot([ne, ni], sol)
         ni = HHNeuronInhib(; I_bg=0.4)
     end
     @connections begin
-        ne => ni , [weight=0.1, synapse=Glu_AMPA_Synapse(name=:glu)]
-        ne => ni , [weight=0.1, synapse=NMDA_Synapse(name=:nmda)]
-        ni => ne , [weight=1, synapse=GABA_B_Synapse(name=:gabab)]
+        ne => ni , (weight=0.1, synapse=Glu_AMPA_Synapse(name=:glu))
+        ne => ni , (weight=0.1, synapse=NMDA_Synapse(name=:nmda))
+        ni => ne , (weight=1, synapse=GABA_B_Synapse(name=:gabab))
     end
 end
 prob = ODEProblem(g, [], (0, 1000))
@@ -61,7 +61,7 @@ stackplot([ne, ni], sol)
         Layer_2_3 = Cortical(N_wta=20, N_exci=5, density=0.05, weight=1, I_bg_ar=4, G_syn_inhib=4, τ_inhib=70, G_syn_ff_inhib=1.5)
     end
     @connections begin
-        Brainstem => Layer_2_3, [weight = 20]
+        Brainstem => Layer_2_3, (weight = 20)
     end
 end
 
