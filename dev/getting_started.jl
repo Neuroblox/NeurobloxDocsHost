@@ -47,10 +47,10 @@ using CairoMakie
         WC2 = WilsonCowan()
     end
     @connections begin
-        WC1 => WC1, [weight = -1] ## recurrent connection from WC1 to itself
-        WC1 => WC2, [weight =  7] ## connection from WC1 to WC2
-        WC2 => WC1, [weight =  4] ## connection from WC2 to WC1
-        WC2 => WC2, [weight = -1] ## recurrent connection from WC2 to itself
+        WC1 => WC1, (weight = -1) ## recurrent connection from WC1 to itself
+        WC1 => WC2, (weight =  7) ## connection from WC1 to WC2
+        WC2 => WC1, (weight =  4) ## connection from WC2 to WC1
+        WC2 => WC2, (weight = -1) ## recurrent connection from WC2 to itself
     end
 end
 # Here, we've created two Wilson-Cowan blox and connected them as nodes in a directed graph. Each blox connects to itself and to the other blox. 

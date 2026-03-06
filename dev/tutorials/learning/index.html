@@ -30,10 +30,10 @@ image_set = CSV.read(Downloads.download(&quot;raw.githubusercontent.com/Neuroblo
     # learning rule
     hebbian_cort = HebbianPlasticity(K=5e-4, W_lim=15, t_pre=trial_dur, t_post=trial_dur)
     @connections begin
-        stim =&gt; VAC, [weight=14]
-        ASC1 =&gt; VAC, [weight=44]
-        ASC1 =&gt; AC, [weight=44]
-        VAC =&gt; AC, [weight=3, density=0.1, learning_rule = hebbian_cort] ## pass learning rule as a keyword argument
+        stim =&gt; VAC, (weight=14)
+        ASC1 =&gt; VAC, (weight=44)
+        ASC1 =&gt; AC, (weight=44)
+        VAC =&gt; AC, HypergeometricRule(weight=3, density=0.1, learning_rule = hebbian_cort) ## pass learning rule as a keyword argument
     end
 end
 agent = Agent(g);
@@ -47,7 +47,7 @@ run_experiment!(agent, env; t_warmup=200.0, alg=Vern7())
 
 adjacency(fig[1,2], agent; title=&quot;Final weights&quot;, colorrange=(0,7))
 fig</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">┌ Warning: No action selection provided
-└ @ NeurobloxBase ~/actions-runner/_work/NeurobloxDev/NeurobloxDev/NeurobloxBase/src/reinforcement_learning.jl:97</code></pre><p><img src="../../assets/adj_open.svg" alt/> Notice how the weight values in the upper left corner (connections with <code>HebbianPlasticity</code>) have changed after simulation.</p><h2 id="Cortico-Striatal-Circuit-Performing-Category-Learning"><a class="docs-heading-anchor" href="#Cortico-Striatal-Circuit-Performing-Category-Learning">Cortico-Striatal Circuit Performing Category Learning</a><a id="Cortico-Striatal-Circuit-Performing-Category-Learning-1"></a><a class="docs-heading-anchor-permalink" href="#Cortico-Striatal-Circuit-Performing-Category-Learning" title="Permalink"></a></h2><p>This is one simplified biological instantiation of an RL system. It is carrying out a simple RL behavior but not faithfully simulating physiology. The experiment we are simulating here is the category learning experiment [Antzoulatos2014] which was successfully modeled through a detailed corticostriatal model [2].</p><pre><code class="language-julia hljs">time_block_dur = 90.0 ## ms (size of discrete time blocks)
+└ @ NeurobloxBase ~/actions-runner/_work/NeurobloxDev/NeurobloxDev/NeurobloxBase/src/reinforcement_learning.jl:96</code></pre><p><img src="../../assets/adj_open.svg" alt/> Notice how the weight values in the upper left corner (connections with <code>HebbianPlasticity</code>) have changed after simulation.</p><h2 id="Cortico-Striatal-Circuit-Performing-Category-Learning"><a class="docs-heading-anchor" href="#Cortico-Striatal-Circuit-Performing-Category-Learning">Cortico-Striatal Circuit Performing Category Learning</a><a id="Cortico-Striatal-Circuit-Performing-Category-Learning-1"></a><a class="docs-heading-anchor-permalink" href="#Cortico-Striatal-Circuit-Performing-Category-Learning" title="Permalink"></a></h2><p>This is one simplified biological instantiation of an RL system. It is carrying out a simple RL behavior but not faithfully simulating physiology. The experiment we are simulating here is the category learning experiment [Antzoulatos2014] which was successfully modeled through a detailed corticostriatal model [2].</p><pre><code class="language-julia hljs">time_block_dur = 90.0 ## ms (size of discrete time blocks)
 N_trials = 100 ## number of trials
 trial_dur = 1000 ## ms
 
@@ -69,22 +69,22 @@ trial_dur = 1000 ## ms
 hebbian_mod = HebbianModulationPlasticity(K=0.06, decay=0.01, α=2.5, θₘ=1, modulator=SNcb, t_pre=trial_dur, t_post=trial_dur, t_mod=time_block_dur)
 hebbian_cort = HebbianPlasticity(K=5e-4, W_lim=7, t_pre=trial_dur, t_post=trial_dur)
     @connections begin
-        stim =&gt; VAC, [weight=14]
-        ASC1 =&gt; VAC, [weight=44]
-        ASC1 =&gt; AC, [weight=44]
-        VAC =&gt; AC, [weight=3, density=0.1, learning_rule = hebbian_cort]
-        AC =&gt; STR1, [weight = 0.075, density =  0.04, learning_rule =  hebbian_mod]
-        AC =&gt; STR2, [weight =  0.075, density =  0.04, learning_rule =  hebbian_mod]
-        tan_pop1 =&gt; STR1, [weight = 1, t_event = time_block_dur]
-        tan_pop2 =&gt; STR2, [weight = 1, t_event = time_block_dur]
-        STR1 =&gt; tan_pop1, [weight = 1]
-        STR2 =&gt; tan_pop1, [weight = 1]
-        STR1 =&gt; tan_pop2, [weight = 1]
-        STR2 =&gt; tan_pop2, [weight = 1]
-        STR1 =&gt; STR2, [weight = 1, t_event = 2*time_block_dur]
-        STR2 =&gt; STR1, [weight = 1, t_event = 2*time_block_dur]
-        STR1 =&gt; SNcb, [weight = 1]
-        STR2 =&gt; SNcb, [weight = 1]
+        stim =&gt; VAC, (weight=14)
+        ASC1 =&gt; VAC, (weight=44)
+        ASC1 =&gt; AC, (weight=44)
+        VAC =&gt; AC, HypergeometricRule(weight=3, density=0.1, learning_rule = hebbian_cort)
+        AC =&gt; STR1, HypergeometricRule(weight = 0.075, density =  0.04, learning_rule =  hebbian_mod)
+        AC =&gt; STR2, HypergeometricRule(weight =  0.075, density =  0.04, learning_rule =  hebbian_mod)
+        tan_pop1 =&gt; STR1, EventRule(weight = 1, t_event = time_block_dur)
+        tan_pop2 =&gt; STR2, EventRule(weight = 1, t_event = time_block_dur)
+        STR1 =&gt; tan_pop1, (weight = 1)
+        STR2 =&gt; tan_pop1, (weight = 1)
+        STR1 =&gt; tan_pop2, (weight = 1)
+        STR2 =&gt; tan_pop2, (weight = 1)
+        STR1 =&gt; STR2, EventRule(weight = 1, t_event = 2*time_block_dur)
+        STR2 =&gt; STR1, EventRule(weight = 1, t_event = 2*time_block_dur)
+        STR1 =&gt; SNcb, (weight = 1)
+        STR2 =&gt; SNcb, (weight = 1)
         # action selection connections
         STR1 =&gt; AS;
         STR2 =&gt; AS;
@@ -97,9 +97,9 @@ fig = Figure(title=&quot;Adjacency matrix&quot;, size = (1600, 800))
 
 adjacency(fig[1,1], agent; title = &quot;Before Learning&quot;, colorrange=(0,0.2))
 
-trace = run_experiment!(agent, env; t_warmup=200.0, alg=Vern7(), verbose=true)</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">(trial = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10  …  91, 92, 93, 94, 95, 96, 97, 98, 99, 100], correct = Bool[0, 0, 0, 1, 0, 0, 1, 1, 0, 0  …  0, 0, 0, 0, 0, 0, 0, 1, 0, 1], action = [1, 2, 2, 2, 2, 1, 2, 2, 1, 1  …  1, 2, 1, 1, 2, 1, 1, 2, 2, 1], time = [4.490504131, 3.106679627, 2.939084498, 5.731987475, 3.063808155, 4.115675233, 3.033205455, 4.095759283, 4.230706868, 2.893086571  …  4.062811664, 3.018326122, 4.264098218, 4.077888807, 2.869370332, 3.022628284, 4.230531115, 4.077483684, 2.858101887, 4.275293392])</code></pre><p><code>trace</code> is a vector of <code>NamedTuple</code>s containing useful outcomes for each trial of the experiment:</p><pre><code class="language-julia hljs">trace.trial ## trial indices
+trace = run_experiment!(agent, env; t_warmup=200.0, alg=Vern7(), verbose=true)</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">(trial = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10  …  91, 92, 93, 94, 95, 96, 97, 98, 99, 100], correct = Bool[0, 0, 0, 1, 0, 0, 1, 1, 0, 0  …  0, 0, 0, 0, 0, 0, 0, 1, 0, 1], action = [1, 2, 2, 2, 2, 1, 2, 2, 1, 1  …  1, 2, 1, 1, 2, 1, 1, 2, 2, 1], time = [4.773902605, 4.155888465, 2.952752531, 2.865505334, 4.299566167, 3.056742659, 4.160706822, 3.042565574, 4.171010514, 4.258345381  …  3.029097784, 4.133462827, 3.056486647, 4.12214784, 3.05875473, 4.105799123, 3.030982135, 4.283201795, 4.102330231, 2.929740524])</code></pre><p><code>trace</code> is a vector of <code>NamedTuple</code>s containing useful outcomes for each trial of the experiment:</p><pre><code class="language-julia hljs">trace.trial ## trial indices
 trace.correct ## whether the response was correct or not on each trial
 trace.action; ## what responce was made on each trial, 1 is left and 2 is right
 
 adjacency(fig[1,2], agent; title = &quot;After Learning&quot;, colorrange=(0,0.2))
-fig</code></pre><p><img src="../../assets/adj_RL.svg" alt/></p><p>Notice the changes in weight values after the RL experiment.</p><h2 id="Challenge-Problems"><a class="docs-heading-anchor" href="#Challenge-Problems">Challenge Problems</a><a id="Challenge-Problems-1"></a><a class="docs-heading-anchor-permalink" href="#Challenge-Problems" title="Permalink"></a></h2><ul><li>Visualize the model&#39;s performance in the category learning task as a function of time (trials). Hint: For correct trials <code>trace.correct = 1</code> and for incorrect trials <code>trace.correct = 0</code>.</li><li>Since this is an oversimplified instantiation of a cortico-striatal model, it is highly sensitive to the parameters, such that if we change the values of <code>TAN</code> parameters (maximum activity <code>κ</code>), or learning rates in <code>HebbianModulationPlasticity</code> (learning rate constant <code>K</code>), the system won’t be able to learn. Try playing with these parameters and figure out at what range of these parameters the model works.</li></ul><h2 id="References"><a class="docs-heading-anchor" href="#References">References</a><a id="References-1"></a><a class="docs-heading-anchor-permalink" href="#References" title="Permalink"></a></h2><ul><li>[1]  Pathak, A., Brincat, S.L., Organtzidis, H. et al. Biomimetic model of corticostriatal micro-assemblies discovers a neural code. Nat Commun 2025. https://doi.org/10.1038/s41467-025-67076-x</li><li>[2] Antzoulatos EG, Miller EK. Increases in functional connectivity between prefrontal cortex and striatum during category learning. Neuron. 2014 Jul 2;83(1):216-25. doi: 10.1016/j.neuron.2014.05.005. Epub 2014 Jun 12. PMID: 24930701; PMCID: PMC4098789.</li></ul><hr/><p><em>This page was generated using <a href="https://github.com/fredrikekre/Literate.jl">Literate.jl</a>.</em></p></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../decision_making/">« Decision Making in a Circuit Model</a><a class="docs-footer-nextpage" href="../optimization/">Parameter Fitting using Optimization »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.17.0 on <span class="colophon-date" title="Wednesday 4 March 2026 21:10">Wednesday 4 March 2026</span>. Using Julia version 1.12.5.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
+fig</code></pre><p><img src="../../assets/adj_RL.svg" alt/></p><p>Notice the changes in weight values after the RL experiment.</p><h2 id="Challenge-Problems"><a class="docs-heading-anchor" href="#Challenge-Problems">Challenge Problems</a><a id="Challenge-Problems-1"></a><a class="docs-heading-anchor-permalink" href="#Challenge-Problems" title="Permalink"></a></h2><ul><li>Visualize the model&#39;s performance in the category learning task as a function of time (trials). Hint: For correct trials <code>trace.correct = 1</code> and for incorrect trials <code>trace.correct = 0</code>.</li><li>Since this is an oversimplified instantiation of a cortico-striatal model, it is highly sensitive to the parameters, such that if we change the values of <code>TAN</code> parameters (maximum activity <code>κ</code>), or learning rates in <code>HebbianModulationPlasticity</code> (learning rate constant <code>K</code>), the system won’t be able to learn. Try playing with these parameters and figure out at what range of these parameters the model works.</li></ul><h2 id="References"><a class="docs-heading-anchor" href="#References">References</a><a id="References-1"></a><a class="docs-heading-anchor-permalink" href="#References" title="Permalink"></a></h2><ul><li>[1]  Pathak, A., Brincat, S.L., Organtzidis, H. et al. Biomimetic model of corticostriatal micro-assemblies discovers a neural code. Nat Commun 2025. https://doi.org/10.1038/s41467-025-67076-x</li><li>[2] Antzoulatos EG, Miller EK. Increases in functional connectivity between prefrontal cortex and striatum during category learning. Neuron. 2014 Jul 2;83(1):216-25. doi: 10.1016/j.neuron.2014.05.005. Epub 2014 Jun 12. PMID: 24930701; PMCID: PMC4098789.</li></ul><hr/><p><em>This page was generated using <a href="https://github.com/fredrikekre/Literate.jl">Literate.jl</a>.</em></p></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../decision_making/">« Decision Making in a Circuit Model</a><a class="docs-footer-nextpage" href="../optimization/">Parameter Fitting using Optimization »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.17.0 on <span class="colophon-date" title="Friday 6 March 2026 13:22">Friday 6 March 2026</span>. Using Julia version 1.12.5.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>

@@ -2,7 +2,7 @@
 
 julia_version = "1.12.5"
 manifest_format = "2.0"
-project_hash = "47792e0d73c7f436e7696bbb0ecb8bf07b95ba24"
+project_hash = "0bad30d6e40c977560721605ab52772dcf304ac0"
 
 [[deps.ADTypes]]
 git-tree-sha1 = "f7304359109c768cf32dc5fa2d371565bb63b68a"
@@ -112,11 +112,12 @@ version = "0.4.0"
 
 [[deps.ArrayInterface]]
 deps = ["Adapt", "LinearAlgebra"]
-git-tree-sha1 = "d81ae5489e13bc03567d4fbbb06c546a5e53c857"
+git-tree-sha1 = "78b3a7a536b4b0a747a0f296ea77091ca0a9f9a3"
 uuid = "4fba245c-0d91-5ea0-9b3e-6abc04ee57a9"
-version = "7.22.0"
+version = "7.23.0"
 
     [deps.ArrayInterface.extensions]
+    ArrayInterfaceAMDGPUExt = "AMDGPU"
     ArrayInterfaceBandedMatricesExt = "BandedMatrices"
     ArrayInterfaceBlockBandedMatricesExt = "BlockBandedMatrices"
     ArrayInterfaceCUDAExt = "CUDA"
@@ -131,6 +132,7 @@ version = "7.22.0"
     ArrayInterfaceTrackerExt = "Tracker"
 
     [deps.ArrayInterface.weakdeps]
+    AMDGPU = "21141c5a-9bdb-4563-92ae-f87d6854732e"
     BandedMatrices = "aae01518-5342-5314-be14-df237901396f"
     BlockBandedMatrices = "ffab5731-97b5-5995-9138-79e8c1846df0"
     CUDA = "052768ef-5323-5732-b1bb-66c8b64840ba"
@@ -1587,9 +1589,9 @@ version = "1.12.0"
 
 [[deps.LinearSolve]]
 deps = ["ArrayInterface", "ChainRulesCore", "ConcreteStructs", "DocStringExtensions", "EnumX", "GPUArraysCore", "InteractiveUtils", "Krylov", "Libdl", "LinearAlgebra", "MKL_jll", "Markdown", "OpenBLAS_jll", "PrecompileTools", "Preferences", "RecursiveArrayTools", "Reexport", "SciMLBase", "SciMLLogging", "SciMLOperators", "Setfield", "StaticArraysCore"]
-git-tree-sha1 = "15e73fc6ac5ad564842af06fb9f479199e7174fb"
+git-tree-sha1 = "ba64436736405d666e0d22d54ee0e1b04e2e2b02"
 uuid = "7ed4a6bd-45f5-4d41-b270-4a48e9bafcae"
-version = "3.63.0"
+version = "3.64.0"
 
     [deps.LinearSolve.extensions]
     LinearSolveAMDGPUExt = "AMDGPU"
@@ -1857,7 +1859,7 @@ uuid = "769b91e5-4c60-41ee-bfae-153c84203cb2"
 version = "0.8.0"
 
 [[deps.NeurobloxBase]]
-deps = ["Accessors", "ComponentArrays", "DSP", "DiffEqCallbacks", "Distributions", "ExproniconLite", "GraphDynamics", "Interpolations", "JLD2", "LinearAlgebra", "MLStyle", "OhMyThreads", "OrderedCollections", "Peaks", "Preferences", "Random", "RecursiveArrayTools", "Reexport", "SciMLBase", "SparseArrays", "Statistics", "StatsBase", "SymbolicIndexingInterface"]
+deps = ["Accessors", "ComponentArrays", "DSP", "DiffEqCallbacks", "Distributions", "ExproniconLite", "GraphDynamics", "InteractiveUtils", "Interpolations", "JLD2", "LinearAlgebra", "MLStyle", "OhMyThreads", "OrderedCollections", "Peaks", "Preferences", "Random", "RecursiveArrayTools", "Reexport", "SciMLBase", "SparseArrays", "Statistics", "StatsBase", "SymbolicIndexingInterface"]
 path = "NeurobloxBase"
 uuid = "c1a47a78-a13f-4f42-9de5-c5b922306e53"
 version = "0.2.0"
@@ -2154,9 +2156,9 @@ version = "1.22.0"
 
 [[deps.OrdinaryDiffEqCore]]
 deps = ["ADTypes", "Accessors", "Adapt", "ArrayInterface", "ConcreteStructs", "DataStructures", "DiffEqBase", "DocStringExtensions", "EnumX", "EnzymeCore", "FastBroadcast", "FastClosures", "FastPower", "FillArrays", "FunctionWrappersWrappers", "InteractiveUtils", "LinearAlgebra", "Logging", "MacroTools", "MuladdMacro", "Polyester", "PrecompileTools", "Preferences", "Random", "RecursiveArrayTools", "Reexport", "SciMLBase", "SciMLLogging", "SciMLOperators", "SciMLStructures", "Static", "StaticArrayInterface", "StaticArraysCore", "SymbolicIndexingInterface", "TruncatedStacktraces"]
-git-tree-sha1 = "65363819a98d156fac5bb48b9c604549069b6d10"
+git-tree-sha1 = "e051c1fb69b1cb1511a00161b97e7a79e0b70687"
 uuid = "bbf590c4-e513-4bbe-9b18-05decba2e5d8"
-version = "3.16.0"
+version = "3.17.0"
 
     [deps.OrdinaryDiffEqCore.extensions]
     OrdinaryDiffEqCoreMooncakeExt = "Mooncake"
@@ -3227,9 +3229,9 @@ version = "0.5.5"
 
 [[deps.TiffImages]]
 deps = ["ColorTypes", "DataStructures", "DocStringExtensions", "FileIO", "FixedPointNumbers", "IndirectArrays", "Inflate", "Mmap", "OffsetArrays", "PkgVersion", "PrecompileTools", "ProgressMeter", "SIMD", "UUIDs"]
-git-tree-sha1 = "98b9352a24cb6a2066f9ababcc6802de9aed8ad8"
+git-tree-sha1 = "08c10bc34f4e7743f530793d0985bf3c254e193d"
 uuid = "731e570b-9d59-4bfa-96dc-6df516fadf69"
-version = "0.11.6"
+version = "0.11.8"
 
 [[deps.TimerOutputs]]
 deps = ["ExprTools", "Printf"]

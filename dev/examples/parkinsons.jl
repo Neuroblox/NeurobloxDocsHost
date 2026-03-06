@@ -89,38 +89,38 @@ C_BGTh➡Cor=9.75
 @graph g begin
     @connections begin
         ## thalamocortical connection
-        Th => EI, [weight = C_BGTh➡Cor]
+        Th => EI, (weight = C_BGTh➡Cor)
 
         ## remaining cortical → subcortical connections
-        PY => STN, [weight = C_Cor➡BGTh]
-        PY => D1, [weight = C_BGTh➡Cor]
-        PY => D2, [weight = C_BGTh➡Cor]
-        PY => FSI, [weight = C_BGTh➡Cor]
+        PY => STN, (weight = C_Cor➡BGTh)
+        PY => D1, (weight = C_BGTh➡Cor)
+        PY => D2, (weight = C_BGTh➡Cor)
+        PY => FSI, (weight = C_BGTh➡Cor)
 
         ## basal ganglia ↔ thalamus connections
-        STN => GPE, [weight = C_BGTh]
-        STN => GPI, [weight = C_BGTh]
-        GPE => STN, [weight = -0.5*C_BGTh]
-        GPE => GPE, [weight = -0.5*C_BGTh]
-        GPE => GPI, [weight = -0.5*C_BGTh]
-        GPE => FSI, [weight = -0.5*C_BGTh]
-        FSI => D1, [weight = -0.5*C_BGTh]
-        FSI => D2, [weight = -0.5*C_BGTh]
-        FSI => FSI, [weight = -0.5*C_BGTh]
-        D1 => D1, [weight = -0.5*C_BGTh]
-        D1 => D2, [weight = -0.5*C_BGTh]
-        D1 => GPI, [weight = -0.5*C_BGTh]
-        D2 => D2, [weight = -0.5*C_BGTh]
-        D2 => D1, [weight = -0.5*C_BGTh]
-        D2 => GPE, [weight = -0.5*C_BGTh]
-        GPI => Th, [weight = -0.5*C_BGTh]
+        STN => GPE, (weight = C_BGTh)
+        STN => GPI, (weight = C_BGTh)
+        GPE => STN, (weight = -0.5*C_BGTh)
+        GPE => GPE, (weight = -0.5*C_BGTh)
+        GPE => GPI, (weight = -0.5*C_BGTh)
+        GPE => FSI, (weight = -0.5*C_BGTh)
+        FSI => D1, (weight = -0.5*C_BGTh)
+        FSI => D2, (weight = -0.5*C_BGTh)
+        FSI => FSI, (weight = -0.5*C_BGTh)
+        D1 => D1, (weight = -0.5*C_BGTh)
+        D1 => D2, (weight = -0.5*C_BGTh)
+        D1 => GPI, (weight = -0.5*C_BGTh)
+        D2 => D2, (weight = -0.5*C_BGTh)
+        D2 => D1, (weight = -0.5*C_BGTh)
+        D2 => GPE, (weight = -0.5*C_BGTh)
+        GPI => Th, (weight = -0.5*C_BGTh)
 
         ## corticocortical connections
-        PY => EI, [weight = 6*C_Cor]
-        PY => II, [weight = 1.5*C_Cor]
-        EI => PY, [weight = 4.8*C_Cor]
-        II => PY, [weight = -1.5*C_Cor]
-        II => II, [weight = -3.3*C_Cor]
+        PY => EI, (weight = 6*C_Cor)
+        PY => II, (weight = 1.5*C_Cor)
+        EI => PY, (weight = 4.8*C_Cor)
+        II => PY, (weight = -1.5*C_Cor)
+        II => II, (weight = -3.3*C_Cor)
     end
 end
 
