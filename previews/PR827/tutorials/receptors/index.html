@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><title>Receptor Dynamics and Interventions · Neuroblox</title><meta name="title" content="Receptor Dynamics and Interventions · Neuroblox"/><meta property="og:title" content="Receptor Dynamics and Interventions · Neuroblox"/><meta property="twitter:title" content="Receptor Dynamics and Interventions · Neuroblox"/><meta name="description" content="Documentation for Neuroblox."/><meta property="og:description" content="Documentation for Neuroblox."/><meta property="twitter:description" content="Documentation for Neuroblox."/><script data-outdated-warner src="../../assets/warner.js"></script><link href="https://cdnjs.cloudflare.com/ajax/libs/lato-font/3.0.0/css/lato-font.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/juliamono/0.050/juliamono.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/fontawesome.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/solid.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/brands.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.8/katex.min.css" rel="stylesheet" type="text/css"/><script>documenterBaseURL="../.."</script><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" data-main="../../assets/documenter.js"></script><script src="../../search_index.js"></script><script src="../../siteinfo.js"></script><script src="../../../versions.js"></script><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/catppuccin-mocha.css" data-theme-name="catppuccin-mocha"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/catppuccin-macchiato.css" data-theme-name="catppuccin-macchiato"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/catppuccin-frappe.css" data-theme-name="catppuccin-frappe"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/catppuccin-latte.css" data-theme-name="catppuccin-latte"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/documenter-dark.css" data-theme-name="documenter-dark" data-theme-primary-dark/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/documenter-light.css" data-theme-name="documenter-light" data-theme-primary/><script src="../../assets/themeswap.js"></script><link href="../../assets/favicon.ico" rel="icon" type="image/x-icon"/></head><body><div id="documenter"><nav class="docs-sidebar"><a class="docs-logo" href="../../"><img src="../../assets/logo.png" alt="Neuroblox logo"/></a><div class="docs-package-name"><span class="docs-autofit"><a href="../../">Neuroblox</a></span></div><button class="docs-search-query input is-rounded is-small is-clickable my-2 mx-auto py-1 px-2" id="documenter-search-query">Search docs (Ctrl + /)</button><ul class="docs-menu"><li><a class="tocitem" href="../../">Neuroblox</a></li><li><a class="tocitem" href="../../install/">How to install</a></li><li><a class="tocitem" href="../../getting_started/">Getting Started</a></li><li><span class="tocitem">Examples</span><ul><li><a class="tocitem" href="../../examples/resting_state/">Resting state simulation using neural mass models</a></li><li><a class="tocitem" href="../../examples/parkinsons/">Building a model of the Basal Ganglia using Neural Mass models</a></li><li><a class="tocitem" href="../../examples/basal_ganglia/">Basal Ganglia Model and Parkinson&#39;s Disease Simulation</a></li><li><a class="tocitem" href="../../examples/neural_assembly/">Bottom-up construction of a neural assembly</a></li></ul></li><li><span class="tocitem">Tutorials</span><ul><li class="is-active"><a class="tocitem" href>Receptor Dynamics and Interventions</a><ul class="internal"><li><a class="tocitem" href="#Introduction"><span>Introduction</span></a></li><li><a class="tocitem" href="#Receptors-between-two-neurons"><span>Receptors between two neurons</span></a></li><li><a class="tocitem" href="#Changing-E-I-balance-in-a-cortical-microcircuit"><span>Changing E-I balance in a cortical microcircuit</span></a></li></ul></li><li><a class="tocitem" href="../PING_circuit/">Pyramidal-Interneuron Gamma network</a></li><li><a class="tocitem" href="../CS_circuit/">Biomimetic Model of Corticostriatal Micro-assemblies</a></li><li><a class="tocitem" href="../decision_making/">Decision Making in a Circuit Model</a></li><li><a class="tocitem" href="../learning/">Synaptic Plasticity and Reinforcement Learning</a></li><li><a class="tocitem" href="../optimization/">Parameter Fitting using Optimization</a></li></ul></li><li><span class="tocitem">API</span><ul><li><a class="tocitem" href="../../api_graph/">Model Graphs</a></li><li><a class="tocitem" href="../../api_blox/">Neuron, Neural Mass and Composite Blox</a></li><li><a class="tocitem" href="../../api_receptors/">Receptors</a></li><li><a class="tocitem" href="../../api_plot/">Plotting Figures</a></li><li><a class="tocitem" href="../../api_utils/">Utility functions</a></li><li><a class="tocitem" href="../../api_rl/">Reinforcement Learning</a></li><li><a class="tocitem" href="../../at_blox_macro/">Defining your own Blox with <code>@blox</code></a></li><li><a class="tocitem" href="../../experiment_macro/">Define experiments using <code>@experiment</code></a></li><li><a class="tocitem" href="../../connection_macro/">Defining your own connections with <code>@connection</code></a></li><li><a class="tocitem" href="../../connection_types/">Neuroblox and GraphDynamics Connection Type System</a></li></ul></li><li><a class="tocitem" href="../../Changelog/">Release Notes</a></li></ul><div class="docs-version-selector field has-addons"><div class="control"><span class="docs-label button is-static is-size-7">Version</span></div><div class="docs-selector control is-expanded"><div class="select is-fullwidth is-size-7"><select id="documenter-version-selector"></select></div></div></div></nav><div class="docs-main"><header class="docs-navbar"><a class="docs-sidebar-button docs-navbar-link fa-solid fa-bars is-hidden-desktop" id="documenter-sidebar-button" href="#"></a><nav class="breadcrumb"><ul class="is-hidden-mobile"><li><a class="is-disabled">Tutorials</a></li><li class="is-active"><a href>Receptor Dynamics and Interventions</a></li></ul><ul class="is-hidden-tablet"><li class="is-active"><a href>Receptor Dynamics and Interventions</a></li></ul></nav><div class="docs-right"><a class="docs-settings-button docs-navbar-link fa-solid fa-gear" id="documenter-settings-button" href="#" title="Settings"></a><a class="docs-article-toggle-button fa-solid fa-chevron-up" id="documenter-article-toggle-button" href="javascript:;" title="Collapse all docstrings"></a></div></header><article class="content" id="documenter-page"><h1 id="Receptor-Dynamics-and-Interventions"><a class="docs-heading-anchor" href="#Receptor-Dynamics-and-Interventions">Receptor Dynamics and Interventions</a><a id="Receptor-Dynamics-and-Interventions-1"></a><a class="docs-heading-anchor-permalink" href="#Receptor-Dynamics-and-Interventions" title="Permalink"></a></h1><h2 id="Introduction"><a class="docs-heading-anchor" href="#Introduction">Introduction</a><a id="Introduction-1"></a><a class="docs-heading-anchor-permalink" href="#Introduction" title="Permalink"></a></h2><p>Between any pre- and postsynaptic neurons in a Neuroblox model, there exist a synapse that captures the dynamics of the transmitter release and the receptor on the postsynaptic side. Here we will see how to choose synapses when connecting neurons and how to change synapse parameters to model interventions like drugs that alter receptor dynamics.</p><h2 id="Receptors-between-two-neurons"><a class="docs-heading-anchor" href="#Receptors-between-two-neurons">Receptors between two neurons</a><a id="Receptors-between-two-neurons-1"></a><a class="docs-heading-anchor-permalink" href="#Receptors-between-two-neurons" title="Permalink"></a></h2><p>Firstly we make a reciprocal connection between an excitatory and inhibitory neuron. The excitatory projections contains both AMPA and NMDA receptors, whereas the inhibitory one is mediated by a GABA A receptor.</p><pre><code class="language-julia hljs">using Neuroblox
+using OrdinaryDiffEqVerner
+using CairoMakie
+
+@graph g begin
+    @nodes begin
+        ne = HHNeuronExci(; I_bg=8)
+        ni = HHNeuronInhib(; I_bg=0.4)
+    end
+    @connections begin
+        ne =&gt; ni , (weight=0.1, synapse=Glu_AMPA_Synapse(name=:ampa))
+        ne =&gt; ni , (weight=0.1, synapse=NMDA_Synapse(name=:nmda))
+        ni =&gt; ne , (weight=1, synapse=GABA_A_Synapse(name=:gabaa))
+     end
+end</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">GraphSystem(...2 nodes and 3 connections...)</code></pre><p>Using the <code>stackplot</code> recipe we plot the voltage of both neurons (blue for excitatory and red for inhibitory).</p><pre><code class="language-julia hljs">prob = ODEProblem(g, [], (0, 1000))
+sol = solve(prob, Vern7())
+
+stackplot([ne, ni], sol)</code></pre><img src="93206c8a.png" alt="Example block output"/><p>Now let us change the inhibitory connection to a GABA B receptor. The excitatory connection remains the same.</p><pre><code class="language-julia hljs">@graph g begin
+    @nodes begin
+        ne = HHNeuronExci(; I_bg=8)
+        ni = HHNeuronInhib(; I_bg=0.4)
+    end
+    @connections begin
+        ne =&gt; ni , (weight=0.1, synapse=Glu_AMPA_Synapse(name=:glu))
+        ne =&gt; ni , (weight=0.1, synapse=NMDA_Synapse(name=:nmda))
+        ni =&gt; ne , (weight=1, synapse=GABA_B_Synapse(name=:gabab))
+    end
+end
+prob = ODEProblem(g, [], (0, 1000))
+sol = solve(prob, Vern7())
+
+stackplot([ne, ni], sol)</code></pre><img src="6d147a1d.png" alt="Example block output"/><p>Notice the changes in the firing rates of both neurons between the GABA A and GABA B cases. The GABA B receptor operates on a longer timescale for both during activation and deactivation. It takes longer to activate but also exhibits slower closing times compared to GABA A. Therefore the inhibition on the excitatory neuron remains active for longer, thus supressing its firing which in turn suppresses the excitation on the inhibitory neuron.</p><h2 id="Changing-E-I-balance-in-a-cortical-microcircuit"><a class="docs-heading-anchor" href="#Changing-E-I-balance-in-a-cortical-microcircuit">Changing E-I balance in a cortical microcircuit</a><a id="Changing-E-I-balance-in-a-cortical-microcircuit-1"></a><a class="docs-heading-anchor-permalink" href="#Changing-E-I-balance-in-a-cortical-microcircuit" title="Permalink"></a></h2><p>Besides choosing the receptor types in neuronal connections, we can also change receptor parameters in circuit models, to simulate the effect of interventions, most commonly drugs. Here we will build a model containing a cortical microcircuit, derived from layers 2-3 of posterior cortex. We will add an ascending input to this microcircuit coming from the brainstem and working as a pacemaker.</p><pre><code class="language-julia hljs">@graph g begin
+    @nodes begin
+        Brainstem = NGNMM_theta(Cₑ=2*26,Cᵢ=1*26, Δₑ=0.5, Δᵢ=0.5, η_0ₑ=10.0, η_0ᵢ=0.0, v_synₑₑ=10.0, v_synₑᵢ=-10.0, v_synᵢₑ=10.0, v_synᵢᵢ=-10.0, alpha_invₑₑ=10.0/26, alpha_invₑᵢ=0.8/26, alpha_invᵢₑ=10.0/26, alpha_invᵢᵢ=0.8/26, kₑₑ=0.0*26, kₑᵢ=0.6*26, kᵢₑ=0.6*26, kᵢᵢ=0*26)
+        Layer_2_3 = Cortical(N_wta=20, N_exci=5, density=0.05, weight=1, I_bg_ar=4, G_syn_inhib=4, τ_inhib=70, G_syn_ff_inhib=1.5)
+    end
+    @connections begin
+        Brainstem =&gt; Layer_2_3, (weight = 20)
+    end
+end
+
+prob = ODEProblem(g, [], (0.0, 1000.0))
+sol = solve(prob, Vern7());
+
+prob_EI = @experiment prob begin
+    @setup begin
+        p_I = 1.5 ## GABA factor
+        p_E = 3.0 ## AMPA factor
+    end
+    GABA_A_Synapse, begin
+        τ₂ -&gt; τ₂ * p_I
+        G_syn -&gt; G_syn * p_I
+    end
+
+    Glu_AMPA_Synapse, begin
+        τ₂ -&gt; τ₂ * p_E
+        G_syn -&gt; G_syn * p_E
+    end
+end</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi"><span class="sgr38_2" style="color:#56b6c2">ODEProblem</span> with uType <span class="sgr38_2" style="color:#56b6c2">Vector{Float64}</span> and tType <span class="sgr38_2" style="color:#56b6c2">Float64</span>. In-place: <span class="sgr38_2" style="color:#56b6c2">true</span>
+Non-trivial mass matrix: <span class="sgr38_2" style="color:#56b6c2">false</span>
+timespan: (0.0, 1000.0)
+u0: 934-element Vector{Float64}:
+  -0.6
+   0.18
+   0.02
+   0.21
+   0.0
+   0.23
+   0.26
+   0.0
+ -65.0
+   0.32
+   ⋮
+   0.0
+   0.0
+   0.0
+   0.0
+   0.0
+   0.0
+   0.0
+   0.0
+   0.0</code></pre><p>After solving the circuit model in its control condition, we design an <code>@experiment</code> above to simulate an intervention on both the GABA A and the AMPA receptors, which are the default receptos in the <code>Cortical</code> blox. This way we change the E-I balance of the circuit by affecting both components.</p><pre><code class="language-julia hljs">sol_EI = solve(prob_EI, Vern7());
+
+fig = Figure()
+ax = Axis(fig[1,1], title=&quot;Cortical LFP&quot;)
+meanfield!(ax, Layer_2_3, sol; label=&quot;Control&quot;)
+meanfield!(ax, Layer_2_3, sol_EI; color=:red, label=&quot;E-I Intervention&quot;)
+axislegend(position=:rt, framevisible = false)
+fig</code></pre><img src="6d4bbb53.png" alt="Example block output"/><p>We solved the experiment problem and then used the solution objects to plot the cortical LFP activity for both conditions.</p><hr/><p><em>This page was generated using <a href="https://github.com/fredrikekre/Literate.jl">Literate.jl</a>.</em></p></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../../examples/neural_assembly/">« Bottom-up construction of a neural assembly</a><a class="docs-footer-nextpage" href="../PING_circuit/">Pyramidal-Interneuron Gamma network »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.17.0 on <span class="colophon-date" title="Monday 9 March 2026 19:57">Monday 9 March 2026</span>. Using Julia version 1.12.5.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
