@@ -1816,9 +1816,9 @@ version = "0.2.4"
 
 [[deps.MultivariatePolynomials]]
 deps = ["DataStructures", "LinearAlgebra", "MutableArithmetics"]
-git-tree-sha1 = "d38b8653b1cdfac5a7da3b819c0a8d6024f9a18c"
+git-tree-sha1 = "139071bb741eeaa3ee7d4109f1299e9282882d79"
 uuid = "102ac46a-7ee4-5c85-9060-abc95bfdeaa3"
-version = "0.5.13"
+version = "0.5.14"
 weakdeps = ["ChainRulesCore"]
 
     [deps.MultivariatePolynomials.extensions]
@@ -2809,9 +2809,9 @@ version = "1.10.0"
 
 [[deps.ScopedValues]]
 deps = ["HashArrayMappedTries", "Logging"]
-git-tree-sha1 = "c3b2323466378a2ba15bea4b2f73b081e022f473"
+git-tree-sha1 = "ac4b837d89a58c848e85e698e2a2514e9d59d8f6"
 uuid = "7e506255-f358-4e82-b7e4-beb19740aa63"
-version = "1.5.0"
+version = "1.6.0"
 
 [[deps.Scratch]]
 deps = ["Dates"]
