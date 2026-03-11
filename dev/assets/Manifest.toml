@@ -1882,10 +1882,14 @@ uuid = "d34949e2-e824-4448-b7f9-1a74e4d2565a"
 version = "0.2.0"
 
 [[deps.NeurobloxDBSPrivate]]
-deps = ["Accessors", "CairoMakie", "DiffEqBase", "GraphDynamics", "NeurobloxBase", "NeurobloxDBS", "OrderedCollections", "OrdinaryDiffEqRosenbrock", "OrdinaryDiffEqTsit5", "Reexport", "SciMLBase", "StochasticDiffEq", "YAML"]
+deps = ["Accessors", "DiffEqBase", "GraphDynamics", "NeurobloxBase", "NeurobloxDBS", "OrderedCollections", "OrdinaryDiffEqRosenbrock", "OrdinaryDiffEqTsit5", "Reexport", "SciMLBase", "StochasticDiffEq", "YAML"]
 path = "NeurobloxDBSPrivate"
 uuid = "bdfd818c-c048-435e-9abc-ef02bd9abebf"
 version = "0.2.0"
+weakdeps = ["CairoMakie"]
+
+    [deps.NeurobloxDBSPrivate.extensions]
+    MakieExtension = "CairoMakie"
 
 [[deps.NeurobloxPharma]]
 deps = ["Accessors", "CSV", "DiffEqCallbacks", "Distributions", "GraphDynamics", "LogExpFunctions", "NaNMath", "NeurobloxBase", "ProgressMeter", "Random", "RecursiveArrayTools", "Reexport", "SciMLBase", "SparseArrays", "StatsBase", "StructArrays", "Tables"]
@@ -2156,9 +2160,9 @@ version = "1.22.0"
 
 [[deps.OrdinaryDiffEqCore]]
 deps = ["ADTypes", "Accessors", "Adapt", "ArrayInterface", "ConcreteStructs", "DataStructures", "DiffEqBase", "DocStringExtensions", "EnumX", "EnzymeCore", "FastBroadcast", "FastClosures", "FastPower", "FillArrays", "FunctionWrappersWrappers", "InteractiveUtils", "LinearAlgebra", "Logging", "MacroTools", "MuladdMacro", "Polyester", "PrecompileTools", "Preferences", "Random", "RecursiveArrayTools", "Reexport", "SciMLBase", "SciMLLogging", "SciMLOperators", "SciMLStructures", "Static", "StaticArrayInterface", "StaticArraysCore", "SymbolicIndexingInterface", "TruncatedStacktraces"]
-git-tree-sha1 = "e051c1fb69b1cb1511a00161b97e7a79e0b70687"
+git-tree-sha1 = "622401a3c36ccbb0ab1639dc423bf1f4be494252"
 uuid = "bbf590c4-e513-4bbe-9b18-05decba2e5d8"
-version = "3.17.0"
+version = "3.17.1"
 
     [deps.OrdinaryDiffEqCore.extensions]
     OrdinaryDiffEqCoreMooncakeExt = "Mooncake"
@@ -2986,9 +2990,9 @@ weakdeps = ["OffsetArrays", "StaticArrays"]
 
 [[deps.StaticArrays]]
 deps = ["LinearAlgebra", "PrecompileTools", "Random", "StaticArraysCore"]
-git-tree-sha1 = "0f529006004a8be48f1be25f3451186579392d47"
+git-tree-sha1 = "246a8bb2e6667f832eea063c3a56aef96429a3db"
 uuid = "90137ffa-7385-5640-81b9-e52037218182"
-version = "1.9.17"
+version = "1.9.18"
 weakdeps = ["ChainRulesCore", "Statistics"]
 
     [deps.StaticArrays.extensions]
@@ -3035,9 +3039,9 @@ weakdeps = ["ChainRulesCore", "InverseFunctions"]
 
 [[deps.StochasticDiffEq]]
 deps = ["ADTypes", "Adapt", "ArrayInterface", "DataStructures", "DiffEqBase", "DiffEqNoiseProcess", "DocStringExtensions", "FastPower", "FiniteDiff", "ForwardDiff", "JumpProcesses", "LevyArea", "LinearAlgebra", "Logging", "MuladdMacro", "OrdinaryDiffEqCore", "OrdinaryDiffEqDifferentiation", "OrdinaryDiffEqNonlinearSolve", "Random", "RecursiveArrayTools", "Reexport", "SciMLBase", "SciMLLogging", "SciMLOperators", "SimpleNonlinearSolve", "SparseArrays", "StaticArrays"]
-git-tree-sha1 = "6d8aef5987fb40847eb52f33fee3cf6d4d0331df"
+git-tree-sha1 = "10a9eb792d84ab7246af5181df19506cbfecfad0"
 uuid = "789caeaf-c7a9-5a7d-9973-96adeb23e2a0"
-version = "6.96.0"
+version = "6.97.0"
 
 [[deps.StrideArraysCore]]
 deps = ["ArrayInterface", "CloseOpenIntervals", "IfElse", "LayoutPointers", "LinearAlgebra", "ManualMemory", "SIMDTypes", "Static", "StaticArrayInterface", "ThreadingUtilities"]
@@ -3123,9 +3127,9 @@ version = "1.1.0"
 
 [[deps.SymbolicUtils]]
 deps = ["AbstractTrees", "ArrayInterface", "Combinatorics", "ConstructionBase", "DataStructures", "DocStringExtensions", "DynamicPolynomials", "EnumX", "ExproniconLite", "LinearAlgebra", "MacroTools", "Moshi", "MultivariatePolynomials", "MutableArithmetics", "NaNMath", "PrecompileTools", "ReadOnlyArrays", "Setfield", "SparseArrays", "SpecialFunctions", "StaticArraysCore", "SymbolicIndexingInterface", "TaskLocalValues", "TermInterface", "WeakCacheSets"]
-git-tree-sha1 = "df93b5c3b6182a22ee87f8c0d0e404fe3d8ecb9c"
+git-tree-sha1 = "ccef050d03339092e736cf2ce67f3e991d2528de"
 uuid = "d1185830-fcd6-423d-90d6-eec64667417b"
-version = "4.19.0"
+version = "4.20.0"
 
     [deps.SymbolicUtils.extensions]
     SymbolicUtilsChainRulesCoreExt = "ChainRulesCore"
