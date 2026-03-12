@@ -3127,9 +3127,9 @@ version = "1.1.0"
 
 [[deps.SymbolicUtils]]
 deps = ["AbstractTrees", "ArrayInterface", "Combinatorics", "ConstructionBase", "DataStructures", "DocStringExtensions", "DynamicPolynomials", "EnumX", "ExproniconLite", "LinearAlgebra", "MacroTools", "Moshi", "MultivariatePolynomials", "MutableArithmetics", "NaNMath", "PrecompileTools", "ReadOnlyArrays", "Setfield", "SparseArrays", "SpecialFunctions", "StaticArraysCore", "SymbolicIndexingInterface", "TaskLocalValues", "TermInterface", "WeakCacheSets"]
-git-tree-sha1 = "ccef050d03339092e736cf2ce67f3e991d2528de"
+git-tree-sha1 = "16eaca1bf86172d26913398958bc346d0861ac80"
 uuid = "d1185830-fcd6-423d-90d6-eec64667417b"
-version = "4.20.0"
+version = "4.20.1"
 
     [deps.SymbolicUtils.extensions]
     SymbolicUtilsChainRulesCoreExt = "ChainRulesCore"
@@ -3282,9 +3282,9 @@ version = "0.4.1"
 
 [[deps.UnicodePlots]]
 deps = ["ColorSchemes", "ColorTypes", "Contour", "Crayons", "Dates", "LinearAlgebra", "MarchingCubes", "NaNMath", "PrecompileTools", "Printf", "SparseArrays", "StaticArrays", "StatsBase"]
-git-tree-sha1 = "0087c82cf98f2c2bb7df350c02b0b1fc6ae087d6"
+git-tree-sha1 = "c4b9fb42808b72180f699d5b19eb6a4a1cea8ca7"
 uuid = "b8865327-cd53-5732-bb35-84acbb429228"
-version = "3.8.1"
+version = "3.8.2"
 
     [deps.UnicodePlots.extensions]
     FreeTypeExt = ["FileIO", "FreeType"]
