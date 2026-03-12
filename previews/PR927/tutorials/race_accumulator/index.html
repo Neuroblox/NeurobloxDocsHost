@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><title>Decision Making via Competing Neural Accumulators · Neuroblox</title><meta name="title" content="Decision Making via Competing Neural Accumulators · Neuroblox"/><meta property="og:title" content="Decision Making via Competing Neural Accumulators · Neuroblox"/><meta property="twitter:title" content="Decision Making via Competing Neural Accumulators · Neuroblox"/><meta name="description" content="Documentation for Neuroblox."/><meta property="og:description" content="Documentation for Neuroblox."/><meta property="twitter:description" content="Documentation for Neuroblox."/><script data-outdated-warner src="../../assets/warner.js"></script><link href="https://cdnjs.cloudflare.com/ajax/libs/lato-font/3.0.0/css/lato-font.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/juliamono/0.050/juliamono.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/fontawesome.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/solid.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/brands.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.8/katex.min.css" rel="stylesheet" type="text/css"/><script>documenterBaseURL="../.."</script><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" data-main="../../assets/documenter.js"></script><script src="../../search_index.js"></script><script src="../../siteinfo.js"></script><script src="../../../versions.js"></script><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/catppuccin-mocha.css" data-theme-name="catppuccin-mocha"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/catppuccin-macchiato.css" data-theme-name="catppuccin-macchiato"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/catppuccin-frappe.css" data-theme-name="catppuccin-frappe"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/catppuccin-latte.css" data-theme-name="catppuccin-latte"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/documenter-dark.css" data-theme-name="documenter-dark" data-theme-primary-dark/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/documenter-light.css" data-theme-name="documenter-light" data-theme-primary/><script src="../../assets/themeswap.js"></script><link href="../../assets/favicon.ico" rel="icon" type="image/x-icon"/></head><body><div id="documenter"><nav class="docs-sidebar"><a class="docs-logo" href="../../"><img src="../../assets/logo.png" alt="Neuroblox logo"/></a><div class="docs-package-name"><span class="docs-autofit"><a href="../../">Neuroblox</a></span></div><button class="docs-search-query input is-rounded is-small is-clickable my-2 mx-auto py-1 px-2" id="documenter-search-query">Search docs (Ctrl + /)</button><ul class="docs-menu"><li><a class="tocitem" href="../../">Neuroblox</a></li><li><a class="tocitem" href="../../install/">How to install</a></li><li><a class="tocitem" href="../../getting_started/">Getting Started</a></li><li><span class="tocitem">Examples</span><ul><li><a class="tocitem" href="../../examples/resting_state/">Resting state simulation using neural mass models</a></li><li><a class="tocitem" href="../../examples/parkinsons/">Building a model of the Basal Ganglia using Neural Mass models</a></li><li><a class="tocitem" href="../../examples/basal_ganglia/">Basal Ganglia Model and Parkinson&#39;s Disease Simulation</a></li><li><a class="tocitem" href="../../examples/neural_assembly/">Bottom-up construction of a neural assembly</a></li></ul></li><li><span class="tocitem">Tutorials</span><ul><li><a class="tocitem" href="../receptors/">Receptor Dynamics and Interventions</a></li><li><a class="tocitem" href="../PING_circuit/">Pyramidal-Interneuron Gamma network</a></li><li><a class="tocitem" href="../CS_circuit/">Biomimetic Model of Corticostriatal Micro-assemblies</a></li><li><a class="tocitem" href="../decision_making/">Decision Making in a Circuit Model</a></li><li class="is-active"><a class="tocitem" href>Decision Making via Competing Neural Accumulators</a><ul class="internal"><li><a class="tocitem" href="#Introduction"><span>Introduction</span></a></li><li><a class="tocitem" href="#The-Race-Accumulator-Model"><span>The Race Accumulator Model</span></a></li><li><a class="tocitem" href="#Setup"><span>Setup</span></a></li><li><a class="tocitem" href="#Single-Trial:-Unequal-Evidence"><span>Single Trial: Unequal Evidence</span></a></li><li><a class="tocitem" href="#Psychometric-Curve:-Accuracy-vs.-Evidence-Strength"><span>Psychometric Curve: Accuracy vs. Evidence Strength</span></a></li><li><a class="tocitem" href="#Reaction-Times"><span>Reaction Times</span></a></li><li><a class="tocitem" href="#Summary"><span>Summary</span></a></li><li><a class="tocitem" href="#References"><span>References</span></a></li></ul></li><li><a class="tocitem" href="../learning/">Synaptic Plasticity and Reinforcement Learning</a></li><li><a class="tocitem" href="../optimization/">Parameter Fitting using Optimization</a></li></ul></li><li><span class="tocitem">API</span><ul><li><a class="tocitem" href="../../api_graph/">Model Graphs</a></li><li><a class="tocitem" href="../../api_blox/">Neuron, Neural Mass and Composite Blox</a></li><li><a class="tocitem" href="../../api_receptors/">Receptors</a></li><li><a class="tocitem" href="../../api_plot/">Plotting Figures</a></li><li><a class="tocitem" href="../../api_utils/">Utility functions</a></li><li><a class="tocitem" href="../../api_rl/">Reinforcement Learning</a></li><li><a class="tocitem" href="../../at_blox_macro/">Defining your own Blox with <code>@blox</code></a></li><li><a class="tocitem" href="../../experiment_macro/">Define experiments using <code>@experiment</code></a></li><li><a class="tocitem" href="../../connection_macro/">Defining your own connections with <code>@connection</code></a></li><li><a class="tocitem" href="../../connection_types/">Neuroblox and GraphDynamics Connection Type System</a></li></ul></li><li><a class="tocitem" href="../../Changelog/">Release Notes</a></li></ul><div class="docs-version-selector field has-addons"><div class="control"><span class="docs-label button is-static is-size-7">Version</span></div><div class="docs-selector control is-expanded"><div class="select is-fullwidth is-size-7"><select id="documenter-version-selector"></select></div></div></div></nav><div class="docs-main"><header class="docs-navbar"><a class="docs-sidebar-button docs-navbar-link fa-solid fa-bars is-hidden-desktop" id="documenter-sidebar-button" href="#"></a><nav class="breadcrumb"><ul class="is-hidden-mobile"><li><a class="is-disabled">Tutorials</a></li><li class="is-active"><a href>Decision Making via Competing Neural Accumulators</a></li></ul><ul class="is-hidden-tablet"><li class="is-active"><a href>Decision Making via Competing Neural Accumulators</a></li></ul></nav><div class="docs-right"><a class="docs-settings-button docs-navbar-link fa-solid fa-gear" id="documenter-settings-button" href="#" title="Settings"></a><a class="docs-article-toggle-button fa-solid fa-chevron-up" id="documenter-article-toggle-button" href="javascript:;" title="Collapse all docstrings"></a></div></header><article class="content" id="documenter-page"><h1 id="Decision-Making-via-Competing-Neural-Accumulators"><a class="docs-heading-anchor" href="#Decision-Making-via-Competing-Neural-Accumulators">Decision Making via Competing Neural Accumulators</a><a id="Decision-Making-via-Competing-Neural-Accumulators-1"></a><a class="docs-heading-anchor-permalink" href="#Decision-Making-via-Competing-Neural-Accumulators" title="Permalink"></a></h1><h2 id="Introduction"><a class="docs-heading-anchor" href="#Introduction">Introduction</a><a id="Introduction-1"></a><a class="docs-heading-anchor-permalink" href="#Introduction" title="Permalink"></a></h2><p>How does the brain make decisions under uncertainty? A classic computational framework is the <strong>race accumulator</strong> (or <em>leaky competing accumulator</em>): two (or more) neural populations independently integrate evidence for each alternative and &quot;race&quot; to a decision threshold. The first to reach threshold determines the choice and also sets the reaction time.</p><p>Wang (2002) [1] showed that such accumulator dynamics emerge naturally from mutual inhibition between cortical excitatory populations linked through shared inhibitory interneurons. The key insight is that <strong>NMDA-mediated slow recurrent excitation</strong> acts as an integrator (τ_network ≈ 1 s), while <strong>GABAergic feedback inhibition</strong> implements the winner-takes-all competition between the two alternatives.</p><blockquote><p><strong>Note — full spiking model:</strong> The complete Wang (2002) model uses ~2000 leaky integrate-and-fire neurons with explicit NMDA, AMPA, and GABA-A receptors. This biophysical circuit is implemented in Neuroblox and demonstrated in the <code>decision_making.jl</code> tutorial. Here we use a mean-field approach — two competing <code>WilsonCowan</code> populations — to show the same computational principles with a fraction of the computational cost.</p></blockquote><p><strong>In this tutorial you will learn to:</strong></p><ul><li>Connect two <code>WilsonCowan</code> populations with mutual inhibition as a race accumulator.</li><li>Use <code>ConstantInput</code> sources with different weights to model variable sensory evidence.</li><li>Characterize decisions as the winning population at steady state.</li><li>Plot a psychometric-like curve: fraction of A-wins vs. evidence strength.</li></ul><h2 id="The-Race-Accumulator-Model"><a class="docs-heading-anchor" href="#The-Race-Accumulator-Model">The Race Accumulator Model</a><a id="The-Race-Accumulator-Model-1"></a><a class="docs-heading-anchor-permalink" href="#The-Race-Accumulator-Model" title="Permalink"></a></h2><p>We represent each choice option as a Wilson-Cowan E-I population with self-excitation and cross-inhibition. Sensory evidence for option A (or B) is modelled as a tonic current to population A (or B). With equal evidence both populations activate to the same level; with unequal evidence the more strongly driven population suppresses the other via mutual inhibition.</p><pre><code class="nohighlight hljs">  Input_A ──► Population A ◄─── mutual ───► Population B ◄── Input_B
+                  ↑ self-excitation                 ↑ self-excitation</code></pre><h2 id="Setup"><a class="docs-heading-anchor" href="#Setup">Setup</a><a id="Setup-1"></a><a class="docs-heading-anchor-permalink" href="#Setup" title="Permalink"></a></h2><pre><code class="language-julia hljs">using Neuroblox
+using OrdinaryDiffEqTsit5
+using CairoMakie
+using Random
+using Statistics
+
+Random.seed!(42)</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">Random.TaskLocalRNG()</code></pre><p>Parameters for the E-I populations. We use a moderately strong recurrent excitation (<code>c_EE = 10</code>) so each population acts as an integrator, and strong mutual inhibition (<code>w_AB = w_BA = 3.5</code>) implements winner-takes-all competition.</p><pre><code class="language-julia hljs">wc_params = (
+    c_EE = 10.0, ## recurrent E→E excitation (integration)
+    c_EI = 8.0,  ## E drives local inhibition
+    c_IE = 6.0,  ## local I suppresses E
+    c_II = 1.0,
+    θ_E  = 2.5,  ## thresholds
+    θ_I  = 3.5,
+    a_E  = 1.2,
+    a_I  = 2.0
+)
+
+w_inh = 3.5   ## cross-inhibition weight (negative sign applied in @connections)
+tspan = (0.0, 500.0)  ## 500 ms integration window</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">(0.0, 500.0)</code></pre><h2 id="Single-Trial:-Unequal-Evidence"><a class="docs-heading-anchor" href="#Single-Trial:-Unequal-Evidence">Single Trial: Unequal Evidence</a><a id="Single-Trial:-Unequal-Evidence-1"></a><a class="docs-heading-anchor-permalink" href="#Single-Trial:-Unequal-Evidence" title="Permalink"></a></h2><p>Apply a stronger input to population A (I<em>A = 2.5) than to B (I</em>B = 1.5) and observe which population wins.</p><pre><code class="language-julia hljs">@graph g_trial begin
+    @nodes begin
+        popA = WilsonCowan(; wc_params...)
+        popB = WilsonCowan(; wc_params...)
+        # `ConstantInput` provides a steady tonic drive — models sustained sensory evidence.
+        inpA = ConstantInput(; I = 2.5)
+        inpB = ConstantInput(; I = 1.5)
+    end
+    @connections begin
+        inpA =&gt; popA, (weight = 1.0)
+        inpB =&gt; popB, (weight = 1.0)
+        # Mutual inhibition: negative weights make the connection inhibitory.
+        popA =&gt; popB, (weight = -w_inh)
+        popB =&gt; popA, (weight = -w_inh)
+    end
+end
+
+u0 = [popA.E =&gt; 0.1, popA.I =&gt; 0.1, popB.E =&gt; 0.1, popB.I =&gt; 0.1]
+
+prob = ODEProblem(g_trial, u0, tspan, [])
+sol  = solve(prob, Tsit5())
+
+E_A = state_timeseries(popA, sol, &quot;E&quot;)
+E_B = state_timeseries(popB, sol, &quot;E&quot;)
+
+fig1 = Figure(size=(800, 380))
+ax1  = Axis(fig1[1,1]; xlabel=&quot;Time (ms)&quot;, ylabel=&quot;E (excitatory activity)&quot;,
+            title=&quot;Race accumulator: unequal evidence (I_A = 2.5,  I_B = 1.5)&quot;)
+lines!(ax1, sol.t, E_A; color=:steelblue, label=&quot;Population A (stronger input)&quot;)
+lines!(ax1, sol.t, E_B; color=:firebrick,  label=&quot;Population B&quot;)
+axislegend(ax1; position=:rc)
+fig1</code></pre><img src="9496e426.png" alt="Example block output"/><p>Population A, receiving stronger input, rises faster and drives population B toward silence via mutual inhibition. The circuit has made a &quot;decision&quot; — A wins.</p><h2 id="Psychometric-Curve:-Accuracy-vs.-Evidence-Strength"><a class="docs-heading-anchor" href="#Psychometric-Curve:-Accuracy-vs.-Evidence-Strength">Psychometric Curve: Accuracy vs. Evidence Strength</a><a id="Psychometric-Curve:-Accuracy-vs.-Evidence-Strength-1"></a><a class="docs-heading-anchor-permalink" href="#Psychometric-Curve:-Accuracy-vs.-Evidence-Strength" title="Permalink"></a></h2><p>In the classic random-dot motion task (Wang 2002), stimulus coherence <code>c</code> controls the difference in firing rates driving the two selective populations: I<em>A = I₀ + Δ·c,   I</em>B = I₀ − Δ·c</p><p>Here I₀ = 2.0 is the mean input and Δ is the sensitivity. We scan <code>c</code> from 0 to 1 and record whether population A or B &quot;wins&quot; (higher E at the end of the trial).</p><pre><code class="language-julia hljs">I₀  = 2.0   ## mean input to both populations
+Δ   = 1.5   ## sensitivity: how strongly coherence biases the input
+coherences = 0.0:0.1:1.0
+
+# Fraction of trials in which A wins
+p_A = zeros(length(coherences))
+
+for (k, c) in enumerate(coherences)
+    I_A = I₀ + Δ * c
+    I_B = I₀ - Δ * c
+
+    @graph g_scan begin
+        @nodes begin
+            pA = WilsonCowan(; wc_params...)
+            pB = WilsonCowan(; wc_params...)
+            iA = ConstantInput(; I = I_A)
+            iB = ConstantInput(; I = I_B)
+        end
+        @connections begin
+            iA =&gt; pA, (weight = 1.0)
+            iB =&gt; pB, (weight = 1.0)
+            pA =&gt; pB, (weight = -w_inh)
+            pB =&gt; pA, (weight = -w_inh)
+        end
+    end
+    # Add small random perturbations to the initial conditions to break symmetry at c = 0
+    ε     = 0.02 * randn(2)
+    u0_k  = [pA.E =&gt; 0.1 + ε[1], pA.I =&gt; 0.1,
+              pB.E =&gt; 0.1 + ε[2], pB.I =&gt; 0.1]
+    sol_k = solve(ODEProblem(g_scan, u0_k, tspan, []), Tsit5())
+
+    E_A_k = state_timeseries(pA, sol_k, &quot;E&quot;)[end]
+    E_B_k = state_timeseries(pB, sol_k, &quot;E&quot;)[end]
+    p_A[k] = E_A_k &gt; E_B_k ? 1.0 : 0.0
+end
+
+fig2 = Figure(size=(700, 420))
+ax2  = Axis(fig2[1,1]; xlabel=&quot;Evidence strength (coherence c)&quot;,
+            ylabel=&quot;P(Population A wins)&quot;,
+            title=&quot;Psychometric curve: accuracy vs. evidence&quot;)
+scatter!(ax2, collect(coherences), p_A; color=:steelblue, markersize=12)
+lines!(ax2, collect(coherences), p_A; color=:steelblue)
+hlines!(ax2, [0.5]; linestyle=:dash, color=:gray, label=&quot;Chance level&quot;)
+axislegend(ax2; position=:rb)
+fig2</code></pre><img src="b5280240.png" alt="Example block output"/><p>At zero coherence (I<em>A = I</em>B) the outcome is random (near 50%). As coherence increases, population A wins more reliably — the circuit acts as a sensory classifier. This reproduces the qualitative shape of the psychometric curves in Wang (2002), Figure 4.</p><h2 id="Reaction-Times"><a class="docs-heading-anchor" href="#Reaction-Times">Reaction Times</a><a id="Reaction-Times-1"></a><a class="docs-heading-anchor-permalink" href="#Reaction-Times" title="Permalink"></a></h2><p>The race accumulator also predicts a distribution of reaction times (RT). A short RT corresponds to rapid separation of the two populations (high coherence or fortunate noise). We define RT as the time at which |E<em>A − E</em>B| first exceeds a threshold δ = 0.3.</p><pre><code class="language-julia hljs">function reaction_time(sol, popA, popB; threshold=0.3)
+    E_A = state_timeseries(popA, sol, &quot;E&quot;)
+    E_B = state_timeseries(popB, sol, &quot;E&quot;)
+    idx = findfirst(abs.(E_A .- E_B) .&gt; threshold)
+    isnothing(idx) ? NaN : sol.t[idx]
+end
+
+# Simulate 20 trials at c = 0 (random noise determines winner)
+n_trials = 20
+rts_c0   = Vector{Float64}(undef, n_trials)
+
+for k in 1:n_trials
+    ε = 0.05 * randn(2)
+    @graph g_rt begin
+        @nodes begin
+            rA = WilsonCowan(; wc_params...)
+            rB = WilsonCowan(; wc_params...)
+            iA = ConstantInput(; I = I₀)
+            iB = ConstantInput(; I = I₀)
+        end
+        @connections begin
+            iA =&gt; rA, (weight = 1.0)
+            iB =&gt; rB, (weight = 1.0)
+            rA =&gt; rB, (weight = -w_inh)
+            rB =&gt; rA, (weight = -w_inh)
+        end
+    end
+    u0_k   = [rA.E =&gt; 0.1 + ε[1], rA.I =&gt; 0.1,
+               rB.E =&gt; 0.1 + ε[2], rB.I =&gt; 0.1]
+    sol_rt = solve(ODEProblem(g_rt, u0_k, tspan, []), Tsit5())
+    rts_c0[k] = reaction_time(sol_rt, rA, rB)
+end
+
+fig3 = Figure(size=(700, 380))
+ax3  = Axis(fig3[1,1]; xlabel=&quot;Reaction time (ms)&quot;,
+            ylabel=&quot;Count&quot;,
+            title=&quot;RT distribution at zero coherence (n = $n_trials trials)&quot;)
+hist!(ax3, filter(!isnan, rts_c0); bins=10, color=:steelblue, strokewidth=1)
+fig3</code></pre><img src="11988286.png" alt="Example block output"/><blockquote><p><strong>Exercise:</strong> Compute RT distributions at different coherence levels and compare the means. Higher coherence should produce shorter mean RTs (less integration time needed) and narrower distributions. This reproduces the qualitative pattern in Wang (2002), Figure 5.</p></blockquote><h2 id="Summary"><a class="docs-heading-anchor" href="#Summary">Summary</a><a id="Summary-1"></a><a class="docs-heading-anchor-permalink" href="#Summary" title="Permalink"></a></h2><p>This tutorial demonstrated:</p><ul><li>How two <code>WilsonCowan</code> populations with mutual inhibition implement a race accumulator.</li><li>How differential tonic inputs (<code>ConstantInput</code>) model graded sensory evidence.</li><li>How the psychometric (accuracy vs. coherence) and RT distributions emerge from the competition dynamics.</li></ul><p>The full Wang (2002) model — with ~2000 LIF neurons, NMDA/AMPA/GABA receptors, and explicit spike timing — is implemented in the <code>decision_making.jl</code> tutorial. It provides a more biophysically faithful account of the same decision-making circuit, including the critical role of NMDA&#39;s slow time constant as the neural integrator.</p><h2 id="References"><a class="docs-heading-anchor" href="#References">References</a><a id="References-1"></a><a class="docs-heading-anchor-permalink" href="#References" title="Permalink"></a></h2><ul><li>[1] Wang XJ. (2002). Probabilistic decision making by slow reverberation in cortical circuits. <em>Neuron</em>, 36(5):955–968. https://doi.org/10.1016/S0896-6273(02)01092-9</li><li>[2] Wong KF, Wang XJ. (2006). A recurrent network mechanism of time integration in perceptual decisions. <em>Journal of Neuroscience</em>, 26(4):1314–1328. https://doi.org/10.1523/JNEUROSCI.3733-05.2006</li><li>[3] Usher M, McClelland JL. (2001). The time course of perceptual choice: the leaky, competing accumulator model. <em>Psychological Review</em>, 108(3):550–592. https://doi.org/10.1037/0033-295X.108.3.550</li></ul><hr/><p><em>This page was generated using <a href="https://github.com/fredrikekre/Literate.jl">Literate.jl</a>.</em></p></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../decision_making/">« Decision Making in a Circuit Model</a><a class="docs-footer-nextpage" href="../learning/">Synaptic Plasticity and Reinforcement Learning »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.17.0 on <span class="colophon-date" title="Thursday 12 March 2026 14:56">Thursday 12 March 2026</span>. Using Julia version 1.12.5.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
