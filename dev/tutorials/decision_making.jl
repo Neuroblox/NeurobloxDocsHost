@@ -61,9 +61,9 @@ spike_rate_B = (distribution=Normal(μ_B, σ), dt=dt_spike_rate) # spike rate di
 
 @graph g begin
     @nodes begin
-        background_input = PoissonSpikeTrain(spike_rate, tspan) ## background input
-        stim_A = PoissonSpikeTrain(spike_rate_A, tspan) ## stimulation inputs to selective population A
-        stim_B = PoissonSpikeTrain(spike_rate_B, tspan) ## stimulation inputs to selective population B
+        background_input = PoissonSpikeTrainStimulus(spike_rate, tspan) ## background input
+        stim_A = PoissonSpikeTrainStimulus(spike_rate_A, tspan) ## stimulation inputs to selective population A
+        stim_B = PoissonSpikeTrainStimulus(spike_rate_B, tspan) ## stimulation inputs to selective population B
         n_A = LIFExciCircuit(; N_neurons = N_E_selective, weight = w₊, exci_scaling_factor, inh_scaling_factor)
         n_B = LIFExciCircuit(; N_neurons = N_E_selective, weight = w₊, exci_scaling_factor, inh_scaling_factor)
         n_ns = LIFExciCircuit(; N_neurons = N_E_nonselective, weight = 1.0, exci_scaling_factor, inh_scaling_factor)
