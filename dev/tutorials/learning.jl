@@ -14,13 +14,15 @@
 
 # ## Cortico-Cortical Plasticity
 
-using Neuroblox 
+using Neuroblox
 using OrdinaryDiffEqDefault, OrdinaryDiffEqVerner ## to build the ODE problem and solve it, gain access to multiple solvers from this
 using Random ## for generating random variables
 using CairoMakie ## for customized plotting recipies for blox
 using CSV ## to read data from CSV files
 using Downloads ## to download image stimuli files
 using StructArrays
+using Test, ReferenceTests # hide
+Random.seed!(42) # hide
 
 N_trials = 10 ## number of trials
 trial_dur = 1000 ## in ms
@@ -63,6 +65,7 @@ run_experiment!(agent, env; t_warmup=200.0, alg=Vern7())
 adjacency(fig[1,2], agent; title="Final weights", colorrange=(0,7))
 fig
 save(joinpath("../assets/", "adj_open.svg"), fig); # hide
+@test_reference "plots/learning_adj_open.png" fig by=psnr_equality(24) # hide
 #!nb # ![](../assets/adj_open.svg)
 # Notice how the weight values in the upper left corner (connections with `HebbianPlasticity`) have changed after simulation.
 
@@ -132,6 +135,7 @@ trace.action; ## what responce was made on each trial, 1 is left and 2 is right
 adjacency(fig[1,2], agent; title = "After Learning", colorrange=(0,0.2))
 fig
 save(joinpath("../assets/", "adj_RL.svg"), fig); # hide
+@test_reference "plots/learning_adj_rl.png" fig by=psnr_equality(24) # hide
 #!nb # ![](../assets/adj_RL.svg)
 
 # Notice the changes in weight values after the RL experiment.
