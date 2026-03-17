@@ -22,6 +22,7 @@ using ForwardDiff ## enables AutoForwardDiff() for exact gradient computation
 using CairoMakie
 using Distributions
 using Random
+using Test, ReferenceTests # hide
 
 Random.seed!(1)
 
@@ -77,6 +78,7 @@ colsize!(fig.layout, 1, Relative(1/2))
 Legend(fig[5,1], last(axs))
 fig
 save(joinpath(@__DIR__(), "../assets/", "opt_init.svg"), fig); # hide
+@test_reference "plots/opt_init.png" fig by=psnr_equality(24) # hide
 #!nb # ![](../assets/opt_init.svg)
 
 # ## Parameter Fit using Optimization
@@ -124,6 +126,7 @@ colsize!(fig.layout, 1, Relative(1/2))
 Legend(fig[5,1], last(axs))
 fig
 save(joinpath(@__DIR__(), "../assets/", "opt_final.svg"), fig); # hide
+@test_reference "plots/opt_final.png" fig by=psnr_equality(24) # hide
 #!nb # ![](../assets/opt_final.svg)
 # Notice how the simulation using the fitted parameters is much closer to the ground truth data compared to the previous figure where we compared the data to a simulation using our initial guess. 
 # The parameter fitting worked on two levels; the parameter values are close to the ground truth, and the simulation results when using them come close to the data. So even though the parameters do not exactly match their ground truth values, we notice that the simulation results closely match the underlying data, excluding the added observation noise. 

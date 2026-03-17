@@ -4,12 +4,18 @@
 # Between any pre- and postsynaptic neurons in a Neuroblox model, there exist a synapse that captures the dynamics of the transmitter release and the receptor on the postsynaptic side.
 # Here we will see how to choose synapses when connecting neurons and how to change synapse parameters to model interventions like drugs that alter receptor dynamics.
 
+# **In this tutorial you will learn to:**
+# - Specify explicit receptor types (AMPA, NMDA, GABA-A, GABA-B) when creating connections between neurons.
+# - Observe how different receptor kinetics (e.g., GABA-A vs. GABA-B timescales) affect circuit dynamics.
+# - Use the `@experiment` macro to apply parametric interventions (e.g., simulating a drug that scales receptor conductance) without rebuilding the full model.
+
 # ## Receptors between two neurons
 # Firstly we make a reciprocal connection between an excitatory and inhibitory neuron. The excitatory projections contains both AMPA and NMDA receptors, whereas the inhibitory one is mediated by a GABA A receptor.
 
 using Neuroblox
 using OrdinaryDiffEqVerner
 using CairoMakie
+using Test, ReferenceTests # hide
 
 @graph g begin
     @nodes begin
@@ -28,7 +34,8 @@ end
 prob = ODEProblem(g, [], (0, 1000))
 sol = solve(prob, Vern7())
 
-stackplot([ne, ni], sol)
+fig = stackplot([ne, ni], sol)
+@test_reference "plots/receptors_gabaa.png" fig by=psnr_equality(24) # hide
 
 # Now let us change the inhibitory connection to a GABA B receptor. The excitatory connection remains the same.
 
@@ -46,7 +53,8 @@ end
 prob = ODEProblem(g, [], (0, 1000))
 sol = solve(prob, Vern7())
 
-stackplot([ne, ni], sol)
+fig = stackplot([ne, ni], sol)
+@test_reference "plots/receptors_gabab.png" fig by=psnr_equality(24) # hide
 
 # Notice the changes in the firing rates of both neurons between the GABA A and GABA B cases.
 # The GABA B receptor operates on a longer timescale for both during activation and deactivation. It takes longer to activate but also exhibits slower closing times compared to GABA A. Therefore the inhibition on the excitatory neuron remains active for longer, thus supressing its firing which in turn suppresses the excitation on the inhibitory neuron.
@@ -94,5 +102,6 @@ meanfield!(ax, Layer_2_3, sol; label="Control")
 meanfield!(ax, Layer_2_3, sol_EI; color=:red, label="E-I Intervention")
 axislegend(position=:rt, framevisible = false)
 fig
+@test_reference "plots/receptors_cortical_lfp.png" fig by=psnr_equality(24) # hide
 
 # We solved the experiment problem and then used the solution objects to plot the cortical LFP activity for both conditions.

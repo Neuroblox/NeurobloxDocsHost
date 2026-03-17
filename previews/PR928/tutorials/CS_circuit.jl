@@ -6,11 +6,20 @@
 
 # In a later session we will extend this model and add synaptic plasticity to it to perform category learning, as a simplified version of [1].
 
+# **In this tutorial you will learn to:**
+# - Manually wire up a lateral inhibition (winner-take-all) circuit from individual neurons.
+# - Use the `WinnerTakeAll` composite blox as a shortcut for the circuit above.
+# - Build a `Cortical` block by connecting multiple `WinnerTakeAll` circuits and a feedforward interneuron.
+# - Add an ascending neuromodulatory input (`NextGenerationEI`) to drive cortical rhythms.
+# - Simulate visual stimulus processing by connecting an `ImageStimulus` to a cortical block.
+
 # ## Lateral Inhibition Circuit
 using Neuroblox
 using OrdinaryDiffEqVerner
-using Random 
-using CairoMakie 
+using Random
+using CairoMakie
+using Test, ReferenceTests # hide
+Random.seed!(42) # hide
 
 # First we will manually create a lateral inhibition circuit (*Figure 1*, the "winner-takes-all" circuit) to better understand its components. This circuit is inspired by the structure of the superficial cortical layer.
 #!nb # ![Lateral inhibition in the winner-takes-all circuit](../assets/CS_WTA.png)
@@ -37,9 +46,13 @@ end
 
 # As we can see, the lateral inhibition circuit is made up of 5 excitatory neurons with each one having a reciprocal connection to the same inhibitory interneuron.
 prob = ODEProblem(g, [], (0.0, 1000), [])
+## `Vern7()` is a 7th-order Verner solver — a good choice for non-stiff ODE systems where you want
+## high accuracy. For stiff systems (where states change on very different time scales) prefer `Rodas4()`
+## or `Rosenbrock23()`. For a full comparison of solvers see: https://docs.sciml.ai/DiffEqDocs/stable/solvers/ode_solve/
 sol = solve(prob, Vern7())
 fig = stackplot([exci1, exci2, exci3, exci4, exci5, inh], sol)
 save(joinpath(@__DIR__(), "../assets/", "wta_stack.svg"), fig); # hide
+@test_reference "plots/cs_wta_stack.png" fig by=psnr_equality(24) # hide
 #!nb # ![](../assets/wta_stack.svg)
 
 # `stackplot` stacks the voltage timeseries of each input neuron on top of each other. Excitatory neurons appear in blue and inhibitory neurons in red by default. The y-axis scale is meaningless due to timeseries offsets, yet the plot offers a useful look into spiking patterns in a population.
@@ -65,9 +78,14 @@ end
 prob = ODEProblem(g, [], (0.0, 1000), [])
 sol = solve(prob, Vern7())
 
-neuron_set = get_neurons([wta1, wta2]) ## extract neurons from a composite blocks 
+## `get_neurons` traverses a composite blox and returns a flat vector of its individual neuron blox.
+## Note the Julia convention: functions whose names end in `!` (e.g. `add_connection!`,
+## `run_experiment!`) modify one of their arguments in place. Functions without `!` return a new
+## value without modifying their inputs.
+neuron_set = get_neurons([wta1, wta2]) ## extract neurons from composite blox
 fig = stackplot(neuron_set, sol)
 save(joinpath(@__DIR__(), "../assets/", "wta_wta_stack.svg"), fig); # hide
+@test_reference "plots/cs_wta_wta_stack.png" fig by=psnr_equality(24) # hide
 #!nb # ![](../assets/wta_wta_stack.svg)
 
 # ## Cortical Superficial Layer
@@ -115,6 +133,7 @@ wta_neurons = get_neurons(wtas) ## extract neurons from WTA circuits
 neurons = vcat(wta_neurons, n_ff_inh)
 fig = stackplot(neurons, sol)
 save(joinpath(@__DIR__(), "../assets/", "cort_stack.svg"), fig); # hide
+@test_reference "plots/cs_cort_stack.png" fig by=psnr_equality(24) # hide
 #!nb # ![](../assets/cort_stack.svg)
 
 # > **_Exercise:_** Try different connection densities and weights and see how it affects the population activity. 
@@ -151,17 +170,20 @@ neuron_set = get_neurons(CB) ## extract neurons from a composite block like Cort
 n_neurons = 50 ## set number of neurons to display in the stackplot
 fig = stackplot(neuron_set[1:n_neurons], sol)
 save(joinpath(@__DIR__(), "../assets/", "cort_asc_stack.svg"), fig); # hide
+@test_reference "plots/cs_cort_asc_stack.png" fig by=psnr_equality(24) # hide
 #!nb # ![](../assets/cort_asc_stack.svg)
 
 # We can also generate plots of averaged activity in any composite Blox like `CorticalBlox` and `WinnerTakeAllBlox`. 
 # For instance the meanfield of all cortical block neurons (mean membrane voltage)
 fig = meanfield(CB, sol)
 save(joinpath(@__DIR__(), "../assets/", "cort_meanfield.svg"), fig); # hide
+@test_reference "plots/cs_cort_meanfield.png" fig by=psnr_equality(24) # hide
 #!nb # ![](../assets/cort_meanfield.svg)
 
 # and the powerspectrum of the meanfield (average over membrane potentials)
 fig = powerspectrumplot(CB, sol; sampling_rate=0.01)
 save(joinpath(@__DIR__(), "../assets/", "cort_power.svg"), fig); # hide
+@test_reference "plots/cs_cort_power.png" fig by=psnr_equality(24) # hide
 #!nb # ![](../assets/cort_power.svg)
 
 # Notice the peak at 16 Hz, representing beta oscillations.
@@ -188,6 +210,7 @@ pixels = reshape(pixels, 15, 15)
 ## plot the image that the visual cortex 'sees'
 fig = heatmap(pixels, colormap = :gray1)
 save(joinpath(@__DIR__(), "../assets/", "image_stim.svg"), fig); # hide
+@test_reference "plots/cs_image_stim.png" fig by=psnr_equality(24) # hide
 #!nb # ![](../assets/image_stim.svg)
 
 # Above we can see an example image stimulus. Each pixel of the image stimulus is a variable (`stim₊u_i`) that connects to a neuron of the visual cortex `VAC` Blox. Using `connection_rule(stim, VAC)` we can better see how this connection is implemented.

@@ -2,6 +2,12 @@
 
 # This tutorial will introduce you to simulating resting state brain dynamics using Neuroblox. We will be using the FitzHugh-Nagumo model as a building block. The FitzHugh-Nagumo model is described by the follwoing equations:
 
+# **In this tutorial you will learn to:**
+# - Build a whole-brain resting state network from an empirical connectivity matrix.
+# - Use `SDEProblem` to simulate noisy (stochastic) neural dynamics with the `EulerHeun` solver.
+# - Extract voltage timeseries from multiple blox using `voltage_timeseries`.
+# - Compute functional connectivity from simulated data and compare it to the structural connectivity.
+
 # ```math
 #        \begin{align}
 #        \dot{V} &= d \, \tau (-f V^3 + e V^2 + \alpha W - \gamma I_{c} + \sigma w(t) ) \\
@@ -52,6 +58,9 @@ tspan = (0.0, 6e5)
 u0map = Iterators.flatten([(osc.V => rand(-2:0.1:4), osc.W => rand(-2:0.1:4)) for osc ∈ blox])
 
 prob = SDEProblem(g, u0map, tspan, [])
+## `EulerHeun()` is a fixed-step stochastic solver suitable for Stratonovich SDEs. It requires an
+## explicit `dt` (step size). For Itô SDEs you would use `EM()` (Euler-Maruyama). See the
+## DifferentialEquations.jl solver guide: https://docs.sciml.ai/DiffEqDocs/stable/solvers/sde_solve/
 sol = solve(prob, EulerHeun(), dt=0.5, saveat=5);
 
 # Let us now plot the voltage potential of the first couple of components.
