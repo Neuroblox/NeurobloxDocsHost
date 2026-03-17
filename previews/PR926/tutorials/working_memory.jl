@@ -29,7 +29,7 @@
 # - Set `WilsonCowan` blox parameters to enter the bistable regime.
 # - Observe two stable fixed points (spontaneous and persistent-activity states) from
 #   different initial conditions.
-# - Use `PulsesInput` to deliver a brief stimulus that loads information into the network.
+# - Use `PulsesStimulus` to deliver a brief stimulus that loads information into the network.
 # - Connect two competing `WilsonCowan` populations to show selective persistent activity.
 
 # ## The Wilson-Cowan Model and Bistability
@@ -54,6 +54,7 @@
 using Neuroblox
 using OrdinaryDiffEqTsit5
 using CairoMakie
+using Test, ReferenceTests # hide
 
 # ## Bistability: Two Stable Fixed Points
 
@@ -93,6 +94,7 @@ hlines!(ax1, [state_timeseries(wc, sol_low,  "E")[end]]; color=:steelblue, lines
 hlines!(ax1, [state_timeseries(wc, sol_high, "E")[end]]; color=:firebrick,  linestyle=:dash, alpha=0.5)
 axislegend(ax1; position=:rc)
 fig1
+@test_reference "plots/wm_bistability.png" fig1 by=psnr_equality(24) # hide
 
 # The two traces converge to different stable values from different starting points.
 # The dashed lines mark the two stable fixed points. This bistability is the
@@ -106,7 +108,7 @@ fig1
 # maintains the high-activity state indefinitely. This is the neural correlate
 # of *writing* an item into working memory.
 
-# `PulsesInput` delivers a square-wave pulse at user-specified times:
+# `PulsesStimulus` delivers a square-wave pulse at user-specified times:
 
 @graph g_mem begin
     @nodes begin
@@ -114,7 +116,7 @@ fig1
             c_EE=16.0, c_EI=10.0, c_IE=6.0, c_II=1.0, θ_E=3.5, θ_I=4.0
         )
         ## A single 50 ms loading pulse starting at t = 100 ms
-        stim = PulsesInput(; baseline=0.0, pulse_amp=3.0, t_start=[100.0], pulse_width=50.0)
+        stim = PulsesStimulus(; baseline=0.0, pulse_amp=3.0, t_start=[100.0], pulse_width=50.0)
     end
     @connections begin
         stim => mem, (weight = 1.0)
@@ -142,6 +144,7 @@ hlines!(ax2, [state_timeseries(wc, sol_high, "E")[end]]; color=:gray, linestyle=
         label="High fixed point")
 axislegend(ax2; position=:rb)
 fig2
+@test_reference "plots/wm_memory_loading.png" fig2 by=psnr_equality(24) # hide
 
 # During the orange window, the stimulus raises the effective excitatory drive above
 # threshold. The system transitions to the high-activity state. After the stimulus
@@ -164,8 +167,8 @@ wc_params = (c_EE=16.0, c_EI=10.0, c_IE=6.0, c_II=1.0, θ_E=3.5, θ_I=4.0)
         popA = WilsonCowan(; wc_params...)
         popB = WilsonCowan(; wc_params...)
         ## Population A is loaded at t = 80 ms; population B is loaded at t = 280 ms
-        stimA = PulsesInput(; baseline=0.0, pulse_amp=3.0, t_start=[80.0],  pulse_width=50.0)
-        stimB = PulsesInput(; baseline=0.0, pulse_amp=3.0, t_start=[280.0], pulse_width=50.0)
+        stimA = PulsesStimulus(; baseline=0.0, pulse_amp=3.0, t_start=[80.0],  pulse_width=50.0)
+        stimB = PulsesStimulus(; baseline=0.0, pulse_amp=3.0, t_start=[280.0], pulse_width=50.0)
     end
     @connections begin
         stimA => popA, (weight = 1.0)
@@ -195,6 +198,7 @@ vspan!(ax3,  80.0, 130.0; color=(:steelblue, 0.2), label="Stimulus A")
 vspan!(ax3, 280.0, 330.0; color=(:firebrick,  0.2), label="Stimulus B")
 axislegend(ax3; position=:rc)
 fig3
+@test_reference "plots/wm_competing_populations.png" fig3 by=psnr_equality(24) # hide
 
 # Population A is loaded first (t = 80–130 ms) and maintains persistent activity.
 # Its inhibitory output onto B prevents B from being loaded even when stimulus B
@@ -210,7 +214,7 @@ fig3
 # This tutorial demonstrated:
 # - How strong recurrent excitation (`c_EE = 16`) creates two stable fixed points in a
 #   Wilson-Cowan E-I population.
-# - How a brief `PulsesInput` stimulus loads information into the high-activity attractor.
+# - How a brief `PulsesStimulus` stimulus loads information into the high-activity attractor.
 # - How mutual inhibition between two populations implements a winner-takes-all
 #   competition for working memory.
 
