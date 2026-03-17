@@ -175,8 +175,10 @@ wc_params = (c_EE=16.0, c_EI=10.0, c_IE=6.0, c_II=1.0, θ_E=3.5, θ_I=4.0)
         stimB => popB, (weight = 1.0)
         ## Mutual inhibition: each population's E output suppresses the other.
         ## A negative weight on a BasicConnection means inhibitory input to jcn.
-        popA  => popB, (weight = -2.0)
-        popB  => popA, (weight = -2.0)
+        ## Weight magnitude must exceed pulse_amp / E_high ≈ 3.0/0.8 = 3.75 so
+        ## that the winner's suppression outweighs the loser's loading pulse.
+        popA  => popB, (weight = -5.0)
+        popB  => popA, (weight = -5.0)
     end
 end
 
