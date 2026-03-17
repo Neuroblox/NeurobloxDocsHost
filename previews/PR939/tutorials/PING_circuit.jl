@@ -94,6 +94,8 @@ I_bath = -0.7; ## External inhibitory bath for inhibitory neurons - value from p
     end
 end
 
+# > **_NOTE_:** Because all connection weights in this network are uniform (every E→I pair has the same weight, every I→I pair has the same weight, etc.), we could alternatively use `create_adjacency_edges!` to specify the full connectivity in one step by passing a weight matrix. The explicit loops above are used here so you can see exactly which connections are being created. In a network with heterogeneous weights, the loop approach is the natural one. See the Resting State tutorial for an example of `create_adjacency_edges!`.
+
 # > **_NOTE_:** If you want to explore the details of these Bloxs, try typing ``?PINGNeuronExci`` or ``?PINGNeuronInhib`` in your Julia REPL 
 # > to see the full details of the blocks. If you really want to dig into the details, 
 # > type ``@edit PINGNeuronExci()`` to open the source code and see how the equations are written.
