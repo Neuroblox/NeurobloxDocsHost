@@ -104,9 +104,9 @@ save(joinpath("../assets/", "hh_power.svg"), fig); # hide
 
 # ### Continuous Input Sources
 # These sources are comprised of algebraic (and potentially differential) equations that become part of the dynamics of Bloxs that the source connects to.
-# We will drive the `WilsonCowan` Blox above with a `ConstantInput` source. The connection between the two Bloxs looks like 
+# We will drive the `WilsonCowan` Blox above with a `ConstantStimulus` source. The connection between the two Bloxs looks like
 
-@named inp = ConstantInput(; I=3)
+@named inp = ConstantStimulus(; I=3)
 
 connection_rule(inp, nm, weight=1)
 
@@ -138,9 +138,9 @@ save(joinpath("../assets/", "wc_input.svg"), fig); # hide
 tspan = (0, 200) # ms
 spike_rate = 0.01 # spikes / ms
 
-@named spike_train_rate = PoissonSpikeTrain(spike_rate, tspan)
+@named spike_train_rate = PoissonSpikeTrainStimulus(spike_rate, tspan)
 
-# The `PoissonSpikeTrain` needs a timespan `Tuple` (`tspan`) to generate spikes within it. Above we have set a fixed `spike_rate` for our process. Alternatively we can also define the spike train with a variable `spike_rate` that is sampled according to any univariate distribution.
+# The `PoissonSpikeTrainStimulus` needs a timespan `Tuple` (`tspan`) to generate spikes within it. Above we have set a fixed `spike_rate` for our process. Alternatively we can also define the spike train with a variable `spike_rate` that is sampled according to any univariate distribution.
 
 using Distributions
 
@@ -148,10 +148,10 @@ tspan = (0, 200) # ms
 ## Define a `NamedTuple` holding a `distribution` and a `dt` field
 spike_rate = (distibution = Normal(1, 0.1), dt = 10)
 
-@named spike_train_dist = PoissonSpikeTrain(spike_rate, tspan)
+@named spike_train_dist = PoissonSpikeTrainStimulus(spike_rate, tspan)
 
 # When choosing a variable `spike_rate` we need to set a `dt` that dictates how often the `distribution` will generate a new `spike_rate` sample. The units of `dt` match the units of `tspan` which by default is ms in Neuroblox.
-# > **_Exercise:_** Define a `LIFExciNeuron`, connect a `PoissonSpikeTrain` to it and tune the source parameters to make the neuron spike.
+# > **_Exercise:_** Define a `LIFExciNeuron`, connect a `PoissonSpikeTrainStimulus` to it and tune the source parameters to make the neuron spike.
 # > You can visualize spiking using `rasterplot` and `frplot` as above. 
 
 # We can create custom event-based spike sources with a bit more effort compared to continuous ones. Here is a worked example with comments on the necessary steps :
@@ -277,7 +277,7 @@ bursts_per_block = 2
 pre_block_time = 200.0
 inter_burst_time = 200.0
 
-@named dbs = ProtocolDBS(
+@named dbs = ProtocolDBSStimulus(
                 frequency=frequency,
                 amplitude=amplitude,
                 pulse_width=pulse_width,
@@ -305,7 +305,7 @@ fig
 save(joinpath("../assets/", "stim_protocol.svg"), fig); # hide
 #!nb # ![](../assets/stim_protocol.svg)
 
-# Now let's finally connect our `ProtocolDBS` source to an HH excitatory neuron and simulate
+# Now let's finally connect our `ProtocolDBSStimulus` source to an HH excitatory neuron and simulate
 
 @named nn = HHNeuronExci(I_bg=0.4)
 g = GraphSystem()

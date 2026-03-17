@@ -22,6 +22,7 @@ using OrdinaryDiffEqLowOrderRK
 using Distributions
 using CairoMakie
 using Random
+using Test, ReferenceTests # hide
 
 Random.seed!(1)
 
@@ -61,9 +62,9 @@ spike_rate_B = (distribution=Normal(μ_B, σ), dt=dt_spike_rate) # spike rate di
 
 @graph g begin
     @nodes begin
-        background_input = PoissonSpikeTrain(spike_rate, tspan) ## background input
-        stim_A = PoissonSpikeTrain(spike_rate_A, tspan) ## stimulation inputs to selective population A
-        stim_B = PoissonSpikeTrain(spike_rate_B, tspan) ## stimulation inputs to selective population B
+        background_input = PoissonSpikeTrainStimulus(spike_rate, tspan) ## background input
+        stim_A = PoissonSpikeTrainStimulus(spike_rate_A, tspan) ## stimulation inputs to selective population A
+        stim_B = PoissonSpikeTrainStimulus(spike_rate_B, tspan) ## stimulation inputs to selective population B
         n_A = LIFExciCircuit(; N_neurons = N_E_selective, weight = w₊, exci_scaling_factor, inh_scaling_factor)
         n_B = LIFExciCircuit(; N_neurons = N_E_selective, weight = w₊, exci_scaling_factor, inh_scaling_factor)
         n_ns = LIFExciCircuit(; N_neurons = N_E_nonselective, weight = 1.0, exci_scaling_factor, inh_scaling_factor)
@@ -109,6 +110,7 @@ rasterplot(fig[1,2], n_B, sol; title = "Population B")
 rasterplot(fig[2,1], n_inh, sol; color=:red, title = "Inhibitory Population")
 fig
 save(joinpath("../assets/", "dm_raster.svg"), fig); # hide
+@test_reference "plots/dm_raster.png" fig by=psnr_equality(24) # hide
 #!nb # ![](../assets/dm_raster.svg)
 
 # Notice how the neuronal activity in one of the excitatory populations is quickly ramping up, while the activity in the other population is decreasing at the same time. The inhibitory population exhibits a contant tonic activity that facilitates the competition between A and B via the precise spike times.
@@ -120,6 +122,7 @@ frplot!(ax, n_B, sol; color=:red, win_size=50, label="Population B", title = "Co
 axislegend(position=:lt)
 fig
 save(joinpath("../assets/", "dm_fr.svg"), fig); # hide
+@test_reference "plots/dm_fr.png" fig by=psnr_equality(24) # hide
 #!nb # ![](../assets/dm_fr.svg)
 
 # We observe the same result qualitatively when plotting the firing rates instead of spikes. Using a single axis we can better see the magnitude of the competition in the difference between the firing rates over time.

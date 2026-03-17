@@ -24,11 +24,12 @@
 # The network is set up as a directed graph with excitatory neurons driving inhibitory neurons and vice versa, with self-inhibition but not self-excitation present.
 
 # ## Import the necessary packages
-using Neuroblox 
+using Neuroblox
 using OrdinaryDiffEqTsit5
-using Distributions 
-using Random 
+using Distributions
+using Random
 using CairoMakie
+using Test, ReferenceTests # hide
 
 # ## Initialization 
 # Set the random seed to reproduce the plots as shown here exactly. If you want to probe how random variability changes the network, simply omit this line.
@@ -115,6 +116,7 @@ rasterplot(fig[1,1], exci, sol; threshold=20.0, title="Excitatory Neurons")
 rasterplot(fig[2,1], inhib, sol; threshold=20.0, title="Inhibitory Neurons")
 fig
 save(joinpath("../assets/", "ping_raster.svg"), fig); # hide
+@test_reference "plots/ping_raster.png" fig by=psnr_equality(24) # hide
 #!nb # ![](../assets/ping_raster.svg)
 
 # The upper panel should show the dynamics in Figure 1.C, with a clear population of excitatory neurons firing together from the external driving current, and the other excitatory neurons exhibiting more stochastic bursts.

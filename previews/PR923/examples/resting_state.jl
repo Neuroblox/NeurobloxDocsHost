@@ -63,7 +63,11 @@ prob = SDEProblem(g, u0map, tspan, [])
 ## DifferentialEquations.jl solver guide: https://docs.sciml.ai/DiffEqDocs/stable/solvers/sde_solve/
 sol = solve(prob, EulerHeun(), dt=0.5, saveat=5);
 
-# Let us now plot the voltage potential of the first couple of components. We can extract the voltage timeseries of a blox from the solution object using the `voltage_timeseries` function.
+# Let us now plot the voltage potential of the first couple of components.
+# `voltage_timeseries(blox, sol)` is a convenience function that extracts the membrane voltage (V)
+# state variable of a given blox from the solution object and returns it as a plain Julia vector.
+# It is equivalent to calling `state_timeseries(blox, sol, "V")`, but is more readable when you
+# specifically want voltage. Here we call it for the first two oscillators in our network.
 
 v1 = voltage_timeseries(blox[1], sol)
 v2 = voltage_timeseries(blox[2], sol)
