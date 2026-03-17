@@ -55,6 +55,11 @@ using CairoMakie
 # Now we'll setup the neural masses. The values are all taken from the original paper [1], Table 1.
 # Notice that some of these neural masses have the default Neuroblox parameters (e.g., ``PY`` uses default cortical parameters, so the user can simply specify ``cortical=true`` to access these).
 # If you want to see the full list of defaults for the Jansen-Rit model, you can type ``?Jansen-Rit`` in your Julia REPL to view the docstring.
+#
+# > **_Julia tip — `@named`:_** The `@named` macro automatically sets the `name` keyword argument
+# > of a blox to match the variable name you assign it to. So `@named PY = JansenRit(...)` is
+# > exactly equivalent to `PY = JansenRit(; name = :PY, ...)`. This saves repetition and keeps
+# > the blox name consistent with your variable name.
 
 ## Create the cortical oscillators
 @named PY  = JansenRit(cortical=true)  ## default parameters cortical Jansen Rit blox
@@ -79,10 +84,16 @@ using CairoMakie
 # Note that Julia can use any unicode character as a variable name, so we can use arrows in the names of the weights. If you're typing these from scratch, you can access these by typing ``\rightarrow``. For more examples, check out the [Julia documentation](https://docs.julialang.org/en/v1/manual/unicode-input/).
 # We also use the ``@parameters`` macro to define the common connection parameters, which we can then use to define the connections. This is a macro from [ModelingToolkit](https://docs.sciml.ai/ModelingToolkit/stable/tutorials/ode_modeling/) in Julia, which you should look at if you want to build more general models.
 
+# > **_Julia tip — Unicode variable names:_** Julia allows any Unicode character in variable and
+# > function names. This lets us write `C_Cor➡BGTh` with an actual arrow, or use Greek letters
+# > like `τ`, `λ`, and `η` directly. In the Julia REPL or VS Code, type a LaTeX name followed by
+# > Tab to insert the character — e.g. `\tau`+Tab → `τ`, `\rightarrow`+Tab → `→`. For a full
+# > list see the [Julia Unicode input table](https://docs.julialang.org/en/v1/manual/unicode-input/).
+
 C_Cor=3 ## define common connection parameters using healthy parameter range
 C_BGTh=3
 C_Cor➡BGTh=9.75
-C_BGTh➡Cor=9.75 
+C_BGTh➡Cor=9.75
 
 ## Create a graph of connections
 

@@ -1,13 +1,22 @@
 # # Bottom-up construction of a neural assembly
 
 # ## Introduction
-# This tutorial goes through the process of building a neural assembly that is part of a larger model that performs category learning of images [1]. We will follow a bottom-up approach with these steps :
+# This tutorial goes through the process of building a neural assembly that is part of a larger model that performs category learning of images [1]. We will follow a bottom-up approach with these steps:
 # - build a model of a single neuron
 # - expand that model by connecting a few neurons into a local circuit
 # - define a "winner-takes-all" (WTA) circuit with lateral inhibition
-# - build a cortical block by connecting multiple WTAs together with feed-forward inhibition 
+# - build a cortical block by connecting multiple WTAs together with feed-forward inhibition
 # - connect the cortical block to a model of an ascending system
 # - add a source of visual input (images) and a cortical block representing visual cortex to our model and simulate visual processing
+
+# **In this tutorial you will learn to:**
+# - Simulate single Hodgkin-Huxley neurons and visualize voltage traces.
+# - Build circuits step-by-step using `GraphSystem` and `add_connection!`.
+# - Use `stackplot` to visualize the spiking activity of multiple neurons at once.
+# - Use composite blox (`WinnerTakeAll`, `Cortical`) to abstract circuit motifs into reusable blocks.
+# - Use `get_neurons` to extract individual neurons from a composite blox for plotting.
+# - Drive cortical activity with a `NextGenerationEI` ascending neuromodulatory blox.
+# - Connect an `ImageStimulus` to simulate sensory-driven cortical responses.
 
 # ## Single spiking neuron from Hodgkin-Huxley model
 # ![fig1](../assets/neural_assembly_1.png)
@@ -31,6 +40,9 @@ using CairoMakie ## for customized plotting recipies for blox
 using CSV ## to read data from CSV files
 using Downloads ## to download image stimuli files
 using StructArrays
+
+Random.seed!(42) ## Fix the random seed so that rand() calls (e.g. random background currents I_bg)
+                 ## produce the same results each run, matching the plots shown in the documentation.
 
 # define a single excitatory neuron 'blox' with steady input current I_bg = 0.5 microA/cm2
 nn1 = HHNeuronExci(name=Symbol("nrn1"), I_bg=0.5)
