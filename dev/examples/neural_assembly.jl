@@ -70,8 +70,12 @@ fig ## to display the figure
 
 # ![fig2](../assets/neural_assembly_2.png)
 
-## While creating a system of multiple components (neurons in this case), each component should be defined within the same namespace. So first
-## we define a global namespace.
+## When building a system from individually defined blox (rather than using the @graph macro),
+## each blox must share the same namespace so that Neuroblox can correctly wire up their equations.
+## We define a single shared namespace here and pass it to every blox we create. Note that when
+## you use the @graph macro (as in the Getting Started tutorial), namespacing is handled for you
+## automatically — you only need to set it manually here because we are building the graph
+## step-by-step with add_connection!().
 global_namespace=:g
 ## define three neurons, two excitatory and one inhibitory 
 
@@ -91,6 +95,9 @@ sol = solve(prob, Vern7(), saveat=0.1);
 
 ## plotting membrane voltage activity of all neurons in a stacked form
 
+# `stackplot` takes an array of blox (or a single blox) and a solution object, and produces a
+# stacked time-series plot where each row shows the membrane voltage of one neuron. This makes
+# it easy to compare the activity of multiple neurons at a glance.
 stackplot([nn1,nn2,nn3], sol)	## stackplot(<blox or array of blox>, sol)
 
 # Suggestion : Try different values of input currents 'I_bg' and connection weights. One can try different permutations of excitatory and inhibitory neurons.
@@ -140,7 +147,10 @@ add_connection!(g, wta1, wta2, DensityRule(density = 0.5, weight = 1)) ##density
 prob = ODEProblem(g, [], (0.0, 1000), [])
 sol = solve(prob, Vern7(), saveat=0.1)
 
-neuron_set = get_neurons([wta1, wta2]) ## extract neurons from a composite blocks 
+# `get_neurons` traverses a composite blox (or an array of blox) and returns a flat vector of all
+# the individual neuron blox it contains. This is useful when you want to pass individual neurons
+# to `stackplot` or other functions that operate on single-neuron blox rather than composite blocks.
+neuron_set = get_neurons([wta1, wta2]) ## extract neurons from a composite blocks
 stackplot(neuron_set,sol)
 
 # ## Creating a single cortical superficial layer block by connecting multiple WTA circuits
@@ -197,7 +207,14 @@ stackplot(neuron_set, sol)
 
 # ## Connecting the cortical superficial layer block to an ascending system block
 
-# Now we will expand on the SCORT block of the previous section by defining a block representing an ascending system (ASC1 in [1]) and then connecting the two blocks together. 
+# Now we will expand on the SCORT block of the previous section by defining a block representing an
+# **ascending neuromodulatory system** (ASC1 in [1]) and then connecting the two blocks together.
+# "Ascending system" here refers to brainstem and subcortical neuromodulatory inputs (such as those
+# from the locus coeruleus, basal forebrain, or thalamic relay nuclei) that broadcast rhythmic
+# modulation to cortex — not feedforward sensory inputs from lower areas.
+# The `NextGenerationEI` blox is a next-generation neural mass model (Byrne et al. 2020) that
+# captures the dynamics of a coupled excitatory-inhibitory population and is used here to generate
+# a 16 Hz modulating drive to the cortical block.
 
 global_namespace=:g
 
