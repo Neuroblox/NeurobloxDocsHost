@@ -4,6 +4,11 @@
 # Between any pre- and postsynaptic neurons in a Neuroblox model, there exist a synapse that captures the dynamics of the transmitter release and the receptor on the postsynaptic side.
 # Here we will see how to choose synapses when connecting neurons and how to change synapse parameters to model interventions like drugs that alter receptor dynamics.
 
+# **In this tutorial you will learn to:**
+# - Specify explicit receptor types (AMPA, NMDA, GABA-A, GABA-B) when creating connections between neurons.
+# - Observe how different receptor kinetics (e.g., GABA-A vs. GABA-B timescales) affect circuit dynamics.
+# - Use the `@experiment` macro to apply parametric interventions (e.g., simulating a drug that scales receptor conductance) without rebuilding the full model.
+
 # ## Receptors between two neurons
 # Firstly we make a reciprocal connection between an excitatory and inhibitory neuron. The excitatory projections contains both AMPA and NMDA receptors, whereas the inhibitory one is mediated by a GABA A receptor.
 

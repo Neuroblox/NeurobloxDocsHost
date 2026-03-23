@@ -96,6 +96,10 @@ end
 # The Bloxs we use here are subtypes of `CompositeBlox` and contain either `LIFExciNeuron`s or `LIFInhNeuron`s in them.
 
 prob = ODEProblem(g, [], tspan);
+## `Euler()` is the simplest fixed-step ODE solver. It is used here (rather than adaptive solvers
+## like `Tsit5`) because the spiking dynamics of LIF neurons introduce discontinuities that can
+## confuse adaptive step-size control. The step size `dt = 0.01` ms is small enough to resolve
+## individual spikes accurately.
 sol = solve(prob, Euler(); dt = 0.01);
 
 # ## Results

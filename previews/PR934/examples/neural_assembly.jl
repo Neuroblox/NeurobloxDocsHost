@@ -1,13 +1,22 @@
 # # Bottom-up construction of a neural assembly
 
 # ## Introduction
-# This tutorial goes through the process of building a neural assembly that is part of a larger model that performs category learning of images [1]. We will follow a bottom-up approach with these steps :
+# This tutorial goes through the process of building a neural assembly that is part of a larger model that performs category learning of images [1]. We will follow a bottom-up approach with these steps:
 # - build a model of a single neuron
 # - expand that model by connecting a few neurons into a local circuit
 # - define a "winner-takes-all" (WTA) circuit with lateral inhibition
-# - build a cortical block by connecting multiple WTAs together with feed-forward inhibition 
+# - build a cortical block by connecting multiple WTAs together with feed-forward inhibition
 # - connect the cortical block to a model of an ascending system
 # - add a source of visual input (images) and a cortical block representing visual cortex to our model and simulate visual processing
+
+# **In this tutorial you will learn to:**
+# - Simulate single Hodgkin-Huxley neurons and visualize voltage traces.
+# - Build circuits step-by-step using `GraphSystem` and `add_connection!`.
+# - Use `stackplot` to visualize the spiking activity of multiple neurons at once.
+# - Use composite blox (`WinnerTakeAll`, `Cortical`) to abstract circuit motifs into reusable blocks.
+# - Use `get_neurons` to extract individual neurons from a composite blox for plotting.
+# - Drive cortical activity with a `NextGenerationEI` ascending neuromodulatory blox.
+# - Connect an `ImageStimulus` to simulate sensory-driven cortical responses.
 
 # ## Single spiking neuron from Hodgkin-Huxley model
 # ![fig1](../assets/neural_assembly_1.png)
@@ -31,6 +40,9 @@ using CairoMakie ## for customized plotting recipies for blox
 using CSV ## to read data from CSV files
 using Downloads ## to download image stimuli files
 using StructArrays
+
+Random.seed!(42) ## Fix the random seed so that rand() calls (e.g. random background currents I_bg)
+                 ## produce the same results each run, matching the plots shown in the documentation.
 
 # define a single excitatory neuron 'blox' with steady input current I_bg = 0.5 microA/cm2
 nn1 = HHNeuronExci(name=Symbol("nrn1"), I_bg=0.5)
@@ -58,8 +70,12 @@ fig ## to display the figure
 
 # ![fig2](../assets/neural_assembly_2.png)
 
-## While creating a system of multiple components (neurons in this case), each component should be defined within the same namespace. So first
-## we define a global namespace.
+## When building a system from individually defined blox (rather than using the @graph macro),
+## each blox must share the same namespace so that Neuroblox can correctly wire up their equations.
+## We define a single shared namespace here and pass it to every blox we create. Note that when
+## you use the @graph macro (as in the Getting Started tutorial), namespacing is handled for you
+## automatically — you only need to set it manually here because we are building the graph
+## step-by-step with add_connection!().
 global_namespace=:g
 ## define three neurons, two excitatory and one inhibitory 
 
@@ -79,6 +95,9 @@ sol = solve(prob, Vern7(), saveat=0.1);
 
 ## plotting membrane voltage activity of all neurons in a stacked form
 
+# `stackplot` takes an array of blox (or a single blox) and a solution object, and produces a
+# stacked time-series plot where each row shows the membrane voltage of one neuron. This makes
+# it easy to compare the activity of multiple neurons at a glance.
 stackplot([nn1,nn2,nn3], sol)	## stackplot(<blox or array of blox>, sol)
 
 # Suggestion : Try different values of input currents 'I_bg' and connection weights. One can try different permutations of excitatory and inhibitory neurons.
@@ -128,7 +147,10 @@ add_connection!(g, wta1, wta2, DensityRule(density = 0.5, weight = 1)) ##density
 prob = ODEProblem(g, [], (0.0, 1000), [])
 sol = solve(prob, Vern7(), saveat=0.1)
 
-neuron_set = get_neurons([wta1, wta2]) ## extract neurons from a composite blocks 
+# `get_neurons` traverses a composite blox (or an array of blox) and returns a flat vector of all
+# the individual neuron blox it contains. This is useful when you want to pass individual neurons
+# to `stackplot` or other functions that operate on single-neuron blox rather than composite blocks.
+neuron_set = get_neurons([wta1, wta2]) ## extract neurons from a composite blocks
 stackplot(neuron_set,sol)
 
 # ## Creating a single cortical superficial layer block by connecting multiple WTA circuits
@@ -185,7 +207,14 @@ stackplot(neuron_set, sol)
 
 # ## Connecting the cortical superficial layer block to an ascending system block
 
-# Now we will expand on the SCORT block of the previous section by defining a block representing an ascending system (ASC1 in [1]) and then connecting the two blocks together. 
+# Now we will expand on the SCORT block of the previous section by defining a block representing an
+# **ascending neuromodulatory system** (ASC1 in [1]) and then connecting the two blocks together.
+# "Ascending system" here refers to brainstem and subcortical neuromodulatory inputs (such as those
+# from the locus coeruleus, basal forebrain, or thalamic relay nuclei) that broadcast rhythmic
+# modulation to cortex — not feedforward sensory inputs from lower areas.
+# The `NextGenerationEI` blox is a next-generation neural mass model (Byrne et al. 2020) that
+# captures the dynamics of a coupled excitatory-inhibitory population and is used here to generate
+# a 16 Hz modulating drive to the cortical block.
 
 global_namespace=:g
 

@@ -3,6 +3,12 @@
 # ## Introduction
 # This tutorial demonstrates how to build and simulate a basal ganglia model using Neuroblox, based on the work of [Adam et al. (2022)](https://doi.org/10.1073/pnas.2120808119). We'll explore the model's behavior in both normal and Parkinsonian conditions, showcasing the emergence of pathological beta oscillations characteristic of Parkinson's disease.
 
+# **In this tutorial you will learn to:**
+# - Use Neuroblox's specialized composite blox (`Striatum_MSN_Adam`, `Striatum_FSI_Adam`, `GPe_Adam`, `STN_Adam`) that encapsulate entire Hodgkin-Huxley neuron populations with intrinsic connectivity.
+# - Build and solve stochastic differential equation (SDE) problems with `SDEProblem` and `RKMil`.
+# - Run ensemble simulations with `EnsembleProblem` to average over multiple noise realizations.
+# - Compare power spectra between baseline and Parkinsonian circuit configurations.
+
 # ![Full basal ganglia model in baseline condition](../assets/basal_ganglia_baseline.jpg)
 
 # In previous tutorials, we explored building neural circuits from individual neuron bloxs and creating networks using neural mass bloxs. Here, we'll demonstrate how Neuroblox enables modeling of complex brain structures using specialized composite bloxs that encapsulate entire neural populations. These composite bloxs represent distinct neuronal populations within the basal ganglia, each containing multiple Hodgkin-Huxley neurons with their characteristic properties and intrinsic connectivity patterns.
@@ -29,7 +35,10 @@ N_MSN = 100 ## number of Medium Spiny Neurons
 tspan = (0.0, 2000.0) ## simulation time span [ms]
 dt = 0.05 ## time step for solving and saving [ms]
 
-## Create a stochastic differential equation problem and use the RKMil method to solve it
+## Create a stochastic differential equation problem and use the RKMil method to solve it.
+## `RKMil()` is a first-order Milstein method for Itô SDEs — it includes a correction term over
+## the basic Euler-Maruyama method that improves strong convergence from order 0.5 to order 1.0.
+## It requires a fixed step size `dt`. For Stratonovich SDEs use `EulerHeun()` instead.
 prob = SDEProblem(msn.graph, [], tspan, [])
 sol = solve(prob, RKMil(), dt = dt, saveat = dt);
 

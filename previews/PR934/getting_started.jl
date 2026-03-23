@@ -9,6 +9,17 @@
 
 # ## [Getting Started with Neuroblox](@id getting_started_julia)
 
+# ### Overview of the Neuroblox Ecosystem
+#
+# Neuroblox is organized into several levels of abstraction to support a wide range of modeling needs:
+#
+# - **Low-level (single neurons):** Individual neuron models (e.g., Hodgkin-Huxley neurons) that simulate the membrane voltage and ionic currents of a single cell.
+# - **Mid-level (neural masses / populations):** Models like Wilson-Cowan or Jansen-Rit that represent the average activity of an entire population of neurons as a compact set of differential equations. These are useful for modeling brain regions and large-scale dynamics.
+# - **Composite blocks:** Higher-level structures (e.g., `WinnerTakeAll`, `Cortical`) that bundle multiple neurons or neural masses into reusable circuit motifs.
+# - **Utility functions:** Functions for extracting simulation results (`state_timeseries`, `voltage_timeseries`), computing power spectra, plotting raster plots, and more.
+#
+# Throughout the tutorials you will encounter all of these levels, building from individual neurons up to whole-brain circuits. This tutorial starts at the mid-level with a neural mass model to get you running simulations quickly.
+
 # This example will introduce you to simulating brain dynamics using Neuroblox. We will create a simple oscillating circuit using two Wilson-Cowan neural mass models [1]. The Wilson-Cowan model is one of the most influential models in computational neuroscience [2], describing the dynamics of interactions between populations of excitatory and inhibitory neurons.
 
 # ### The Wilson-Cowan Model
@@ -73,7 +84,8 @@ sol = solve(prob, Rodas4(), saveat=0.1)
 
 # ### Plotting simulation results
 
-# Finally, let us plot the `E` and `I` states of the first component, `WC1`. To do this we will use the `state_timeseries` function that extracts the timeseries of a blox state from the solution object. 
+# Finally, let us plot the `E` and `I` states of the first component, `WC1`. Neuroblox provides a family of functions for extracting simulation results from a solution object.
+# `state_timeseries(blox, sol, state_name)` is the general-purpose version: given a blox and a solved ODE solution, it returns the time series of the named state variable as a plain Julia vector. Here we use it to extract the excitatory (`E`) and inhibitory (`I`) activity of `WC1`.
 
 E1 = state_timeseries(WC1, sol, "E")
 I1 = state_timeseries(WC1, sol, "I")
