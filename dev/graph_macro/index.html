@@ -15,7 +15,7 @@ end</code></pre><p>or</p><pre><code class="language-julia hljs">@graph name begi
     @connections begin
         (...)
     end
-end</code></pre><p>Build a <code>GraphSystem</code> from a list of nodes corresponding to blox and a set of connections between the nodes. </p><p>Nodes are defined using normal julia assignment syntax, and connections are defined using pair syntax, followed by an optional tuple of keyword arguments for the connection.</p><pre><code class="language-julia hljs">@graph begin
+end</code></pre><p>Build a <code>GraphSystem</code> from a list of nodes corresponding to blox and a set of connections between the nodes.</p><p>Nodes are defined using normal Julia assignment syntax, and connections are defined using pair syntax, followed by an optional tuple of keyword arguments for the connection.</p><pre><code class="language-julia hljs">@graph begin
     @nodes begin
         nn1 = HHNeuronExci(name=Symbol(&quot;nrn1&quot;), I_bg=3)
         nn2 = HHNeuronExci(name=Symbol(&quot;nrn2&quot;), I_bg=2)
@@ -27,7 +27,35 @@ end</code></pre><p>Build a <code>GraphSystem</code> from a list of nodes corresp
         nn2 =&gt; nn3, (weight = 1)
         nn3 =&gt; nn1, (weight = 0.2)
     end
-end</code></pre><p>The <code>name</code> kwarg of the nodes will be set equal to the variable they&#39;re assigned to, and their <code>namespace</code> equal to the <code>name</code> of the outer graph (default <code>nothing</code>).</p><p>One can insert normal Julia code outside of the <code>@nodes</code> and <code>@connections</code> blox to improve readability or perform other logic:</p><pre><code class="language-julia hljs">@graph begin
+end</code></pre><p>The <code>name</code> kwarg of the nodes will be set equal to the variable they&#39;re assigned to, and their <code>namespace</code> equal to the <code>name</code> of the outer graph (default <code>nothing</code>).</p><h2 id="Node-metadata"><a class="docs-heading-anchor" href="#Node-metadata">Node metadata</a><a id="Node-metadata-1"></a><a class="docs-heading-anchor-permalink" href="#Node-metadata" title="Permalink"></a></h2><p>Arbitrary metadata can be attached to a node by appending a tuple of keyword arguments after the constructor call:</p><pre><code class="language-julia hljs">@graph begin
+    @nodes begin
+        nn1 = HHNeuronExci(I_bg=3), (position = (1, 2))
+        nn2 = HHNeuronExci(I_bg=2), (position = (3, 4), layer = 2)
+    end
+end</code></pre><p>The metadata tuple is passed to the blox constructor as <code>metadata = pairs((; kwargs...))</code>. All of the following forms are accepted:</p><pre><code class="language-julia hljs"># Single kwarg — no trailing comma needed
+nn = SomeBlox(), (position = (1, 2))
+
+# Multiple kwargs — comma-separated inside parens
+nn = SomeBlox(), (position = (1, 2), layer = 2)
+
+# Trailing-comma tuple (explicit 1-element tuple)
+nn = SomeBlox(), (position = (1, 2),)
+
+# Named-tuple form with semicolon
+nn = SomeBlox(), (; position = (1, 2), layer = 2)</code></pre><h2 id="Connection-syntax"><a class="docs-heading-anchor" href="#Connection-syntax">Connection syntax</a><a id="Connection-syntax-1"></a><a class="docs-heading-anchor-permalink" href="#Connection-syntax" title="Permalink"></a></h2><p>The <code>@connections</code> block supports several forms:</p><pre><code class="language-julia hljs">@connections begin
+    # DefaultRule with kwargs passed to the constructor
+    a =&gt; b, (weight = 1.0)
+    a =&gt; b, weight = 1.0       # single-kwarg shorthand
+
+    # Explicit connection object (no extra kwargs)
+    a =&gt; b, MyRule(1.0)
+
+    # Explicit connection object + metadata kwargs stored on the edge
+    a =&gt; b, MyRule(1.0), (color = :red, width = 2.0)
+
+    # No spec → DefaultRule()
+    a =&gt; b
+end</code></pre><p>When the three-element form <code>src =&gt; dst, conn, (kwargs...)</code> is used, the kwargs are forwarded to <code>add_connection!</code> and stored in <code>connection.metadata</code>.</p><p>One can insert normal Julia code outside of the <code>@nodes</code> and <code>@connections</code> blox to improve readability or perform other logic:</p><pre><code class="language-julia hljs">@graph begin
     μ_E = 1.5
     σ_E = 0.15
     μ_I = 0.8
@@ -64,4 +92,4 @@ end</code></pre><p>to manually pick the names assigned to the inhibitory neurons
             n1 =&gt; n2, (weight = 1)
         end
     end
-end</code></pre></article><nav class="docs-footer"><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.17.0 on <span class="colophon-date" title="Thursday 16 April 2026 18:43">Thursday 16 April 2026</span>. Using Julia version 1.12.6.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
+end</code></pre></article><nav class="docs-footer"><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.17.0 on <span class="colophon-date" title="Friday 17 April 2026 11:33">Friday 17 April 2026</span>. Using Julia version 1.12.6.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
