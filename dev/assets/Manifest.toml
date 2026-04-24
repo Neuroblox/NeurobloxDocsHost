@@ -2191,9 +2191,9 @@ version = "5.1.1"
 
 [[deps.OptimizationOptimJL]]
 deps = ["Optim", "OptimizationBase", "Reexport", "SciMLBase", "SparseArrays"]
-git-tree-sha1 = "7ab4b611444e17652943e7f22b755bb7ed8ed1be"
+git-tree-sha1 = "3e6aa79dd37700e32f95e9b312f0742343cd9437"
 uuid = "36348300-93cb-4f02-beb5-3c3902f8871e"
-version = "0.4.12"
+version = "0.4.13"
 
 [[deps.Opus_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl"]
