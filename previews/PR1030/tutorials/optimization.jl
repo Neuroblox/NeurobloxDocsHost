@@ -16,7 +16,6 @@
 # We will be using a next generation neural mass model of E-I balance here, which we have seen before. We will treat the four coupling coefficients between the excitatory and inhibitory componenets of the model (excitatory-excitatory, excitatory-inhibitory, inhibitory-excitatory and inhibitory-inhibitory) as the unknown parameters to be fitted. 
 using Neuroblox
 using OrdinaryDiffEqTsit5
-using Optimization ## the general interface for solving optimization problems
 using OptimizationOptimJL ## provides LBFGS and other Optim.jl solvers
 using ForwardDiff ## enables AutoForwardDiff() for exact gradient computation
 using CairoMakie
@@ -48,17 +47,24 @@ data = solve(prob, Tsit5());
 
 # We add some observation noise to our fictive data to make it look more realistic. At each timepoint each state receives noise that is sampled from a Normal distribution around 0 with a standard deviation of 0.1 .
 noise_distribution = Normal(0, 0.1)
-data .+= rand(noise_distribution, size(data));
+## Extract the state matrix (n_states × n_timepoints) and add noise to a fresh copy
+data_matrix = Array(data) .+ rand(noise_distribution, size(data));
 
 # ## Initial Guess for Parameters
-# For most optimization methods we need to provide an initial guess for the parameters to be fitted. We use `extract_vars` to build a nested `ComponentVector` that carries symbolic parameter names alongside their values. This vector is a flat `AbstractArray` compatible with any optimizer, while still letting us access parameters by name (e.g. `v0.g.nm.kₑₑ`). The original `prob` is never mutated; `apply_vars` creates a fresh `ODEProblem` from the updated vector on every call.
-## Build a ComponentVector for the parameters to be optimized and set initial guess values
-v0 = extract_vars(prob, [nm.kₑₑ, nm.kᵢᵢ, nm.kₑᵢ, nm.kᵢₑ])
-v0.g.nm.kₑₑ = 0.2; v0.g.nm.kᵢᵢ = 3.3; v0.g.nm.kₑᵢ = 2.0; v0.g.nm.kᵢₑ = 3.5
-sol = solve(apply_vars(prob, v0), Tsit5())
+# For most optimization methods we need to provide an initial guess for the parameters to be fitted. We construct an `ODEProblem` directly with the initial-guess parameter values.
+init_prob = ODEProblem(g, [], tspan,
+    [nm.kₑₑ => 0.2, nm.kᵢᵢ => 3.3, nm.kₑᵢ => 2.0, nm.kᵢₑ => 3.5])
+sol = solve(init_prob, Tsit5(); saveat=t_save)
 
 state_names = state_symbols(typeof(nm))
 state_syms_namespaced = [getproperty(nm, s) for s in state_names]
+
+## Build a Tables.jl-compatible table from the noisy data:
+## each row is one time point with a :t field and one field per state symbol.
+nt_keys    = (:t, state_syms_namespaced...)
+data_table = [NamedTuple{nt_keys}((data.t[j], data_matrix[:, j]...))
+              for j in axes(data_matrix, 2)]
+
 fig = Figure(size = (1600, 800), fontsize=22)
 axs = [
     Axis(fig[1,1], title=String(state_names[1])),
@@ -71,7 +77,7 @@ axs = [
     Axis(fig[4,2], title=String(state_names[8]))
 ]
 for (i,s) in enumerate(state_syms_namespaced)
-    lines!(axs[i], data[s], label="Data")
+    lines!(axs[i], data_matrix[i, :], label="Data")
     lines!(axs[i], sol[s], label="Initial Guess")
 end
 colsize!(fig.layout, 1, Relative(1/2))
@@ -82,30 +88,21 @@ save(joinpath(@__DIR__(), "../assets/", "opt_init.svg"), fig); # hide
 #!nb # ![](../assets/opt_init.svg)
 
 # ## Parameter Fit using Optimization
-# We are now ready to define the loss function and the optimization problem and then solve it to get the optimized values for the four coupling parameters. The loss function is pure: it calls `apply_vars` to create a new `ODEProblem` on each iteration rather than mutating a shared one. This is required for `AutoForwardDiff()`, which traces through the ODE solve by wrapping parameter values in `Dual` numbers.
-## define the least squares loss function
-function loss(v, data, prob)
-    prob2 = apply_vars(prob, v)
-    sol = solve(prob2, Tsit5())
-
-    return sum(abs2, sol .- data)
-end
-
-## Use forward-mode automatic differentiation to compute gradients
-objective = OptimizationFunction((v, data) -> loss(v, data, prob), AutoForwardDiff())
-prob_opt = OptimizationProblem(objective, v0, data)
-## run the optimization using the LBFGS optimizer
-res = solve(prob_opt, LBFGS())
+# We are now ready to fit the parameters. We pass the `data` solution directly to `optimize_state` — it extracts `data.t` as the `saveat` grid automatically, so the inner ODE solver always outputs at exactly the same time points as the measurements.
+## fit all states simultaneously; saveat is taken from data_table's :t column automatically
+res = optimize_state(data_table, state_syms_namespaced,
+                     [nm.kₑₑ, nm.kᵢᵢ, nm.kₑᵢ, nm.kᵢₑ], init_prob;
+                     solve_alg=Tsit5(), opt_alg=LBFGS())
 ## print the return code to check that the optimization was successful
-@show res.retcode
+@show res.result.retcode
 
 # ## Results
-# Since the least squares optimization was run successfully, we can use the returned parameters as the ones that best fit the data. First of all let's compare them to the ground truth. `res.u` is a `ComponentVector` with the same nested structure as `v0`, so the fitted values can be read by name (e.g. `res.u.g.nm.kₑₑ`).
+# Since the least squares optimization was run successfully, we can use the returned parameters as the ones that best fit the data. First of all let's compare them to the ground truth. `res.result.u` is a `ComponentVector` with the fitted values; `res.prob` is the remade `ODEProblem` with those values applied.
 println("Ground truth parameters are $(p_ground_truth)")
-println("Fitted parameters are $(res.u)")
+println("Fitted parameters are $(res.result.u)")
 # We observe that the fitted parameters are close to the ground truth ones, certainly much closer than our initial guess.
 # Let's now simulate the model using these optimized parameters and compare the timeseries with the original data.
-sol = solve(apply_vars(prob, res.u), Tsit5())
+sol = solve(res.prob, Tsit5(); saveat=t_save)
 
 fig = Figure(size = (1600, 800), fontsize=22)
 axs = [
@@ -119,7 +116,7 @@ axs = [
     Axis(fig[4,2], title=String(state_names[8]))
 ]
 for (i,s) in enumerate(state_syms_namespaced)
-    lines!(axs[i], data[s], label="Data")
+    lines!(axs[i], data_matrix[i, :], label="Data")
     lines!(axs[i], sol[s], label="Optimized Solution")
 end
 colsize!(fig.layout, 1, Relative(1/2))
