@@ -66,7 +66,7 @@ fig = stackplot([ne, ni], sol)
 @graph g begin
     @nodes begin
         Brainstem = NGNMM_theta(Cₑ=2*26,Cᵢ=1*26, Δₑ=0.5, Δᵢ=0.5, η_0ₑ=10.0, η_0ᵢ=0.0, v_synₑₑ=10.0, v_synₑᵢ=-10.0, v_synᵢₑ=10.0, v_synᵢᵢ=-10.0, alpha_invₑₑ=10.0/26, alpha_invₑᵢ=0.8/26, alpha_invᵢₑ=10.0/26, alpha_invᵢᵢ=0.8/26, kₑₑ=0.0*26, kₑᵢ=0.6*26, kᵢₑ=0.6*26, kᵢᵢ=0*26)
-        Layer_2_3 = Cortical(N_wta=20, N_exci=5, density=0.05, weight=1, I_bg_ar=4, G_syn_inhib=4, τ_inhib=70, G_syn_ff_inhib=1.5)
+        Layer_2_3 = Cortical(N_wta=20, N_exci=5, density=0.05, weight=1, I_bg=4, G_syn_inhib=4, τ_inhib=70, G_syn_ff_inhib=1.5)
     end
     @connections begin
         Brainstem => Layer_2_3, (weight = 20)
