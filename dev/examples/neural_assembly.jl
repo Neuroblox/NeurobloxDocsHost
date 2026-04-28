@@ -224,7 +224,7 @@ global_namespace=:g
 
 ## define the superficial layer cortical block using inbuilt function
 ## Number if WTA circuits = N_wta=45; number of pyramidal neurons in each WTA circuit = N_exci = 5;
-@named CB = Cortical(N_wta=10, N_exci=5, density=0.01, weight=1, I_bg_ar=7; namespace=global_namespace)
+@named CB = Cortical(N_wta=10, N_exci=5, density=0.01, weight=1, I_bg=7; namespace=global_namespace)
 
 ## define graph and connect ASC1->CB
 g = GraphSystem()
@@ -258,8 +258,8 @@ powerspectrumplot(CB, sol)
 # create cortical blocks for visual area cortex (VAC), anterior cortex (AC) and ascending system block (ASC1)
 global_namespace=:g
 ## cortical blox
-@named VAC = Cortical(N_wta=10, N_exci=5,  density=0.01, weight=1,I_bg_ar=0; namespace=global_namespace) 
-@named AC = Cortical(N_wta=10, N_exci=5, density=0.01, weight=1,I_bg_ar=0; namespace=global_namespace) 
+@named VAC = Cortical(N_wta=10, N_exci=5,  density=0.01, weight=1,I_bg=0; namespace=global_namespace) 
+@named AC = Cortical(N_wta=10, N_exci=5, density=0.01, weight=1,I_bg=0; namespace=global_namespace) 
 ## ascending system blox, modulating frequency set to 16 Hz
 @named ASC1 = NextGenerationEI(;namespace=global_namespace, Cₑ=2*26,Cᵢ=1*26, Δₑ=0.5, Δᵢ=0.5, η_0ₑ=10.0, η_0ᵢ=0.0, v_synₑₑ=10.0, v_synₑᵢ=-10.0, v_synᵢₑ=10.0, v_synᵢᵢ=-10.0, alpha_invₑₑ=10.0/26, alpha_invₑᵢ=0.8/26, alpha_invᵢₑ=10.0/26, alpha_invᵢᵢ=0.8/26, kₑₑ=0.0*26, kₑᵢ=0.6*26, kᵢₑ=0.6*26, kᵢᵢ=0*26) 
 

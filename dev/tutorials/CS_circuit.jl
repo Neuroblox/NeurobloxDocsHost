@@ -151,7 +151,7 @@ save(joinpath(@__DIR__(), "../assets/", "cort_stack.svg"), fig); # hide
             N_exci=5, ## number of pyramidal neurons in each WinnerTakeAll circuit
             density=0.01, 
             weight=1, 
-            I_bg_ar=7
+            I_bg=7
         )
     end
     @connections begin
