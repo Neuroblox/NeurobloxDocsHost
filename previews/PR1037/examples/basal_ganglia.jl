@@ -102,13 +102,13 @@ ens_prob = EnsembleProblem(prob)
 ens_sol = solve(ens_prob, RKMil(), dt=dt, saveat = dt, trajectories = 3);
 
 # Compute firing rates for comparison
-fr_msn = firing_rate(msn, ens_sol[1], threshold=-35, transient=200)
-fr_fsi = firing_rate(fsi, ens_sol[1], threshold=-35, transient=200)
+fr_msn = firing_rate(msn, ens_sol.u[1], threshold=-35, transient=200)
+fr_fsi = firing_rate(fsi, ens_sol.u[1], threshold=-35, transient=200)
 
 # Let's see their raster plots and power spectra
 fig = Figure(size = (1000, 800))
-rasterplot(fig[1,1], msn, ens_sol[1], threshold = -35, title = "MSN - Mean Firing Rate: $(round(fr_msn[1], digits=2)) spikes/s")
-rasterplot(fig[1,2], fsi, ens_sol[1], threshold = -35, title = "FSI - Mean Firing Rate: $(round(fr_fsi[1], digits=2)) spikes/s")
+rasterplot(fig[1,1], msn, ens_sol.u[1], threshold = -35, title = "MSN - Mean Firing Rate: $(round(fr_msn[1], digits=2)) spikes/s")
+rasterplot(fig[1,2], fsi, ens_sol.u[1], threshold = -35, title = "FSI - Mean Firing Rate: $(round(fr_fsi[1], digits=2)) spikes/s")
 
 powerspectrumplot(fig[2,1], msn, ens_sol, state = "G",
                   method = welch_pgram, window = hanning,
