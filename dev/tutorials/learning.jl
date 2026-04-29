@@ -125,7 +125,7 @@ fig = Figure(title="Adjacency matrix", size = (1600, 800))
 
 adjacency(fig[1,1], agent; title = "Before Learning", colorrange=(0,0.2))
 
-trace = run_experiment!(agent, env; t_warmup=200.0, alg=Vern7(), verbose=true)
+trace = run_experiment!(agent, env; t_warmup=200.0, alg=Vern7())
 
 # `trace` is a vector of `NamedTuple`s containing useful outcomes for each trial of the experiment: 
 trace.trial ## trial indices
