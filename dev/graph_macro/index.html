@@ -55,7 +55,24 @@ nn = SomeBlox(), (; position = (1, 2), layer = 2)</code></pre><h2 id="Connection
 
     # No spec → DefaultRule()
     a =&gt; b
-end</code></pre><p>When the three-element form <code>src =&gt; dst, conn, (kwargs...)</code> is used, the kwargs are forwarded to <code>add_connection!</code> and stored in <code>connection.metadata</code>.</p><p>One can insert normal Julia code outside of the <code>@nodes</code> and <code>@connections</code> blox to improve readability or perform other logic:</p><pre><code class="language-julia hljs">@graph begin
+end</code></pre><p>When the three-element form <code>src =&gt; dst, conn, (kwargs...)</code> is used, the kwargs are forwarded to <code>add_connection!</code> and stored in <code>connection.metadata</code>.</p><h2 id="Graph-metadata"><a class="docs-heading-anchor" href="#Graph-metadata">Graph metadata</a><a id="Graph-metadata-1"></a><a class="docs-heading-anchor-permalink" href="#Graph-metadata" title="Permalink"></a></h2><p>Graph-level metadata can be attached using a <code>@graph_metadata</code> block. Each entry is a <code>key =&gt; value</code> pair, where the key is a <code>Symbol</code> and the value is any Julia expression. The pairs are stored in the <code>metadata::OrderedDict{Symbol, Any}</code> field of the resulting <code>GraphSystem</code>.</p><pre><code class="language-julia hljs">g = @graph begin
+    @nodes begin
+        ping_exci1 = PINGNeuronExci()
+        ping_inhib = PINGNeuronInhib()
+    end
+
+    @graph_metadata begin
+        :solver_settings =&gt; Dict(:solver =&gt; :stiff)
+        :datafiles =&gt; [&quot;image_example.csv&quot;]
+
+        # Normal Julia code is allowed inside the block
+        x = 5
+        :x_squared =&gt; x^2
+    end
+end
+
+g.metadata[:solver_settings]  # Dict(:solver =&gt; :stiff)
+g.metadata[:x_squared]        # 25</code></pre><p>One can insert normal Julia code outside of the <code>@nodes</code> and <code>@connections</code> blox to improve readability or perform other logic:</p><pre><code class="language-julia hljs">@graph begin
     μ_E = 1.5
     σ_E = 0.15
     μ_I = 0.8
@@ -92,4 +109,4 @@ end</code></pre><p>to manually pick the names assigned to the inhibitory neurons
             n1 =&gt; n2, (weight = 1)
         end
     end
-end</code></pre></article><nav class="docs-footer"><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.17.0 on <span class="colophon-date" title="Wednesday 29 April 2026 18:00">Wednesday 29 April 2026</span>. Using Julia version 1.12.6.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
+end</code></pre></article><nav class="docs-footer"><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.17.0 on <span class="colophon-date" title="Friday 1 May 2026 03:23">Friday 1 May 2026</span>. Using Julia version 1.12.6.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
