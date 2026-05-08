@@ -279,9 +279,9 @@ version = "0.15.10"
 
 [[deps.Cairo_jll]]
 deps = ["Artifacts", "Bzip2_jll", "CompilerSupportLibraries_jll", "Fontconfig_jll", "FreeType2_jll", "Glib_jll", "JLLWrappers", "Libdl", "Pixman_jll", "Xorg_libXext_jll", "Xorg_libXrender_jll", "Zlib_jll", "libpng_jll"]
-git-tree-sha1 = "d0efe2c6fdcdaa1c161d206aa8b933788397ec71"
+git-tree-sha1 = "1fa950ebc3e37eccd51c6a8fe1f92f7d86263522"
 uuid = "83423d85-b0ee-5818-9007-b63ccbeb887a"
-version = "1.18.6+0"
+version = "1.18.7+0"
 
 [[deps.ChainRulesCore]]
 deps = ["Compat", "LinearAlgebra"]
@@ -509,9 +509,9 @@ version = "4.1.1"
 
 [[deps.DSP]]
 deps = ["Bessels", "FFTW", "IterTools", "LinearAlgebra", "Polynomials", "Random", "Reexport", "SpecialFunctions", "Statistics"]
-git-tree-sha1 = "5989debfc3b38f736e69724818210c67ffee4352"
+git-tree-sha1 = "d335b2929e1b6067951a1250df247cc5fab7d40e"
 uuid = "717857b8-e6f2-59f4-9121-6e50c889abd2"
-version = "0.8.4"
+version = "0.8.5"
 weakdeps = ["OffsetArrays"]
 
     [deps.DSP.extensions]
@@ -2146,9 +2146,9 @@ version = "5.5.1"
 
 [[deps.OptimizationBase]]
 deps = ["ADTypes", "ArrayInterface", "DifferentiationInterface", "DocStringExtensions", "FastClosures", "LinearAlgebra", "PDMats", "PrecompileTools", "Reexport", "SciMLBase", "SciMLLogging", "SparseArrays", "SparseConnectivityTracer", "SparseMatrixColorings", "SymbolicIndexingInterface"]
-git-tree-sha1 = "642ea067d729f1f18795a434550b40de0a4fbbc8"
+git-tree-sha1 = "6c10a4e4c3a74bf4b6c1fa0c1b8bcec683007762"
 uuid = "bca83a33-5cc9-4baa-983d-23429ab6bcbb"
-version = "5.1.1"
+version = "5.1.2"
 
     [deps.OptimizationBase.extensions]
     OptimizationChainRulesCoreExt = "ChainRulesCore"
@@ -2176,9 +2176,9 @@ version = "5.1.1"
 
 [[deps.OptimizationOptimJL]]
 deps = ["Optim", "OptimizationBase", "Reexport", "SciMLBase", "SparseArrays"]
-git-tree-sha1 = "3e6aa79dd37700e32f95e9b312f0742343cd9437"
+git-tree-sha1 = "c1494ecd921c413ce27706784e06907a4ed5bfc1"
 uuid = "36348300-93cb-4f02-beb5-3c3902f8871e"
-version = "0.4.13"
+version = "0.4.14"
 
 [[deps.Opus_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl"]
@@ -2338,9 +2338,9 @@ weakdeps = ["Makie", "RecipesBase"]
 
 [[deps.Pixman_jll]]
 deps = ["Artifacts", "CompilerSupportLibraries_jll", "JLLWrappers", "LLVMOpenMP_jll", "Libdl"]
-git-tree-sha1 = "db76b1ecd5e9715f3d043cec13b2ec93ce015d53"
+git-tree-sha1 = "e4a6721aa89e62e5d4217c0b21bd714263779dda"
 uuid = "30392449-352a-5448-841d-b1acce4e97dc"
-version = "0.44.2+0"
+version = "0.46.4+0"
 
 [[deps.Pkg]]
 deps = ["Artifacts", "Dates", "Downloads", "FileWatching", "LibGit2", "Libdl", "Logging", "Markdown", "Printf", "Random", "SHA", "TOML", "Tar", "UUIDs", "p7zip_jll"]
@@ -2676,9 +2676,9 @@ version = "0.1.0"
 
 [[deps.SciMLBase]]
 deps = ["ADTypes", "Accessors", "Adapt", "ArrayInterface", "CommonSolve", "ConstructionBase", "Distributed", "DocStringExtensions", "EnumX", "FunctionWrappersWrappers", "IteratorInterfaceExtensions", "LinearAlgebra", "Logging", "Markdown", "PreallocationTools", "PrecompileTools", "Preferences", "Printf", "Random", "RecipesBase", "RecursiveArrayTools", "Reexport", "RuntimeGeneratedFunctions", "SciMLLogging", "SciMLOperators", "SciMLPublic", "SciMLStructures", "StaticArraysCore", "Statistics", "SymbolicIndexingInterface"]
-git-tree-sha1 = "450a8405f96d0a7c6caabed0852def06ba8c6bf1"
+git-tree-sha1 = "41e2bf1d335424a55e610a5ec29a39b5542289b3"
 uuid = "0bca4576-84f4-4d90-8ffe-ffa030f20462"
-version = "3.7.1"
+version = "3.9.0"
 
     [deps.SciMLBase.extensions]
     SciMLBaseChainRulesCoreExt = "ChainRulesCore"
