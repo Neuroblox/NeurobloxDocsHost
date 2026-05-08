@@ -109,22 +109,20 @@ stackplot([nn1,nn2,nn3], sol)	## stackplot(<blox or array of blox>, sol)
 global_namespace=:g 
 N_exci = 5; ##number of excitatory neurons
 
-n_inh = HHNeuronInhib(name = Symbol("inh"), namespace=global_namespace, G_syn = 4.0, τ = 70) ##feedback inhibitory interneuron neuron
+n_inh = HHNeuronInhib(name = :inh, namespace=global_namespace) ##feedback inhibitory interneuron neuron
 
 ##creating an array of excitatory pyramidal neurons
 n_excis = [HHNeuronExci(
     name = Symbol("exci$i"),
     namespace=global_namespace, 
-    G_syn = 3.0, 
-    τ = 5,
     I_bg = 5*rand(), 
 ) for i = 1:N_exci]
 
 g = GraphSystem()
 
 for i in 1:N_exci
-    add_connection!(g, n_inh, n_excis[i], DefaultRule(weight = 1.0))
-    add_connection!(g, n_excis[i], n_inh, DefaultRule(weight = 1.0))
+    add_connection!(g, n_inh, n_excis[i], DefaultRule(weight = 1.0, G_syn = 4.0, τ = 70))
+    add_connection!(g, n_excis[i], n_inh, DefaultRule(weight = 1.0, G_syn = 3.0, τ = 5))
 end
 prob = ODEProblem(g, [], (0.0, 1000), [])
 sol = solve(prob, Vern7(), saveat=0.1)
@@ -182,7 +180,6 @@ wtas = [WinnerTakeAll(;
 n_ff_inh = HHNeuronInhib(;
                          name=Symbol("ff_inh"),
                          namespace=global_namespace,
-                         G_syn=G_syn_ff_inhib
                          )
 
 g = GraphSystem()
@@ -194,7 +191,7 @@ for i in 1:N_wta
             add_connection!(g, wtas[i], wtas[j], DensityRule(density = density, weight = 1))
         end
     end
-    add_connection!(g, n_ff_inh, wtas[i], DefaultRule(weight = 1))
+    add_connection!(g, n_ff_inh, wtas[i], DefaultRule(weight = 1, G_syn=G_syn_ff_inhib))
 end
 
 prob = ODEProblem(g, [], (0.0, 1000), [])
