@@ -28,7 +28,7 @@ Random.seed!(42) # hide
 
 @graph g begin
     @nodes begin
-        inh = HHNeuronInhib(G_syn = 4.0) ##feedback inhibitory interneuron neuron
+        inh = HHNeuronInhib() ##feedback inhibitory interneuron neuron
         ##creating an array of excitatory pyramidal neurons
         exci1 = HHNeuronExci(I_bg = 5*rand())
         exci2 = HHNeuronExci(I_bg = 5*rand())
@@ -38,7 +38,7 @@ Random.seed!(42) # hide
     end
     @connections begin
         for exci_neuron ∈ [exci1, exci2, exci3, exci5]
-            inh => exci_neuron, (weight = 1)
+            inh => exci_neuron, (weight = 1, G_syn=4.0)
             exci_neuron => inh, (weight = 1)
         end
     end
@@ -109,7 +109,7 @@ density = 0.01 ## connection density between WTA circuits
     @nodes begin
         ## create a vector of `WinnerTakesAllBlox` using list comprehension
         wtas = [WinnerTakeAll(; N_exci, G_syn_exci, G_syn_inhib, I_bg) for i in 1:N_wta]
-        n_ff_inh = HHNeuronInhib(; G_syn=G_syn_ff_inhib)
+        n_ff_inh = HHNeuronInhib()
     end
     @connections begin
         for i in 1:N_wta
@@ -118,7 +118,7 @@ density = 0.01 ## connection density between WTA circuits
                     wtas[i] => wtas[j], DensityRule(weight=1, density=density)
                 end
             end
-            n_ff_inh => wtas[i], (weight=1)
+            n_ff_inh => wtas[i], (weight=1, G_syn=G_syn_ff_inhib)
         end
     end
 end
