@@ -80,7 +80,7 @@ save(joinpath("../assets/", "qif_timeseries.svg"), fig); # hide
 
 using StochasticDiffEq ## to access stochastic DE solvers
 
-@named hh = HHNeuronExci_STN_Adam(; σ=2) ## σ is the brownian noise amplitude
+@named hh = HHExciNeuron_STN_Adam(; σ=2) ## σ is the brownian noise amplitude
 g = GraphSystem()
 add_node!(g, hh)
 
@@ -94,7 +94,7 @@ save(joinpath("../assets/", "hh_power.svg"), fig); # hide
 #!nb # ![](../assets/hh_power.svg)
 
 # We can use all other plots from above with this stochastic HH neuron since it is a subtype of `Neuron`. Given its stochastic nature it might be additionally meaningful to show the powerspectrum of its activity.
-# > **_Exercise:_** Try changing the influence of the stochastic term. What do you notice about the powerspectrum of `HHNeuronExci_STN_Adam_Blox`?
+# > **_Exercise:_** Try changing the influence of the stochastic term. What do you notice about the powerspectrum of `HHExciNeuron_STN_Adam_Blox`?
 
 # ## Sources
 
@@ -307,7 +307,7 @@ save(joinpath("../assets/", "stim_protocol.svg"), fig); # hide
 
 # Now let's finally connect our `ProtocolDBSStimulus` source to an HH excitatory neuron and simulate
 
-@named nn = HHNeuronExci(I_bg=0.4)
+@named nn = HHExciNeuron(I_bg=0.4)
 g = GraphSystem()
 add_connection!(g, dbs, nn, DBSConnection(10.0))
 prob = ODEProblem(g, [], tspan)

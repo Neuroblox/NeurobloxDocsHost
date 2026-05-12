@@ -17,9 +17,9 @@ end</code></pre><p>or</p><pre><code class="language-julia hljs">@graph name begi
     end
 end</code></pre><p>Build a <code>GraphSystem</code> from a list of nodes corresponding to blox and a set of connections between the nodes.</p><p>Nodes are defined using normal Julia assignment syntax, and connections are defined using pair syntax, followed by an optional tuple of keyword arguments for the connection.</p><pre><code class="language-julia hljs">@graph begin
     @nodes begin
-        nn1 = HHNeuronExci(name=Symbol(&quot;nrn1&quot;), I_bg=3)
-        nn2 = HHNeuronExci(name=Symbol(&quot;nrn2&quot;), I_bg=2)
-        nn3 = HHNeuronInhib(name=Symbol(&quot;nrn3&quot;), I_bg=2)
+        nn1 = HHExciNeuron(name=Symbol(&quot;nrn1&quot;), I_bg=3)
+        nn2 = HHExciNeuron(name=Symbol(&quot;nrn2&quot;), I_bg=2)
+        nn3 = HHInhiNeuron(name=Symbol(&quot;nrn3&quot;), I_bg=2)
     end
 
     @connections begin
@@ -29,8 +29,8 @@ end</code></pre><p>Build a <code>GraphSystem</code> from a list of nodes corresp
     end
 end</code></pre><p>The <code>name</code> kwarg of the nodes will be set equal to the variable they&#39;re assigned to, and their <code>namespace</code> equal to the <code>name</code> of the outer graph (default <code>nothing</code>).</p><h2 id="Node-metadata"><a class="docs-heading-anchor" href="#Node-metadata">Node metadata</a><a id="Node-metadata-1"></a><a class="docs-heading-anchor-permalink" href="#Node-metadata" title="Permalink"></a></h2><p>Arbitrary metadata can be attached to a node by appending a tuple of keyword arguments after the constructor call:</p><pre><code class="language-julia hljs">@graph begin
     @nodes begin
-        nn1 = HHNeuronExci(I_bg=3), (position = (1, 2))
-        nn2 = HHNeuronExci(I_bg=2), (position = (3, 4), layer = 2)
+        nn1 = HHExciNeuron(I_bg=3), (position = (1, 2))
+        nn2 = HHExciNeuron(I_bg=2), (position = (3, 4), layer = 2)
     end
 end</code></pre><p>The metadata tuple is passed to the blox constructor as <code>metadata = pairs((; kwargs...))</code>. All of the following forms are accepted:</p><pre><code class="language-julia hljs"># Single kwarg — no trailing comma needed
 nn = SomeBlox(), (position = (1, 2))
@@ -58,7 +58,7 @@ nn = SomeBlox(), (; position = (1, 2), layer = 2)</code></pre><h2 id="Connection
 end</code></pre><p>When the three-element form <code>src =&gt; dst, conn, (kwargs...)</code> is used, the kwargs are forwarded to <code>add_connection!</code> and stored in <code>connection.metadata</code>.</p><h2 id="Graph-metadata"><a class="docs-heading-anchor" href="#Graph-metadata">Graph metadata</a><a id="Graph-metadata-1"></a><a class="docs-heading-anchor-permalink" href="#Graph-metadata" title="Permalink"></a></h2><p>Graph-level metadata can be attached using a <code>@graph_metadata</code> block. Each entry is a <code>key =&gt; value</code> pair, where the key is a <code>Symbol</code> and the value is any Julia expression. The pairs are stored in the <code>metadata::OrderedDict{Symbol, Any}</code> field of the resulting <code>GraphSystem</code>.</p><pre><code class="language-julia hljs">g = @graph begin
     @nodes begin
         ping_exci1 = PINGNeuronExci()
-        ping_inhib = PINGNeuronInhib()
+        ping_inhi = PINGInhiNeuron()
     end
 
     @graph_metadata begin
@@ -81,20 +81,20 @@ g.metadata[:x_squared]        # 25</code></pre><p>One can insert normal Julia co
     @nodes begin
         ping_exci1 = PINGNeuronExci(I_ext = rand(rng, Normal(μ_E, σ_E)))
         ping_exci2 = PINGNeuronExci(I_ext = rand(rng, Normal(μ_E, σ_E)))
-        ping_inhib = PINGNeuronInhib(I_ext = rand(rng, Normal(μ_I, σ_I)))
+        ping_inhi = PINGInhiNeuron(I_ext = rand(rng, Normal(μ_I, σ_I)))
     end
 end</code></pre><h1 id="Defining-nodes-and-connections-in-loops"><a class="docs-heading-anchor" href="#Defining-nodes-and-connections-in-loops">Defining nodes and connections in loops</a><a id="Defining-nodes-and-connections-in-loops-1"></a><a class="docs-heading-anchor-permalink" href="#Defining-nodes-and-connections-in-loops" title="Permalink"></a></h1><p>Nodes and connections can also be defined programmatically using for loops and comprehensions. The syntax here is rigid:</p><p>The syntax for nodes is rigid: nodes must have an assignment still. For example, writing:</p><pre><code class="language-julia hljs">@nodes begin
-    exci_neurons = [HHNeuronExci() for i in 1:10]
+    exci_neurons = [HHExciNeuron() for i in 1:10]
 
-    inh_neurons = for i in 1:10
-        HHNeuronInhib()
+    inhi_neurons = for i in 1:10
+        HHInhiNeuron()
     end
-end</code></pre><p>will assign the array of 10 excitatory neurons to <code>exci_neurons</code> and the array of 10 inhibitory neurons to <code>inh_neurons</code>. (Note that this is different from how normal for loops behave.)</p><p>By default, the neurons inside will have the name of the array, followed by their index. For example, the first excitatory neuron will have the name <code>exci_neurons_1</code>.</p><p>Assignments are allowed inside for loops. For example, we can write</p><pre><code class="language-julia hljs">@nodes begin
-    exci_neurons = [HHNeuronExci() for i in 1:10]
+end</code></pre><p>will assign the array of 10 excitatory neurons to <code>exci_neurons</code> and the array of 10 inhibitory neurons to <code>inhi_neurons</code>. (Note that this is different from how normal for loops behave.)</p><p>By default, the neurons inside will have the name of the array, followed by their index. For example, the first excitatory neuron will have the name <code>exci_neurons_1</code>.</p><p>Assignments are allowed inside for loops. For example, we can write</p><pre><code class="language-julia hljs">@nodes begin
+    exci_neurons = [HHExciNeuron() for i in 1:10]
 
-    inh_neurons = for i in 1:10
+    inhi_neurons = for i in 1:10
         name = &quot;my_neuron$i&quot;
-        HHNeuronInhib(name = name)
+        HHInhiNeuron(name = name)
     end
 end</code></pre><p>to manually pick the names assigned to the inhibitory neurons. However, the <strong>last line of the for loop must be a blox constructor call.</strong></p><p>Edges and for loops can be defined using a comprehension as well.</p><pre><code class="language-julia hljs">@graph begin
     @nodes begin
@@ -109,4 +109,4 @@ end</code></pre><p>to manually pick the names assigned to the inhibitory neurons
             n1 =&gt; n2, (weight = 1)
         end
     end
-end</code></pre></article><nav class="docs-footer"><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.17.0 on <span class="colophon-date" title="Friday 8 May 2026 15:54">Friday 8 May 2026</span>. Using Julia version 1.12.6.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
+end</code></pre></article><nav class="docs-footer"><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.17.0 on <span class="colophon-date" title="Tuesday 12 May 2026 15:55">Tuesday 12 May 2026</span>. Using Julia version 1.12.6.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
