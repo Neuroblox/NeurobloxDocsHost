@@ -32,9 +32,9 @@ spike_rate = 2.4 ## spikes / ms
 
 N = 150 ## total number of neurons
 f = 0.15 ## ratio of selective excitatory to non-selective excitatory neurons
-f_inh = 0.2 ## ratio of inhibitory neurons to all neurons
-N_E = Int(N * (1 - f_inh)) 
-N_I = Int(ceil(N * f_inh)) ## total number of inhibitory neurons
+f_inhi = 0.2 ## ratio of inhibitory neurons to all neurons
+N_E = Int(N * (1 - f_inhi)) 
+N_I = Int(ceil(N * f_inhi)) ## total number of inhibitory neurons
 N_E_selective = Int(ceil(f * N_E)) ## number of selective excitatory neurons
 N_E_nonselective = N_E - 2 * N_E_selective ## number of non-selective excitatory neurons
 
@@ -44,7 +44,7 @@ w₋ = 1 - f * (w₊ - 1) / (1 - f)
 
 # We use scaling factors for conductance parameters so that our abbreviated model can exhibit the same competition behavior between the two selective excitatory populations as the larger model in Wang [1] does.
 exci_scaling_factor = 1600 / N_E
-inh_scaling_factor = 400 / N_I
+inhi_scaling_factor = 400 / N_I
 
 coherence = 0 # random dot motion coherence [%]
 dt_spike_rate = 50 # update interval for the stimulus spike rate [ms]
@@ -65,35 +65,35 @@ spike_rate_B = (distribution=Normal(μ_B, σ), dt=dt_spike_rate) # spike rate di
         background_input = PoissonSpikeTrainStimulus(spike_rate, tspan) ## background input
         stim_A = PoissonSpikeTrainStimulus(spike_rate_A, tspan) ## stimulation inputs to selective population A
         stim_B = PoissonSpikeTrainStimulus(spike_rate_B, tspan) ## stimulation inputs to selective population B
-        n_A = LIFExciCircuit(; N_neurons = N_E_selective, weight = w₊, exci_scaling_factor, inh_scaling_factor)
-        n_B = LIFExciCircuit(; N_neurons = N_E_selective, weight = w₊, exci_scaling_factor, inh_scaling_factor)
-        n_ns = LIFExciCircuit(; N_neurons = N_E_nonselective, weight = 1.0, exci_scaling_factor, inh_scaling_factor)
-        n_inh = LIFInhCircuit(; N_neurons = N_I, weight = 1.0, exci_scaling_factor, inh_scaling_factor)
+        n_A = LIFExciCircuit(; N_neurons = N_E_selective, weight = w₊, exci_scaling_factor, inhi_scaling_factor)
+        n_B = LIFExciCircuit(; N_neurons = N_E_selective, weight = w₊, exci_scaling_factor, inhi_scaling_factor)
+        n_ns = LIFExciCircuit(; N_neurons = N_E_nonselective, weight = 1.0, exci_scaling_factor, inhi_scaling_factor)
+        n_inhi = LIFInhiCircuit(; N_neurons = N_I, weight = 1.0, exci_scaling_factor, inhi_scaling_factor)
     end
     @connections begin
         background_input => n_A, (weight = 1)
         background_input => n_B, (weight = 1)
         background_input => n_ns, (weight = 1)
-        background_input => n_inh, (weight = 1)
+        background_input => n_inhi, (weight = 1)
         stim_A => n_A, (weight = 1)
         stim_B => n_B, (weight = 1)
         n_A => n_B, (weight = w₋)
         n_A => n_ns, (weight = 1)
-        n_A => n_inh, (weight = 1)
+        n_A => n_inhi, (weight = 1)
         n_B => n_A, (weight = w₋)
         n_B => n_ns, (weight = 1)
-        n_B => n_inh, (weight = 1)
+        n_B => n_inhi, (weight = 1)
         n_ns => n_A, (weight = w₋)
         n_ns => n_B, (weight = w₋)
-        n_ns => n_inh, (weight = 1)
-        n_inh => n_A, (weight = 1)
-        n_inh => n_B, (weight = 1)
-        n_inh => n_ns, (weight = 1)
+        n_ns => n_inhi, (weight = 1)
+        n_inhi => n_A, (weight = 1)
+        n_inhi => n_B, (weight = 1)
+        n_inhi => n_ns, (weight = 1)
     end
 end
 
 # As we can see, each selective population `n_A` and `n_B` receives a separate spike train input `stim_A` and `stim_B` respectively. These inputs model visual processing that is selective for the left and right dot directions. All Bloxs also receive background inputs of the same rate from neurons we do not explicitly model.
-# The Bloxs we use here are subtypes of `CompositeBlox` and contain either `LIFExciNeuron`s or `LIFInhNeuron`s in them.
+# The Bloxs we use here are subtypes of `CompositeBlox` and contain either `LIFExciNeuron`s or `LIFInhiNeuron`s in them.
 
 prob = ODEProblem(g, [], tspan);
 ## `Euler()` is the simplest fixed-step ODE solver. It is used here (rather than adaptive solvers
@@ -107,7 +107,7 @@ sol = solve(prob, Euler(); dt = 0.01);
 fig = Figure()
 rasterplot(fig[1,1], n_A, sol; title = "Population A")
 rasterplot(fig[1,2], n_B, sol; title = "Population B")
-rasterplot(fig[2,1], n_inh, sol; color=:red, title = "Inhibitory Population")
+rasterplot(fig[2,1], n_inhi, sol; color=:red, title = "Inhibitory Population")
 fig
 save(joinpath("../assets/", "dm_raster.svg"), fig); # hide
 @test_reference "plots/dm_raster.png" fig by=psnr_equality(24) # hide
@@ -129,7 +129,7 @@ save(joinpath("../assets/", "dm_fr.svg"), fig); # hide
 
 # ## Challenge Problems
 # - The circuit makes a decision in real time. Can you calculate and plot a response time distribution? Try changing the dot coherence level and see how it affects the response times.
-# - Which receptor type (NMDA, AMPA or GABA) is the most crucial one for the competition behavior of the circuit? Hint: simulate interventions on the circuit to ablate a receptor type. Look into the equations of `LIFExciNeuron` and `LIFInhNeuron` and affect the receptors' conductance.
+# - Which receptor type (NMDA, AMPA or GABA) is the most crucial one for the competition behavior of the circuit? Hint: simulate interventions on the circuit to ablate a receptor type. Look into the equations of `LIFExciNeuron` and `LIFInhiNeuron` and affect the receptors' conductance.
 
 # ## References
 # - [1] Wang XJ. Probabilistic decision making by slow reverberation in cortical circuits. Neuron. 2002 Dec;36(5):955-968. DOI: 10.1016/s0896-6273(02)01092-9. PMID: 12467598. 

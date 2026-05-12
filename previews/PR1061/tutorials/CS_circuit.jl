@@ -28,18 +28,18 @@ Random.seed!(42) # hide
 
 @graph g begin
     @nodes begin
-        inh = HHNeuronInhib() ##feedback inhibitory interneuron neuron
+        inhi = HHInhiNeuron() ##feedback inhibitory interneuron neuron
         ##creating an array of excitatory pyramidal neurons
-        exci1 = HHNeuronExci(I_bg = 5*rand())
-        exci2 = HHNeuronExci(I_bg = 5*rand())
-        exci3 = HHNeuronExci(I_bg = 5*rand())
-        exci4 = HHNeuronExci(I_bg = 5*rand())
-        exci5 = HHNeuronExci(I_bg = 5*rand())
+        exci1 = HHExciNeuron(I_bg = 5*rand())
+        exci2 = HHExciNeuron(I_bg = 5*rand())
+        exci3 = HHExciNeuron(I_bg = 5*rand())
+        exci4 = HHExciNeuron(I_bg = 5*rand())
+        exci5 = HHExciNeuron(I_bg = 5*rand())
     end
     @connections begin
         for exci_neuron ∈ [exci1, exci2, exci3, exci5]
-            inh => exci_neuron, (weight = 1, G_syn=4.0)
-            exci_neuron => inh, (weight = 1)
+            inhi => exci_neuron, (weight = 1, G_syn=4.0)
+            exci_neuron => inhi, (weight = 1)
         end
     end
 end
@@ -50,7 +50,7 @@ prob = ODEProblem(g, [], (0.0, 1000), [])
 ## high accuracy. For stiff systems (where states change on very different time scales) prefer `Rodas4()`
 ## or `Rosenbrock23()`. For a full comparison of solvers see: https://docs.sciml.ai/DiffEqDocs/stable/solvers/ode_solve/
 sol = solve(prob, Vern7())
-fig = stackplot([exci1, exci2, exci3, exci4, exci5, inh], sol)
+fig = stackplot([exci1, exci2, exci3, exci4, exci5, inhi], sol)
 save(joinpath(@__DIR__(), "../assets/", "wta_stack.svg"), fig); # hide
 @test_reference "plots/cs_wta_stack.png" fig by=psnr_equality(24) # hide
 #!nb # ![](../assets/wta_stack.svg)
@@ -101,15 +101,15 @@ N_wta = 10 ## number of WTA circuits
 ## parameters
 N_exci = 5   ## number of pyramidal neurons in each lateral inhibition (WTA) circuit
 G_syn_exci = 3.0 ## maximal synaptic conductance in glutamatergic (excitatory) synapses
-G_syn_inhib = 4.0 ## maximal synaptic conductance in GABAergic (inhibitory) synapses from feedback interneurons
-G_syn_ff_inhib = 3.5 ## maximal synaptic conductance in GABAergic (inhibitory) synapses from feedforward interneurons
+G_syn_inhi = 4.0 ## maximal synaptic conductance in GABAergic (inhibitory) synapses from feedback interneurons
+G_syn_ff_inhi = 3.5 ## maximal synaptic conductance in GABAergic (inhibitory) synapses from feedforward interneurons
 I_bg = 5.0 ## background input current
 density = 0.01 ## connection density between WTA circuits
 @graph g begin
     @nodes begin
         ## create a vector of `WinnerTakesAllBlox` using list comprehension
-        wtas = [WinnerTakeAll(; N_exci, G_syn_exci, G_syn_inhib, I_bg) for i in 1:N_wta]
-        n_ff_inh = HHNeuronInhib()
+        wtas = [WinnerTakeAll(; N_exci, G_syn_exci, G_syn_inhi, I_bg) for i in 1:N_wta]
+        n_ff_inhi = HHInhiNeuron()
     end
     @connections begin
         for i in 1:N_wta
@@ -118,19 +118,19 @@ density = 0.01 ## connection density between WTA circuits
                     wtas[i] => wtas[j], DensityRule(weight=1, density=density)
                 end
             end
-            n_ff_inh => wtas[i], (weight=1, G_syn=G_syn_ff_inhib)
+            n_ff_inhi => wtas[i], (weight=1, G_syn=G_syn_ff_inhi)
         end
     end
 end
 
 # WTA circuits connect to each other with given connection density and the feedforward interneuron connects to each WTA circuit.
-# The feedforward interneuron `n_ff_inh` of a `CorticalBlox` connects to all excitatory (pyramidal) cells of the WTA circuits within the `CorticalBlox` and receives input from excitatory neurons of other `CorticalBlox` that connect to the current `CorticalBlox`. This interneuron is largely responsible for controlling the spiking rhythm of the ensemble of WTAs.
+# The feedforward interneuron `n_ff_inhi` of a `CorticalBlox` connects to all excitatory (pyramidal) cells of the WTA circuits within the `CorticalBlox` and receives input from excitatory neurons of other `CorticalBlox` that connect to the current `CorticalBlox`. This interneuron is largely responsible for controlling the spiking rhythm of the ensemble of WTAs.
 
 prob = ODEProblem(g, [], (0.0, 1000))
 sol = solve(prob, Vern7())
 
 wta_neurons = get_neurons(wtas) ## extract neurons from WTA circuits
-neurons = vcat(wta_neurons, n_ff_inh)
+neurons = vcat(wta_neurons, n_ff_inhi)
 fig = stackplot(neurons, sol)
 save(joinpath(@__DIR__(), "../assets/", "cort_stack.svg"), fig); # hide
 @test_reference "plots/cs_cort_stack.png" fig by=psnr_equality(24) # hide

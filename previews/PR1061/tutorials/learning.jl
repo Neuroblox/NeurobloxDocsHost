@@ -79,8 +79,8 @@ trial_dur = 1000 ## ms
 ## additional Striatum Bloxs
 @graph g begin
     @nodes begin
-        STR1 = Striatum(; N_inhib=5) 
-        STR2 = Striatum(; N_inhib=5) 
+        STR1 = Striatum(; N_inhi=5) 
+        STR2 = Striatum(; N_inhi=5) 
     
         tan_pop1 = TAN(κ=10) 
         tan_pop2 = TAN(κ=10) 
