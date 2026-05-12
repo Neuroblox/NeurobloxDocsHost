@@ -70,24 +70,24 @@ I_bath = -0.7; ## External inhibitory bath for inhibitory neurons - value from p
 
 
 # ## Define the Neurons and Graph of Network Connections
-# The neurons from Börgers et al. [1] are implemented in Neuroblox as `PINGNeuronExci` and `PINGNeuronInhib`. We can specify their initial current drives and create the neurons, and wire up connections between them as follows:
+# The neurons from Börgers et al. [1] are implemented in Neuroblox as `PINGNeuronExci` and `PINGInhiNeuron`. We can specify their initial current drives and create the neurons, and wire up connections between them as follows:
 
 @graph g begin
     @nodes begin
         exci_driven = [PINGNeuronExci(I_ext=rand(I_driveE) + rand(I_base)) for i in 1:NE_driven] ## In-line loop to create the driven excitatory neurons, named ED1, ED2, etc.
         exci_other  = [PINGNeuronExci(I_ext=rand(I_base) + rand(I_undriven)) for i in 1:NE_other] ## In-line loop to create the undriven excitatory neurons, named EO1, EO2, etc.
-        inhib       = [PINGNeuronInhib(I_ext=rand(I_driveI) + rand(I_base) + I_bath) for i in 1:NI_driven]; ## In-line loop to create the inhibitory neurons, named ID1, ID2, etc.
+        inhi       = [PINGInhiNeuron(I_ext=rand(I_driveI) + rand(I_base) + I_bath) for i in 1:NI_driven]; ## In-line loop to create the inhibitory neurons, named ID1, ID2, etc.
     end
     exci = [exci_driven; exci_other] ## Concatenate the driven and undriven excitatory neurons into a single vector for convenience
     @connections begin
         for ne ∈ exci
-            for ni ∈ inhib
+            for ni ∈ inhi
                 ne => ni, PINGConnection(g_EI/N) ## Add the E -> I connections
                 ni => ne, PINGConnection(g_IE/N) ## Add the I -> E connections
             end
         end
-        for ni1 ∈ inhib
-            for ni2 ∈ inhib
+        for ni1 ∈ inhi
+            for ni2 ∈ inhi
                 ni1 => ni2, PINGConnection(g_II/N) ## Add the I -> I connections
             end
         end
@@ -96,7 +96,7 @@ end
 
 # > **_NOTE_:** Because all connection weights in this network are uniform (every E→I pair has the same weight, every I→I pair has the same weight, etc.), we could alternatively use `create_adjacency_edges!` to specify the full connectivity in one step by passing a weight matrix. The explicit loops above are used here so you can see exactly which connections are being created. In a network with heterogeneous weights, the loop approach is the natural one. See the Resting State tutorial for an example of `create_adjacency_edges!`.
 
-# > **_NOTE_:** If you want to explore the details of these Bloxs, try typing ``?PINGNeuronExci`` or ``?PINGNeuronInhib`` in your Julia REPL 
+# > **_NOTE_:** If you want to explore the details of these Bloxs, try typing ``?PINGNeuronExci`` or ``?PINGInhiNeuron`` in your Julia REPL 
 # > to see the full details of the blocks. If you really want to dig into the details, 
 # > type ``@edit PINGNeuronExci()`` to open the source code and see how the equations are written.
 
@@ -115,7 +115,7 @@ sol = solve(prob, Tsit5(), saveat=0.1); ## Solve the problem and save at 0.1ms r
 
 fig = Figure()
 rasterplot(fig[1,1], exci, sol; threshold=20.0, title="Excitatory Neurons")
-rasterplot(fig[2,1], inhib, sol; threshold=20.0, title="Inhibitory Neurons")
+rasterplot(fig[2,1], inhi, sol; threshold=20.0, title="Inhibitory Neurons")
 fig
 save(joinpath("../assets/", "ping_raster.svg"), fig); # hide
 @test_reference "plots/ping_raster.png" fig by=psnr_equality(24) # hide

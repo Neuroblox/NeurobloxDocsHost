@@ -13,16 +13,16 @@ spike_rate = 2.4 ## spikes / ms
 
 N = 150 ## total number of neurons
 f = 0.15 ## ratio of selective excitatory to non-selective excitatory neurons
-f_inh = 0.2 ## ratio of inhibitory neurons to all neurons
-N_E = Int(N * (1 - f_inh))
-N_I = Int(ceil(N * f_inh)) ## total number of inhibitory neurons
+f_inhi = 0.2 ## ratio of inhibitory neurons to all neurons
+N_E = Int(N * (1 - f_inhi))
+N_I = Int(ceil(N * f_inhi)) ## total number of inhibitory neurons
 N_E_selective = Int(ceil(f * N_E)) ## number of selective excitatory neurons
 N_E_nonselective = N_E - 2 * N_E_selective ## number of non-selective excitatory neurons
 
 # We use two distinct weight values as per Wang [1]
 w₊ = 1.7
 w₋ = 1 - f * (w₊ - 1) / (1 - f)</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">0.8764705882352941</code></pre><p>We use scaling factors for conductance parameters so that our abbreviated model can exhibit the same competition behavior between the two selective excitatory populations as the larger model in Wang [1] does.</p><pre><code class="language-julia hljs">exci_scaling_factor = 1600 / N_E
-inh_scaling_factor = 400 / N_I
+inhi_scaling_factor = 400 / N_I
 
 coherence = 0 # random dot motion coherence [%]
 dt_spike_rate = 50 # update interval for the stimulus spike rate [ms]
@@ -38,32 +38,32 @@ spike_rate_B = (distribution=Normal(μ_B, σ), dt=dt_spike_rate) # spike rate di
         background_input = PoissonSpikeTrainStimulus(spike_rate, tspan) ## background input
         stim_A = PoissonSpikeTrainStimulus(spike_rate_A, tspan) ## stimulation inputs to selective population A
         stim_B = PoissonSpikeTrainStimulus(spike_rate_B, tspan) ## stimulation inputs to selective population B
-        n_A = LIFExciCircuit(; N_neurons = N_E_selective, weight = w₊, exci_scaling_factor, inh_scaling_factor)
-        n_B = LIFExciCircuit(; N_neurons = N_E_selective, weight = w₊, exci_scaling_factor, inh_scaling_factor)
-        n_ns = LIFExciCircuit(; N_neurons = N_E_nonselective, weight = 1.0, exci_scaling_factor, inh_scaling_factor)
-        n_inh = LIFInhCircuit(; N_neurons = N_I, weight = 1.0, exci_scaling_factor, inh_scaling_factor)
+        n_A = LIFExciCircuit(; N_neurons = N_E_selective, weight = w₊, exci_scaling_factor, inhi_scaling_factor)
+        n_B = LIFExciCircuit(; N_neurons = N_E_selective, weight = w₊, exci_scaling_factor, inhi_scaling_factor)
+        n_ns = LIFExciCircuit(; N_neurons = N_E_nonselective, weight = 1.0, exci_scaling_factor, inhi_scaling_factor)
+        n_inhi = LIFInhiCircuit(; N_neurons = N_I, weight = 1.0, exci_scaling_factor, inhi_scaling_factor)
     end
     @connections begin
         background_input =&gt; n_A, (weight = 1)
         background_input =&gt; n_B, (weight = 1)
         background_input =&gt; n_ns, (weight = 1)
-        background_input =&gt; n_inh, (weight = 1)
+        background_input =&gt; n_inhi, (weight = 1)
         stim_A =&gt; n_A, (weight = 1)
         stim_B =&gt; n_B, (weight = 1)
         n_A =&gt; n_B, (weight = w₋)
         n_A =&gt; n_ns, (weight = 1)
-        n_A =&gt; n_inh, (weight = 1)
+        n_A =&gt; n_inhi, (weight = 1)
         n_B =&gt; n_A, (weight = w₋)
         n_B =&gt; n_ns, (weight = 1)
-        n_B =&gt; n_inh, (weight = 1)
+        n_B =&gt; n_inhi, (weight = 1)
         n_ns =&gt; n_A, (weight = w₋)
         n_ns =&gt; n_B, (weight = w₋)
-        n_ns =&gt; n_inh, (weight = 1)
-        n_inh =&gt; n_A, (weight = 1)
-        n_inh =&gt; n_B, (weight = 1)
-        n_inh =&gt; n_ns, (weight = 1)
+        n_ns =&gt; n_inhi, (weight = 1)
+        n_inhi =&gt; n_A, (weight = 1)
+        n_inhi =&gt; n_B, (weight = 1)
+        n_inhi =&gt; n_ns, (weight = 1)
     end
-end</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">GraphSystem(...12 nodes and 18 connections...)</code></pre><p>As we can see, each selective population <code>n_A</code> and <code>n_B</code> receives a separate spike train input <code>stim_A</code> and <code>stim_B</code> respectively. These inputs model visual processing that is selective for the left and right dot directions. All Bloxs also receive background inputs of the same rate from neurons we do not explicitly model. The Bloxs we use here are subtypes of <code>CompositeBlox</code> and contain either <code>LIFExciNeuron</code>s or <code>LIFInhNeuron</code>s in them.</p><pre><code class="language-julia hljs">prob = ODEProblem(g, [], tspan);
+end</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">GraphSystem(...12 nodes and 18 connections...)</code></pre><p>As we can see, each selective population <code>n_A</code> and <code>n_B</code> receives a separate spike train input <code>stim_A</code> and <code>stim_B</code> respectively. These inputs model visual processing that is selective for the left and right dot directions. All Bloxs also receive background inputs of the same rate from neurons we do not explicitly model. The Bloxs we use here are subtypes of <code>CompositeBlox</code> and contain either <code>LIFExciNeuron</code>s or <code>LIFInhiNeuron</code>s in them.</p><pre><code class="language-julia hljs">prob = ODEProblem(g, [], tspan);
 # `Euler()` is the simplest fixed-step ODE solver. It is used here (rather than adaptive solvers
 # like `Tsit5`) because the spiking dynamics of LIF neurons introduce discontinuities that can
 # confuse adaptive step-size control. The step size `dt = 0.01` ms is small enough to resolve
@@ -71,7 +71,7 @@ end</code></pre><pre class="documenter-example-output"><code class="nohighlight 
 sol = solve(prob, Euler(); dt = 0.01);</code></pre><h2 id="Results"><a class="docs-heading-anchor" href="#Results">Results</a><a id="Results-1"></a><a class="docs-heading-anchor-permalink" href="#Results" title="Permalink"></a></h2><pre><code class="language-julia hljs">fig = Figure()
 rasterplot(fig[1,1], n_A, sol; title = &quot;Population A&quot;)
 rasterplot(fig[1,2], n_B, sol; title = &quot;Population B&quot;)
-rasterplot(fig[2,1], n_inh, sol; color=:red, title = &quot;Inhibitory Population&quot;)
+rasterplot(fig[2,1], n_inhi, sol; color=:red, title = &quot;Inhibitory Population&quot;)
 fig</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">┌ Info: Reference file for &quot;dm_raster.png&quot; did not exist. It has been created:
 │ - NEW CONTENT -----------------
 │ eltype: ColorTypes.RGBA{FixedPointNumbers.N0f8}
@@ -121,4 +121,4 @@ fig</code></pre><pre class="documenter-example-output"><code class="nohighlight 
 │ <span class="sgr48_5" style="background:#121212"><span class="sgr38_5" style="color:#444">▀</span></span><span class="sgr48_5" style="background:#303030"><span class="sgr38_5" style="color:#d0d0d0">▀</span><span class="sgr38_5" style="color:#dadada">▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀</span><span class="sgr38_5" style="color:#d0d0d0">▀▀▀</span><span class="sgr38_5" style="color:#dadada">▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀</span><span class="sgr38_5" style="color:#d0d0d0">▀</span></span><span class="sgr48_5" style="background:#121212"><span class="sgr38_5" style="color:#444">▀</span></span>
 │ -------------------------------
 └   new_reference = &quot;/home/docker/actions-runner/_work/NeurobloxDev/NeurobloxDev/docs/plots/dm_fr.png&quot;
-[ Info: Please run the tests again for any changes to take effect</code></pre><p><img src="../../assets/dm_fr.svg" alt/></p><p>We observe the same result qualitatively when plotting the firing rates instead of spikes. Using a single axis we can better see the magnitude of the competition in the difference between the firing rates over time.</p><h2 id="Challenge-Problems"><a class="docs-heading-anchor" href="#Challenge-Problems">Challenge Problems</a><a id="Challenge-Problems-1"></a><a class="docs-heading-anchor-permalink" href="#Challenge-Problems" title="Permalink"></a></h2><ul><li>The circuit makes a decision in real time. Can you calculate and plot a response time distribution? Try changing the dot coherence level and see how it affects the response times.</li><li>Which receptor type (NMDA, AMPA or GABA) is the most crucial one for the competition behavior of the circuit? Hint: simulate interventions on the circuit to ablate a receptor type. Look into the equations of <code>LIFExciNeuron</code> and <code>LIFInhNeuron</code> and affect the receptors&#39; conductance.</li></ul><h2 id="References"><a class="docs-heading-anchor" href="#References">References</a><a id="References-1"></a><a class="docs-heading-anchor-permalink" href="#References" title="Permalink"></a></h2><ul><li>[1] Wang XJ. Probabilistic decision making by slow reverberation in cortical circuits. Neuron. 2002 Dec;36(5):955-968. DOI: 10.1016/s0896-6273(02)01092-9. PMID: 12467598.</li><li>[2] Protter, M. (2024). GraphDynamics.jl – Efficient dynamics of interacting collections of modular subsystems (v0.2.2). Zenodo. https://doi.org/10.5281/zenodo.14183153</li></ul><hr/><p><em>This page was generated using <a href="https://github.com/fredrikekre/Literate.jl">Literate.jl</a>.</em></p></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../CS_circuit/">« Biomimetic Model of Corticostriatal Micro-assemblies</a><a class="docs-footer-nextpage" href="../dbs_kuramoto/">Synchronization and Deep Brain Stimulation in a Kuramoto Oscillator Network »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.17.0 on <span class="colophon-date" title="Saturday 9 May 2026 11:03">Saturday 9 May 2026</span>. Using Julia version 1.12.6.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
+[ Info: Please run the tests again for any changes to take effect</code></pre><p><img src="../../assets/dm_fr.svg" alt/></p><p>We observe the same result qualitatively when plotting the firing rates instead of spikes. Using a single axis we can better see the magnitude of the competition in the difference between the firing rates over time.</p><h2 id="Challenge-Problems"><a class="docs-heading-anchor" href="#Challenge-Problems">Challenge Problems</a><a id="Challenge-Problems-1"></a><a class="docs-heading-anchor-permalink" href="#Challenge-Problems" title="Permalink"></a></h2><ul><li>The circuit makes a decision in real time. Can you calculate and plot a response time distribution? Try changing the dot coherence level and see how it affects the response times.</li><li>Which receptor type (NMDA, AMPA or GABA) is the most crucial one for the competition behavior of the circuit? Hint: simulate interventions on the circuit to ablate a receptor type. Look into the equations of <code>LIFExciNeuron</code> and <code>LIFInhiNeuron</code> and affect the receptors&#39; conductance.</li></ul><h2 id="References"><a class="docs-heading-anchor" href="#References">References</a><a id="References-1"></a><a class="docs-heading-anchor-permalink" href="#References" title="Permalink"></a></h2><ul><li>[1] Wang XJ. Probabilistic decision making by slow reverberation in cortical circuits. Neuron. 2002 Dec;36(5):955-968. DOI: 10.1016/s0896-6273(02)01092-9. PMID: 12467598.</li><li>[2] Protter, M. (2024). GraphDynamics.jl – Efficient dynamics of interacting collections of modular subsystems (v0.2.2). Zenodo. https://doi.org/10.5281/zenodo.14183153</li></ul><hr/><p><em>This page was generated using <a href="https://github.com/fredrikekre/Literate.jl">Literate.jl</a>.</em></p></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../CS_circuit/">« Biomimetic Model of Corticostriatal Micro-assemblies</a><a class="docs-footer-nextpage" href="../dbs_kuramoto/">Synchronization and Deep Brain Stimulation in a Kuramoto Oscillator Network »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.17.0 on <span class="colophon-date" title="Tuesday 12 May 2026 15:50">Tuesday 12 May 2026</span>. Using Julia version 1.12.6.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
