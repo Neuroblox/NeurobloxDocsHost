@@ -45,7 +45,7 @@ Random.seed!(42) ## Fix the random seed so that rand() calls (e.g. random backgr
                  ## produce the same results each run, matching the plots shown in the documentation.
 
 # define a single excitatory neuron 'blox' with steady input current I_bg = 0.5 microA/cm2
-nn1 = HHNeuronExci(name=Symbol("nrn1"), I_bg=0.5)
+nn1 = HHExciNeuron(name=Symbol("nrn1"), I_bg=0.5)
 
 # define graph and add the single neuron 'blox' as a single node into the graph
 g = GraphSystem() ## defines a graph
@@ -79,9 +79,9 @@ fig ## to display the figure
 global_namespace=:g
 ## define three neurons, two excitatory and one inhibitory 
 
-nn1 = HHNeuronExci(name=Symbol("nrn1"), I_bg=0.4, namespace=global_namespace)
-nn2 = HHNeuronInhib(name=Symbol("nrn2"), I_bg=0.1, namespace=global_namespace)
-nn3 = HHNeuronExci(name=Symbol("nrn3"), I_bg=1.4, namespace=global_namespace)
+nn1 = HHExciNeuron(name=Symbol("nrn1"), I_bg=0.4, namespace=global_namespace)
+nn2 = HHInhiNeuron(name=Symbol("nrn2"), I_bg=0.1, namespace=global_namespace)
+nn3 = HHExciNeuron(name=Symbol("nrn3"), I_bg=1.4, namespace=global_namespace)
 
 ## defien graph and connect the nodes with the edges (synapses in this case), with the synaptic 'weights' specified as arguments
 g = GraphSystem(name=global_namespace)
@@ -109,10 +109,10 @@ stackplot([nn1,nn2,nn3], sol)	## stackplot(<blox or array of blox>, sol)
 global_namespace=:g 
 N_exci = 5; ##number of excitatory neurons
 
-n_inh = HHNeuronInhib(name = :inh, namespace=global_namespace) ##feedback inhibitory interneuron neuron
+n_inhi = HHInhiNeuron(name = :inhi, namespace=global_namespace) ##feedback inhibitory interneuron neuron
 
 ##creating an array of excitatory pyramidal neurons
-n_excis = [HHNeuronExci(
+n_excis = [HHExciNeuron(
     name = Symbol("exci$i"),
     namespace=global_namespace, 
     I_bg = 5*rand(), 
@@ -121,12 +121,12 @@ n_excis = [HHNeuronExci(
 g = GraphSystem()
 
 for i in 1:N_exci
-    add_connection!(g, n_inh, n_excis[i], DefaultRule(weight = 1.0, G_syn = 4.0, τ = 70))
-    add_connection!(g, n_excis[i], n_inh, DefaultRule(weight = 1.0, G_syn = 3.0, τ = 5))
+    add_connection!(g, n_inhi, n_excis[i], DefaultRule(weight = 1.0, G_syn = 4.0, τ = 70))
+    add_connection!(g, n_excis[i], n_inhi, DefaultRule(weight = 1.0, G_syn = 3.0, τ = 5))
 end
 prob = ODEProblem(g, [], (0.0, 1000), [])
 sol = solve(prob, Vern7(), saveat=0.1)
-stackplot(vcat(n_excis, n_inh), sol)
+stackplot(vcat(n_excis, n_inhi), sol)
 
 # Suggestion : Instead of uniform random input current in each excitatory neuron, try different configurations (random or constant) of input currents I_bg for each neuron. 
 # One can vary the size of circuit by changing number of excitatory neurons. 
@@ -161,8 +161,8 @@ N_wta=10 ## number of WTA circuits
 ## parameters
 N_exci=5   ##number of pyramidal neurons in each lateral inhibition (WTA) circuit
 G_syn_exci=3.0 ##maximal synaptic conductance in glutamatergic (excitatory) synapses
-G_syn_inhib=4.0 ## maximal synaptic conductance in GABAergic (inhibitory) synapses from feedback interneurons
-G_syn_ff_inhib=3.5 ## maximal synaptic conductance in GABAergic (inhibitory) synapses from feedforward interneurons
+G_syn_inhi=4.0 ## maximal synaptic conductance in GABAergic (inhibitory) synapses from feedback interneurons
+G_syn_ff_inhi=3.5 ## maximal synaptic conductance in GABAergic (inhibitory) synapses from feedforward interneurons
 I_bg=5.0 ##background input
 density=0.01 ##connection density between WTA circuits
 
@@ -172,13 +172,13 @@ wtas = [WinnerTakeAll(;
                       namespace=global_namespace,
                       N_exci=N_exci,
                       G_syn_exci=G_syn_exci,
-                      G_syn_inhib=G_syn_inhib,
+                      G_syn_inhi=G_syn_inhi,
                       I_bg = I_bg  
                       ) for i = 1:N_wta]
 
 ##feed-forward interneurons (get input from other pyramidal cells and from the ascending system, largely controls the rhythm)
-n_ff_inh = HHNeuronInhib(;
-                         name=Symbol("ff_inh"),
+n_ff_inhi = HHInhiNeuron(;
+                         name=Symbol("ff_inhi"),
                          namespace=global_namespace,
                          )
 
@@ -191,13 +191,13 @@ for i in 1:N_wta
             add_connection!(g, wtas[i], wtas[j], DensityRule(density = density, weight = 1))
         end
     end
-    add_connection!(g, n_ff_inh, wtas[i], DefaultRule(weight = 1, G_syn=G_syn_ff_inhib))
+    add_connection!(g, n_ff_inhi, wtas[i], DefaultRule(weight = 1, G_syn=G_syn_ff_inhi))
 end
 
 prob = ODEProblem(g, [], (0.0, 1000), [])
 sol = solve(prob, Vern7(), saveat=0.1)
 
-neuron_set = get_neurons(vcat(wtas, n_ff_inh)) ## extract neurons from a composite blocks
+neuron_set = get_neurons(vcat(wtas, n_ff_inhi)) ## extract neurons from a composite blocks
 stackplot(neuron_set, sol)
 
 # Sugestion : try different connection densities and weights and see how it affects the population activity. 

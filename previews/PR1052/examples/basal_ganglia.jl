@@ -28,7 +28,7 @@ Random.seed!(123) ## Set a random seed for reproducibility
 
 # Blox definition
 N_MSN = 100 ## number of Medium Spiny Neurons
-@named msn = Striatum_MSN_Adam(N_inhib = N_MSN)
+@named msn = Striatum_MSN_Adam(N_inhi = N_MSN)
 
 # Create and solve the SDE problem
 ## Define simulation parameters
@@ -87,8 +87,8 @@ powerspectrumplot(msn, ens_sol, state = "G",
 global_ns = :g ## global name for the circuit. All components should be inside this namespace.
 
 N_FSI = 50 ## number of Fast Spiking Interneurons
-@named msn = Striatum_MSN_Adam(namespace = global_ns, N_inhib = N_MSN)
-@named fsi = Striatum_FSI_Adam(namespace = global_ns, N_inhib = N_FSI)
+@named msn = Striatum_MSN_Adam(namespace = global_ns, N_inhi = N_MSN)
+@named fsi = Striatum_FSI_Adam(namespace = global_ns, N_inhi = N_FSI)
 
 ḡ_FSI_MSN = 0.6 ## maximal conductance for FSI to MSN synapses [mS/cm^-2]
 density_FSI_MSN = 0.15 ## fraction of FSIs connecting to the MSN population
@@ -129,7 +129,7 @@ fig
 N_GPe = 80 ## number of GPe neurons
 N_STN = 40 ## number of STN neurons
 
-@named gpe = GPe_Adam(namespace = global_ns, N_inhib = N_GPe)
+@named gpe = GPe_Adam(namespace = global_ns, N_inhi = N_GPe)
 @named stn = STN_Adam(namespace = global_ns, N_exci = N_STN)
 
 ḡ_MSN_GPe = 2.5 ## maximal conductance for MSN to GPe synapses [mS/cm^-2]
@@ -200,8 +200,8 @@ fig
 
 # Create bloxs with Parkinsonian parameters
 
-@named msn = Striatum_MSN_Adam(namespace = global_ns, N_inhib = N_MSN, I_bg = 1.2519*ones(N_MSN), G_M = 1.2)
-@named fsi = Striatum_FSI_Adam(namespace = global_ns, N_inhib = N_FSI, I_bg = 4.511*ones(N_FSI), weight = 0.2, g_weight = 0.075)
+@named msn = Striatum_MSN_Adam(namespace = global_ns, N_inhi = N_MSN, I_bg = 1.2519*ones(N_MSN), G_M = 1.2)
+@named fsi = Striatum_FSI_Adam(namespace = global_ns, N_inhi = N_FSI, I_bg = 4.511*ones(N_FSI), weight = 0.2, g_weight = 0.075)
 
 ḡ_FSI_MSN = 0.48 ## decreased maximal conductance of FSI-MSN projection [mS/cm^-2]
 weight_FSI_MSN = ḡ_FSI_MSN / (N_FSI * density_FSI_MSN) ## normalized synaptic weight
