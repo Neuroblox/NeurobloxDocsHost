@@ -2,7 +2,7 @@
 
 julia_version = "1.12.6"
 manifest_format = "2.0"
-project_hash = "c08e1f70072e4a2296f3d5672aad18e98694b6fc"
+project_hash = "a6ccb3131af3f7eb6c5a721b4944ffda686f0dd1"
 
 [[deps.ADTypes]]
 git-tree-sha1 = "bbc22a9a08a0ef6460041086d8a7b27940ed4ffd"
@@ -1954,7 +1954,7 @@ weakdeps = ["UnicodePlots"]
     UnicodePlotsExt = "UnicodePlots"
 
 [[deps.NeurobloxPharmaPrivate]]
-deps = ["Accessors", "CSV", "DiffEqCallbacks", "Distributions", "GraphDynamics", "LogExpFunctions", "NaNMath", "NeurobloxBase", "NeurobloxPharma", "OrderedCollections", "OrdinaryDiffEq", "ProgressMeter", "Random", "RecursiveArrayTools", "Reexport", "SciMLBase", "SparseArrays", "StatsBase"]
+deps = ["Accessors", "CSV", "DiffEqCallbacks", "Distributions", "GraphDynamics", "LogExpFunctions", "NaNMath", "NeurobloxBase", "NeurobloxPharma", "OrderedCollections", "ProgressMeter", "Random", "RecursiveArrayTools", "Reexport", "SciMLBase", "SparseArrays", "StatsBase"]
 path = "NeurobloxPharmaPrivate"
 uuid = "58ac089b-67af-4add-8f86-e409aa08e46d"
 version = "0.2.0"
@@ -2198,10 +2198,10 @@ uuid = "bac558e1-5e72-5ebc-8fee-abe8a469f55d"
 version = "1.8.2"
 
 [[deps.OrdinaryDiffEq]]
-deps = ["ADTypes", "CommonSolve", "DocStringExtensions", "OrdinaryDiffEqBDF", "OrdinaryDiffEqCore", "OrdinaryDiffEqDefault", "OrdinaryDiffEqRosenbrock", "OrdinaryDiffEqTsit5", "OrdinaryDiffEqVerner", "SciMLBase"]
-git-tree-sha1 = "4c411ca0fa291015bc4c23058799a7280c4223e4"
+deps = ["ADTypes", "CommonSolve", "DocStringExtensions", "OrdinaryDiffEqBDF", "OrdinaryDiffEqCore", "OrdinaryDiffEqDefault", "OrdinaryDiffEqRosenbrock", "OrdinaryDiffEqTsit5", "OrdinaryDiffEqVerner", "SciMLBase", "SciMLLogging"]
+git-tree-sha1 = "bedf94fdda31530604410a1702219545b0044955"
 uuid = "1dea7af3-3e70-54e6-95c3-0bf5283fa5ed"
-version = "7.0.0"
+version = "7.0.1"
 
 [[deps.OrdinaryDiffEqBDF]]
 deps = ["ADTypes", "ArrayInterface", "DiffEqBase", "FastBroadcast", "LinearAlgebra", "MacroTools", "MuladdMacro", "OrdinaryDiffEqCore", "OrdinaryDiffEqDifferentiation", "OrdinaryDiffEqNonlinearSolve", "OrdinaryDiffEqSDIRK", "PrecompileTools", "Preferences", "RecursiveArrayTools", "Reexport", "SciMLBase", "TruncatedStacktraces"]
