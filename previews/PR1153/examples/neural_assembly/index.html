@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><title>Bottom-up construction of a neural assembly · Neuroblox</title><meta name="title" content="Bottom-up construction of a neural assembly · Neuroblox"/><meta property="og:title" content="Bottom-up construction of a neural assembly · Neuroblox"/><meta property="twitter:title" content="Bottom-up construction of a neural assembly · Neuroblox"/><meta name="description" content="Documentation for Neuroblox."/><meta property="og:description" content="Documentation for Neuroblox."/><meta property="twitter:description" content="Documentation for Neuroblox."/><script data-outdated-warner src="../../assets/warner.js"></script><link href="https://cdnjs.cloudflare.com/ajax/libs/lato-font/3.0.0/css/lato-font.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/juliamono/0.050/juliamono.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/fontawesome.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/solid.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/brands.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.8/katex.min.css" rel="stylesheet" type="text/css"/><script>documenterBaseURL="../.."</script><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" data-main="../../assets/documenter.js"></script><script src="../../search_index.js"></script><script src="../../siteinfo.js"></script><script src="../../../versions.js"></script><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/catppuccin-mocha.css" data-theme-name="catppuccin-mocha"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/catppuccin-macchiato.css" data-theme-name="catppuccin-macchiato"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/catppuccin-frappe.css" data-theme-name="catppuccin-frappe"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/catppuccin-latte.css" data-theme-name="catppuccin-latte"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/documenter-dark.css" data-theme-name="documenter-dark" data-theme-primary-dark/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/documenter-light.css" data-theme-name="documenter-light" data-theme-primary/><script src="../../assets/themeswap.js"></script><link href="../../assets/favicon.ico" rel="icon" type="image/x-icon"/></head><body><div id="documenter"><nav class="docs-sidebar"><a class="docs-logo" href="../../"><img src="../../assets/logo.png" alt="Neuroblox logo"/></a><div class="docs-package-name"><span class="docs-autofit"><a href="../../">Neuroblox</a></span></div><button class="docs-search-query input is-rounded is-small is-clickable my-2 mx-auto py-1 px-2" id="documenter-search-query">Search docs (Ctrl + /)</button><ul class="docs-menu"><li><a class="tocitem" href="../../">Neuroblox</a></li><li><a class="tocitem" href="../../install/">How to install</a></li><li><a class="tocitem" href="../../getting_started/">Getting Started</a></li><li><span class="tocitem">Examples</span><ul><li><a class="tocitem" href="../resting_state/">Resting state simulation using neural mass models</a></li><li><a class="tocitem" href="../parkinsons/">Building a model of the Basal Ganglia using Neural Mass models</a></li><li><a class="tocitem" href="../basal_ganglia/">Basal Ganglia Model and Parkinson&#39;s Disease Simulation</a></li><li class="is-active"><a class="tocitem" href>Bottom-up construction of a neural assembly</a><ul class="internal"><li><a class="tocitem" href="#Introduction"><span>Introduction</span></a></li><li><a class="tocitem" href="#Single-spiking-neuron-from-Hodgkin-Huxley-model"><span>Single spiking neuron from Hodgkin-Huxley model</span></a></li><li><a class="tocitem" href="#Connecting-three-neurons-through-synapses-to-make-a-local-feed-forward-circuit"><span>Connecting three neurons through synapses to make a local feed-forward circuit</span></a></li><li><a class="tocitem" href="#Creating-a-lateral-inhibition-circuit-(the-&quot;winner-takes-all&quot;-circuit)-in-superficial-cortical-layer"><span>Creating a lateral inhibition circuit (the &quot;winner-takes-all&quot; circuit) in superficial cortical layer</span></a></li><li><a class="tocitem" href="#Creating-lateral-inhibition-&quot;winner-take-all&quot;-circuit-(WTA)-blocks-from-the-inbuilt-functions-and-connecting-two-WTA-circuit-blocks"><span>Creating lateral inhibition &quot;winner-take-all&quot; circuit (WTA) blocks from the inbuilt functions and connecting two WTA circuit blocks</span></a></li><li><a class="tocitem" href="#Creating-a-single-cortical-superficial-layer-block-by-connecting-multiple-WTA-circuits"><span>Creating a single cortical superficial layer block by connecting multiple WTA circuits</span></a></li><li><a class="tocitem" href="#Connecting-the-cortical-superficial-layer-block-to-an-ascending-system-block"><span>Connecting the cortical superficial layer block to an ascending system block</span></a></li><li><a class="tocitem" href="#Creating-simulation-of-visual-stimulus-response-in-cortical-blocks"><span>Creating simulation of visual stimulus response in cortical blocks</span></a></li><li><a class="tocitem" href="#References"><span>References</span></a></li></ul></li></ul></li><li><span class="tocitem">Tutorials</span><ul><li><a class="tocitem" href="../../tutorials/receptors/">Receptor Dynamics and Interventions</a></li><li><a class="tocitem" href="../../tutorials/PING_circuit/">Pyramidal-Interneuron Gamma network</a></li><li><a class="tocitem" href="../../tutorials/CS_circuit/">Biomimetic Model of Corticostriatal Micro-assemblies</a></li><li><a class="tocitem" href="../../tutorials/decision_making/">Decision Making in a Circuit Model</a></li><li><a class="tocitem" href="../../tutorials/dbs_kuramoto/">Synchronization and Deep Brain Stimulation in a Kuramoto Oscillator Network</a></li><li><a class="tocitem" href="../../tutorials/working_memory/">Working Memory as Persistent Neural Activity</a></li><li><a class="tocitem" href="../../tutorials/learning/">Synaptic Plasticity and Reinforcement Learning</a></li><li><a class="tocitem" href="../../tutorials/optimization/">Parameter Fitting using Optimization</a></li></ul></li><li><span class="tocitem">API</span><ul><li><a class="tocitem" href="../../api_graph/">Model Graphs</a></li><li><a class="tocitem" href="../../api_blox/">Neuron, Neural Mass and Composite Blox</a></li><li><a class="tocitem" href="../../api_receptors/">Receptors</a></li><li><a class="tocitem" href="../../api_plot/">Plotting Figures</a></li><li><a class="tocitem" href="../../api_utils/">Utility functions</a></li><li><a class="tocitem" href="../../api_rl/">Reinforcement Learning</a></li><li><a class="tocitem" href="../../at_blox_macro/">Defining your own Blox with <code>@blox</code></a></li><li><a class="tocitem" href="../../experiment_macro/">Define experiments using <code>@experiment</code></a></li><li><a class="tocitem" href="../../connection_macro/">Defining your own connections with <code>@connection</code></a></li><li><a class="tocitem" href="../../connection_types/">Neuroblox and GraphDynamics Connection Type System</a></li><li><a class="tocitem" href="../../finalization/">Graph finalization</a></li></ul></li><li><a class="tocitem" href="../../Changelog/">Release Notes</a></li></ul><div class="docs-version-selector field has-addons"><div class="control"><span class="docs-label button is-static is-size-7">Version</span></div><div class="docs-selector control is-expanded"><div class="select is-fullwidth is-size-7"><select id="documenter-version-selector"></select></div></div></div></nav><div class="docs-main"><header class="docs-navbar"><a class="docs-sidebar-button docs-navbar-link fa-solid fa-bars is-hidden-desktop" id="documenter-sidebar-button" href="#"></a><nav class="breadcrumb"><ul class="is-hidden-mobile"><li><a class="is-disabled">Examples</a></li><li class="is-active"><a href>Bottom-up construction of a neural assembly</a></li></ul><ul class="is-hidden-tablet"><li class="is-active"><a href>Bottom-up construction of a neural assembly</a></li></ul></nav><div class="docs-right"><a class="docs-settings-button docs-navbar-link fa-solid fa-gear" id="documenter-settings-button" href="#" title="Settings"></a><a class="docs-article-toggle-button fa-solid fa-chevron-up" id="documenter-article-toggle-button" href="javascript:;" title="Collapse all docstrings"></a></div></header><article class="content" id="documenter-page"><h1 id="Bottom-up-construction-of-a-neural-assembly"><a class="docs-heading-anchor" href="#Bottom-up-construction-of-a-neural-assembly">Bottom-up construction of a neural assembly</a><a id="Bottom-up-construction-of-a-neural-assembly-1"></a><a class="docs-heading-anchor-permalink" href="#Bottom-up-construction-of-a-neural-assembly" title="Permalink"></a></h1><h2 id="Introduction"><a class="docs-heading-anchor" href="#Introduction">Introduction</a><a id="Introduction-1"></a><a class="docs-heading-anchor-permalink" href="#Introduction" title="Permalink"></a></h2><p>This tutorial goes through the process of building a neural assembly that is part of a larger model that performs category learning of images [1]. We will follow a bottom-up approach with these steps:</p><ul><li>build a model of a single neuron</li><li>expand that model by connecting a few neurons into a local circuit</li><li>define a &quot;winner-takes-all&quot; (WTA) circuit with lateral inhibition</li><li>build a cortical block by connecting multiple WTAs together with feed-forward inhibition</li><li>connect the cortical block to a model of an ascending system</li><li>add a source of visual input (images) and a cortical block representing visual cortex to our model and simulate visual processing</li></ul><p><strong>In this tutorial you will learn to:</strong></p><ul><li>Simulate single Hodgkin-Huxley neurons and visualize voltage traces.</li><li>Build circuits step-by-step using <code>GraphSystem</code> and <code>add_connection!</code>.</li><li>Use <code>stackplot</code> to visualize the spiking activity of multiple neurons at once.</li><li>Use composite blox (<code>WinnerTakeAll</code>, <code>Cortical</code>) to abstract circuit motifs into reusable blocks.</li><li>Use <code>get_neurons</code> to extract individual neurons from a composite blox for plotting.</li><li>Drive cortical activity with a <code>NextGenerationEI</code> ascending neuromodulatory blox.</li><li>Connect an <code>ImageStimulus</code> to simulate sensory-driven cortical responses.</li></ul><h2 id="Single-spiking-neuron-from-Hodgkin-Huxley-model"><a class="docs-heading-anchor" href="#Single-spiking-neuron-from-Hodgkin-Huxley-model">Single spiking neuron from Hodgkin-Huxley model</a><a id="Single-spiking-neuron-from-Hodgkin-Huxley-model-1"></a><a class="docs-heading-anchor-permalink" href="#Single-spiking-neuron-from-Hodgkin-Huxley-model" title="Permalink"></a></h2><p><img src="../../assets/neural_assembly_1.png" alt="fig1"/></p><p>Hodgkin-Huxley (HH) formalism to describe membrane potential of a single neuron</p><p class="math-container">\[  \begin{align}
+  C_m\frac{dV}{dt} &amp;= -g_L(V-V_L) - {g}_{Na}m^3h(V-V_{Na}) -{g}_Kn^4(V-V_K) + I_{in} - I_{syn} \\
+  \frac{dm}{dt} &amp;= \alpha_{m}(V)(1-m) + \beta_{m}(V)m \\
+  \frac{dh}{dt} &amp;= \alpha_{h}(V)(1-h) + \beta_{h}(V)h \\
+  \frac{dn}{dt} &amp;= \alpha_{n}(V)(1-n) + \beta_{n}(V)n
+  \end{align}\]</p><pre><code class="language-julia hljs">using Neuroblox
+using OrdinaryDiffEqVerner ## to build the ODE problem and solve it, gain access to multiple solvers from this
+using Random ## for generating random variables
+using CairoMakie ## for customized plotting recipies for blox
+using CSV ## to read data from CSV files
+using Downloads ## to download image stimuli files
+using StructArrays
+
+Random.seed!(42) ## Fix the random seed so that rand() calls (e.g. random background currents I_bg)
+                 # produce the same results each run, matching the plots shown in the documentation.</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">Random.TaskLocalRNG()</code></pre><p>define a single excitatory neuron &#39;blox&#39; with steady input current I_bg = 0.5 microA/cm2</p><pre><code class="language-julia hljs">nn1 = HHExciNeuron(name=Symbol(&quot;nrn1&quot;), I_bg=0.5)</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">HHExciNeuron(:nrn1, nothing, @NamedTuple{G_Na, G_K, G_L, E_Na, E_K, E_L, I_bg, kₛₜₚ}((52.0, 20.0, 0.1, 55.0, -90.0, -60.0, 0.5, 0.5)), Dict{Symbol, Any}())</code></pre><p>define graph and add the single neuron &#39;blox&#39; as a single node into the graph</p><pre><code class="language-julia hljs">g = GraphSystem() ## defines a graph
+add_node!(g, nn1) ## adds the defined blocks into the graph</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">OrderedCollections.OrderedDict{Any, Vector{GraphDynamics.GraphSystemConnection}}()</code></pre><p>To solve the system, we first create an Ordinary Differential Equation Problem and then solve it over the tspan of (0,1e) using a Vern7() solver.  The solution is saved every 0.1ms. The unit of time in Neuroblox is 1ms.</p><pre><code class="language-julia hljs">prob = ODEProblem(g, [], (0.0, 1000), [])
+sol = solve(prob, Vern7(), saveat=0.1);</code></pre><p>acessing the voltage timeseries from the neuron block and plotting the voltage</p><pre><code class="language-julia hljs">v = voltage_timeseries(nn1, sol)
+
+fig = Figure();
+ax = Axis(fig[1,1]; xlabel = &quot;time (ms)&quot;, ylabel = &quot;Voltage (mv)&quot;)
+cl = get_neuron_color(nn1) #specify color based on neuron type (excitatory/inhibitory)
+lines!(ax, sol.t, v, color=cl)
+fig ## to display the figure</code></pre><img src="2c5ad3e8.png" alt="Example block output"/><p>Suggestion : Try different values of input current &#39;I_bg&#39; and run the entire code block to see the output activity</p><h2 id="Connecting-three-neurons-through-synapses-to-make-a-local-feed-forward-circuit"><a class="docs-heading-anchor" href="#Connecting-three-neurons-through-synapses-to-make-a-local-feed-forward-circuit">Connecting three neurons through synapses to make a local feed-forward circuit</a><a id="Connecting-three-neurons-through-synapses-to-make-a-local-feed-forward-circuit-1"></a><a class="docs-heading-anchor-permalink" href="#Connecting-three-neurons-through-synapses-to-make-a-local-feed-forward-circuit" title="Permalink"></a></h2><p><img src="../../assets/neural_assembly_2.png" alt="fig2"/></p><pre><code class="language-julia hljs"># When building a system from individually defined blox (rather than using the @graph macro),
+# each blox must share the same namespace so that Neuroblox can correctly wire up their equations.
+# We define a single shared namespace here and pass it to every blox we create. Note that when
+# you use the @graph macro (as in the Getting Started tutorial), namespacing is handled for you
+# automatically — you only need to set it manually here because we are building the graph
+# step-by-step with add_connection!().
+global_namespace=:g
+# define three neurons, two excitatory and one inhibitory
+
+nn1 = HHExciNeuron(name=Symbol(&quot;nrn1&quot;), I_bg=0.4, namespace=global_namespace)
+nn2 = HHInhiNeuron(name=Symbol(&quot;nrn2&quot;), I_bg=0.1, namespace=global_namespace)
+nn3 = HHExciNeuron(name=Symbol(&quot;nrn3&quot;), I_bg=1.4, namespace=global_namespace)
+
+# defien graph and connect the nodes with the edges (synapses in this case), with the synaptic &#39;weights&#39; specified as arguments
+g = GraphSystem(name=global_namespace)
+add_connection!(g, nn1, nn2, DefaultRule(weight = 1.)) ##connection from neuron 1 to neuron 2 (nn1 to nn2)
+add_connection!(g, nn2, nn3, DefaultRule(weight = 0.2)) ##connection from neuron 2 to neuron 3 (nn2 to nn3)
+add_connection!(g, nn1, nn3, DefaultRule(weight = 0.5)) ##connection from neuron 1 to neuron 3 (nn2 to nn3)
+
+# create an ODESystem from the graph and then solve it using an ODE solver
+prob = ODEProblem(g, [], (0.0, 1000), [])
+sol = solve(prob, Vern7(), saveat=0.1);
+
+# plotting membrane voltage activity of all neurons in a stacked form</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">retcode: Success
+Interpolation: 1st order linear
+t: 10001-element Vector{Float64}:
+    0.0
+    0.1
+    0.2
+    0.3
+    0.4
+    0.5
+    0.6
+    0.7
+    0.8
+    0.9
+    ⋮
+  999.2
+  999.3
+  999.4
+  999.5
+  999.6
+  999.7
+  999.8
+  999.9
+ 1000.0
+u: 10001-element Vector{Vector{Float64}}:
+ [-65.0, 0.32, 0.05, 0.59, -65.0, 0.32, 0.05, 0.59, -65.0, 0.32, 0.05, 0.59, 0.0, 0.0, 0.0, 0.0]
+ [-65.35790417904926, 0.299750074363423, 0.01583880214270926, 0.6276502910333979, -65.25930691121462, 0.2997825044573165, 0.015986322523399956, 0.6275486254647449, -65.39076472606168, 0.30249394758395043, 0.023057587910125472, 0.6147210452268129, 5.030996495983468e-17, 8.409865317788933e-16, 1.5650646363544184e-14, 2.590302341946123e-13]
+ [-65.61039668643332, 0.2810252067038769, 0.014373887698722589, 0.6621593586691236, -65.41561464051998, 0.2811482937227002, 0.01468930297956851, 0.6617889175429812, -65.68853233072183, 0.2861988811978543, 0.02094880790165414, 0.6381703273443421, 1.4556074772987277e-16, 1.0474963930556247e-15, 4.535757089625698e-14, 3.1859601976931234e-13]
+ [-65.77983596143902, 0.2637621914303352, 0.014000903039508414, 0.6935828054860265, -65.49076051492884, 0.264025672606935, 0.014483788032158424, 0.6928242774820971, -65.90871633024318, 0.2710814801930905, 0.020257230272108, 0.6602620967319824, 2.4778475348030955e-16, 1.0605486624159347e-15, 7.729526246532753e-14, 3.1713047691886455e-13]
+ [-65.88729893248485, 0.24788474328422289, 0.013779560032791374, 0.72205654818297, -65.5054391298253, 0.2483314799739556, 0.014426883343374709, 0.7208295936430268, -66.06896938658329, 0.2570950950475413, 0.019801363011676863, 0.6809632286935743, 3.463388623558534e-16, 1.0272473683529097e-15, 1.0810665424545753e-13, 3.0102807190353564e-13]
+ [-65.94829144215609, 0.23330959660092365, 0.013651069148110852, 0.7477635898004681, -65.47487924087284, 0.23397684370657196, 0.014462008574174075, 0.7460186160507085, -66.18279382767714, 0.24418421694950365, 0.01948288363617791, 0.7002798570056378, 4.394231439947994e-16, 9.931334038119909e-16, 1.3719489530751664e-13, 2.8467759694101474e-13]
+ [-65.97426572031856, 0.21995102604554567, 0.01358980150487645, 0.7709098084601014, -65.4103349153184, 0.2208714388759291, 0.014565852924091545, 0.7686207820437981, -66.26046906410004, 0.23228854987399233, 0.019265258215981747, 0.718244912313344, 5.277928131038424e-16, 9.69901003910999e-16, 1.6476846196549454e-13, 2.717586733908771e-13]
+ [-65.97373299221802, 0.207723790858493, 0.013579298639225862, 0.791708068373083, -65.3201778044925, 0.20892622863293497, 0.014722755485808474, 0.7888664845181671, -66.30985929732952, 0.22134583925297469, 0.019124646927514474, 0.7349088974385484, 6.12718554385971e-16, 9.587138293467006e-16, 1.9120283237152204e-13, 2.6260887711380804e-13]
+ [-65.95305616759343, 0.19654501099306937, 0.013606550575048948, 0.8103681717500958, -65.21067415459329, 0.19805518180469334, 0.014921130581342144, 0.8069781358556801, -66.33701264807272, 0.21129380145010193, 0.019042984355181133, 0.7503332003260246, 6.953901076242904e-16, 9.579696288411232e-16, 2.1685198189002894e-13, 2.566872641356889e-13]
+ [-65.91701916148136, 0.18633532135071446, 0.013662445917061618, 0.8270908022909153, -65.08654199357919, 0.18817630275973768, 0.015152572167216737, 0.8231651036549155, -66.3466050682869, 0.20207141956667313, 0.01900713544278703, 0.7645853092339296, 7.767880609538791e-16, 9.657190397053613e-16, 2.420067905982758e-13, 2.533447937635992e-13]
+ ⋮
+ [-55.435680454154614, 0.16357998518603287, 0.05024010761795016, 0.8902709421246388, -54.620272608701896, 0.17218621118938857, 0.05530767394409947, 0.8785784520003551, -58.91095726558685, 0.1708299351093552, 0.04751860598895935, 0.8243710888421603, 2.396160366435678e-5, 9.732669227045438e-14, 0.3088786807712771, 6.592206209591832e-12]
+ [-55.42598973091028, 0.1636904552056987, 0.05030640968357944, 0.8901220824080072, -54.60645701021054, 0.17233514288254104, 0.055397248201410246, 0.8783713172685753, -58.91226059107183, 0.17081404997214752, 0.047511202656341255, 0.8244024742009732, 2.3487132131761882e-5, 9.774479024739983e-14, 0.3084377405459854, 6.588402238217423e-12]
+ [-55.41633710360788, 0.16380052290494265, 0.05037335408640231, 0.8899736614878176, -54.592588487748756, 0.17248469130180027, 0.05548728991719824, 0.8781631587627717, -58.91355367232293, 0.17079828182102702, 0.04750385837033446, 0.8244336361548643, 2.3022055765031455e-5, 9.816313912855159e-14, 0.3079974297855756, 6.5846301980738135e-12]
+ [-55.40669012047574, 0.16391017788490758, 0.05042297208757695, 0.8898256907575995, -54.57866647161954, 0.17263486287334526, 0.05557781534342991, 0.8779539657078979, -58.914836545090516, 0.1707826304752048, 0.04749657303303116, 0.8244645747891267, 2.2566188527417155e-5, 9.85805536322258e-14, 0.3075577475914544, 6.5808899392330026e-12]
+ [-55.397074454187084, 0.16401943615576384, 0.050469981398642894, 0.8896781530473439, -54.56469033132231, 0.17278566411733812, 0.05566881862581954, 0.8777437271633068, -58.91610924584936, 0.17076709573378798, 0.047489346280672785, 0.8244952902362394, 2.2119348065945243e-5, 9.899799688444692e-14, 0.3071186930663115, 6.577181305437598e-12]
+ [-55.387526123414474, 0.16412831815672566, 0.05053446839208206, 0.8895310263597136, -54.55065947575593, 0.17293710169974902, 0.05576031714861167, 0.8775324319636637, -58.91737181258079, 0.17075167737681352, 0.047482178036407266, 0.8245257826738525, 2.1681355638471876e-5, 9.941682498502835e-14, 0.3066802653141167, 6.573504141544346e-12]
+ [-55.37801938734572, 0.16423681666188344, 0.05060237032412586, 0.8893843186129721, -54.53657324985833, 0.17308918238530333, 0.055852305234346054, 0.8773200687696198, -58.918624283841055, 0.1707363751654947, 0.047475067913448084, 0.8245560523238753, 2.1252036042186145e-5, 9.983611248369682e-14, 0.3062424634401202, 6.569858286571261e-12]
+ [-55.36851738849273, 0.16434491921350738, 0.05065354710904911, 0.8892380433989496, -54.522431035965816, 0.17324191309006073, 0.05594479963400744, 0.8771066260077423, -58.919866699554916, 0.17072118884322662, 0.04746801577442971, 0.8245860994505295, 2.083121754352334e-5, 1.002544906562478e-13, 0.3058052865508475, 6.566243580188707e-12]
+ [-55.359055508852556, 0.16445264603008003, 0.05070780480330075, 0.8890921789133294, -54.50823216443871, 0.1733953008413252, 0.0560377998203333, 0.8768920919134098, -58.92109910034542, 0.1707061181359178, 0.04746102130819232, 0.8246159243593468, 2.0418731809472548e-5, 1.0067330718958379e-13, 0.3053687337541011, 6.5626598580502834e-12]</code></pre><p><code>stackplot</code> takes an array of blox (or a single blox) and a solution object, and produces a stacked time-series plot where each row shows the membrane voltage of one neuron. This makes it easy to compare the activity of multiple neurons at a glance.</p><pre><code class="language-julia hljs">stackplot([nn1,nn2,nn3], sol)	## stackplot(&lt;blox or array of blox&gt;, sol)</code></pre><img src="4df7c3ce.png" alt="Example block output"/><p>Suggestion : Try different values of input currents &#39;I_bg&#39; and connection weights. One can try different permutations of excitatory and inhibitory neurons.</p><h2 id="Creating-a-lateral-inhibition-circuit-(the-&quot;winner-takes-all&quot;-circuit)-in-superficial-cortical-layer"><a class="docs-heading-anchor" href="#Creating-a-lateral-inhibition-circuit-(the-&quot;winner-takes-all&quot;-circuit)-in-superficial-cortical-layer">Creating a lateral inhibition circuit (the &quot;winner-takes-all&quot; circuit) in superficial cortical layer</a><a id="Creating-a-lateral-inhibition-circuit-(the-&quot;winner-takes-all&quot;-circuit)-in-superficial-cortical-layer-1"></a><a class="docs-heading-anchor-permalink" href="#Creating-a-lateral-inhibition-circuit-(the-&quot;winner-takes-all&quot;-circuit)-in-superficial-cortical-layer" title="Permalink"></a></h2><p><img src="../../assets/neural_assembly_3.png" alt="fig3"/></p><pre><code class="language-julia hljs">global_namespace=:g
+N_exci = 5; ##number of excitatory neurons
+
+n_inhi = HHInhiNeuron(name = :inhi, namespace=global_namespace) ##feedback inhibitory interneuron neuron
+
+##creating an array of excitatory pyramidal neurons
+n_excis = [HHExciNeuron(
+    name = Symbol(&quot;exci$i&quot;),
+    namespace=global_namespace,
+    I_bg = 5*rand(),
+) for i = 1:N_exci]
+
+g = GraphSystem()
+
+for i in 1:N_exci
+    add_connection!(g, n_inhi, n_excis[i], DefaultRule(weight = 1.0, G_syn = 4.0, τ = 70))
+    add_connection!(g, n_excis[i], n_inhi, DefaultRule(weight = 1.0, G_syn = 3.0, τ = 5))
+end
+prob = ODEProblem(g, [], (0.0, 1000), [])
+sol = solve(prob, Vern7(), saveat=0.1)
+stackplot(vcat(n_excis, n_inhi), sol)</code></pre><img src="a3a091c0.png" alt="Example block output"/><p>Suggestion : Instead of uniform random input current in each excitatory neuron, try different configurations (random or constant) of input currents I_bg for each neuron. One can vary the size of circuit by changing number of excitatory neurons.</p><h2 id="Creating-lateral-inhibition-&quot;winner-take-all&quot;-circuit-(WTA)-blocks-from-the-inbuilt-functions-and-connecting-two-WTA-circuit-blocks"><a class="docs-heading-anchor" href="#Creating-lateral-inhibition-&quot;winner-take-all&quot;-circuit-(WTA)-blocks-from-the-inbuilt-functions-and-connecting-two-WTA-circuit-blocks">Creating lateral inhibition &quot;winner-take-all&quot; circuit (WTA) blocks from the inbuilt functions and connecting two WTA circuit blocks</a><a id="Creating-lateral-inhibition-&quot;winner-take-all&quot;-circuit-(WTA)-blocks-from-the-inbuilt-functions-and-connecting-two-WTA-circuit-blocks-1"></a><a class="docs-heading-anchor-permalink" href="#Creating-lateral-inhibition-&quot;winner-take-all&quot;-circuit-(WTA)-blocks-from-the-inbuilt-functions-and-connecting-two-WTA-circuit-blocks" title="Permalink"></a></h2><pre><code class="language-julia hljs">global_namespace=:g
+N_exci = 5 ##number of excitatory neurons in each WTA circuit
+wta1 = WinnerTakeAll(name=Symbol(&quot;wta1&quot;), I_bg=5.0, N_exci=N_exci, namespace=global_namespace) ##for a single valued input current, each neuron of the WTA circuit will recieve a uniformly distributed random input from 0 to I_bg
+wta2 = WinnerTakeAll(name=Symbol(&quot;wta2&quot;), I_bg=4.0, N_exci=N_exci, namespace=global_namespace)
+
+g = GraphSystem()
+add_connection!(g, wta1, wta2, DensityRule(density = 0.5, weight = 1)) ##density keyword sets the connection probability from each excitatory neuron of source WTA circuit to each excitatory neuron of target WTA circuit
+
+prob = ODEProblem(g, [], (0.0, 1000), [])
+sol = solve(prob, Vern7(), saveat=0.1)</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">retcode: Success
+Interpolation: 1st order linear
+t: 10001-element Vector{Float64}:
+    0.0
+    0.1
+    0.2
+    0.3
+    0.4
+    0.5
+    0.6
+    0.7
+    0.8
+    0.9
+    ⋮
+  999.2
+  999.3
+  999.4
+  999.5
+  999.6
+  999.7
+  999.8
+  999.9
+ 1000.0
+u: 10001-element Vector{Vector{Float64}}:
+ [-65.0, 0.32, 0.05, 0.59, -65.0, 0.32, 0.05, 0.59, -65.0, 0.32  …  0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+ [-65.4006248755456, 0.30249027613473795, 0.023037874789093447, 0.6147295356348973, -65.4006248755456, 0.30249027613473795, 0.023037874789093447, 0.6147295356348973, -65.31555896138771, 0.29976399451821295  …  5.20798525106892e-17, 8.89403092818399e-16, 5.2009691175400006e-17, 8.87466423307672e-16, 5.106432640290718e-17, 8.615105124429115e-16, 5.083009677144501e-17, 8.551198417835946e-16, 5.16130262474297e-17, 8.765439818413444e-16]
+ [-65.70800393467994, 0.2861849063977212, 0.02090524716316528, 0.6382023590597984, -65.70800393467994, 0.2861849063977212, 0.02090524716316528, 0.6382023590597984, -65.52674248404432, 0.28107800760827584  …  1.5644673196059654e-16, 1.1866089935187834e-15, 1.5600419083365561e-16, 1.1808405098066125e-15, 1.501302479355165e-16, 1.105174263174438e-15, 1.487003062362291e-16, 1.0870117791998623e-15, 1.5351943660772156e-16, 1.148627149045803e-15]
+ [-65.9375947441445, 0.271051493537336, 0.020190765614742066, 0.6603300259251647, -65.9375947441445, 0.271051493537336, 0.020190765614742066, 0.6603300259251647, -65.65568386075458, 0.2638751424503886  …  2.771805545165193e-16, 1.3001763550856173e-15, 2.7595414375501377e-16, 1.2898568309000311e-15, 2.599275294226886e-16, 1.1575409912874073e-15, 2.5609705942709815e-16, 1.1266334840862595e-15, 2.6911748300319246e-16, 1.2328307408168657e-15]
+ [-66.10708553299479, 0.2570441504975614, 0.01971301667126881, 0.6810770242177702, -66.10708553299479, 0.2570441504975614, 0.01971301667126881, 0.6810770242177702, -65.72329505712413, 0.24807611674997185  …  4.040561285842798e-16, 1.3720027955979318e-15, 4.01583354473885e-16, 1.3565696889295624e-15, 3.6978437729058984e-16, 1.1632820545917884e-15, 3.623275040882894e-16, 1.1193984441996281e-15, 3.879009634466866e-16, 1.2722084029314991e-15]
+ [-66.23000667482857, 0.24410800264960217, 0.019373450059472604, 0.7004474229020522, -66.23000667482857, 0.24410800264960217, 0.019373450059472604, 0.7004474229020522, -65.74496229267532, 0.2335952138200849  …  5.356212711974439e-16, 1.4498825608367599e-15, 5.313869606007722e-16, 1.4286248924735174e-15, 4.778248359032412e-16, 1.168646137338889e-15, 4.655086976811674e-16, 1.1113192305385644e-15, 5.081363481674933e-16, 1.3137030616731066e-15]
+ [-66.31665937686775, 0.23218328502375274, 0.019135035299953678, 0.7184723999888554, -66.31665937686775, 0.23218328502375274, 0.0191350352999537, 0.7184723999888554, -65.73205234306168, 0.22034469063442882  …  6.73296317187999e-16, 1.5493340564590426e-15, 6.667137658438478e-16, 1.5213053346265502e-15, 5.848365704866224e-16, 1.186575639021353e-15, 5.663858464819383e-16, 1.1149183748453762e-15, 6.308517030839481e-16, 1.3714524317268792e-15]
+ [-66.37492457822835, 0.22120819074867104, 0.018973950464962475, 0.735200993300123, -66.37492457822835, 0.22120819074867104, 0.018973950464962475, 0.735200993300123, -65.69301645617305, 0.20823763490282185  …  8.193895974671555e-16, 1.6753875210472166e-15, 8.0977704931658165e-16, 1.6393770379575127e-15, 6.922420185716312e-16, 1.2193680164113961e-15, 6.662985715064997e-16, 1.132094244257821e-15, 7.578262018571927e-16, 1.4489726208592258e-15]
+ [-66.41086297197346, 0.21112081610272804, 0.018871859900300124, 0.7506933825865877, -66.41086297197346, 0.21112081610272804, 0.018871859900300124, 0.7506933825865877, -65.63417625567429, 0.19718977332175278  …  9.76480813974789e-16, 1.8301084729040056e-15, 9.630362232880756e-16, 1.784621793348455e-15, 8.014814721994191e-16, 1.2663463640971813e-15, 7.665691149614665e-16, 1.1618238618221173e-15, 8.909676205547049e-16, 1.5467476177110495e-15]
+ [-66.42915983258126, 0.20186046869379848, 0.01881526480307077, 0.7650160722239774, -66.42915983258126, 0.20186046869379848, 0.01881526480307077, 0.7650160722239774, -65.5602876444285, 0.18712057258268816  …  1.147269410825631e-15, 2.0151035966429706e-15, 1.129043598692272e-15, 1.9583384565540884e-15, 9.138639272592912e-16, 1.3263194710334286e-15, 8.683587437729841e-16, 1.2026123279180192e-15, 1.0321560012676471e-15, 1.6647109877100658e-15]
+ ⋮
+ [-59.895625060604765, 0.15934927019402167, 0.04222512165097216, 0.846540770104428, -60.37878866886085, 0.1544544206051943, 0.03983409552746394, 0.8549152572361374, -63.53348344562851, 0.09199552176027422  …  1.939018579267397e-6, 3.806748506116634e-14, 2.620967172197203e-6, 3.327894857113102e-14, 2.1354318807435914e-14, 4.9380163572511254e-15, 2.5395998262076858e-14, 3.751038316070982e-15, 5.636178034278516e-14, 1.3592381572877319e-14]
+ [-59.89328629790455, 0.15939606901032696, 0.04223729093028762, 0.8464381452952778, -60.37628271612847, 0.1544843813397511, 0.03984622497991409, 0.8548599808472143, -63.52778819365024, 0.09203502325873197  …  1.9006234426890615e-6, 3.816938566149303e-14, 2.5690685482672596e-6, 3.336225354247501e-14, 2.1421157689057775e-14, 4.953858120234445e-15, 2.5264514072678442e-14, 3.751321497979348e-15, 5.659433983871264e-14, 1.3650042017813132e-14]
+ [-59.891073483131755, 0.1594410050771878, 0.04224881577754107, 0.8463391875219396, -60.373804414868395, 0.15451401508903168, 0.03985822394482756, 0.8548052958919365, -63.52208416196437, 0.09207458585181753  …  1.862988580763689e-6, 3.8273458650623886e-14, 2.5181975859529505e-6, 3.3447404762007966e-14, 2.1488244434133894e-14, 4.969758759844661e-15, 2.513567029650184e-14, 3.751781694061341e-15, 5.682801708753709e-14, 1.3707984043006681e-14]
+ [-59.88898332858246, 0.15948412295087097, 0.04225971257745007, 0.8462438168308302, -60.371353457396495, 0.15454332541057525, 0.03987009380520648, 0.8547511961949548, -63.516378701020884, 0.09211421006883111  …  1.8260989390447803e-6, 3.837969240122425e-14, 2.468333936191166e-6, 3.353439090338217e-14, 2.1555579975461736e-14, 4.9857185109255606e-15, 2.500943203839709e-14, 3.752416156149463e-15, 5.706281791101492e-14, 1.376620919009683e-14]
+ [-59.88701261643688, 0.15952546634168505, 0.04226999737899686, 0.8461519544765981, -60.36892953947937, 0.15457231582359895, 0.03988183591132539, 0.854697675641747, -63.510667140298914, 0.09215389411660843  …  1.789939761183768e-6, 3.848807581266913e-14, 2.4194576528571334e-6, 3.362320109373202e-14, 2.1623165250693617e-14, 5.0017376089710425e-15, 2.488576482535578e-14, 3.753222201405706e-15, 5.729874816886261e-14, 1.3824719008483824e-14]
+ [-59.88515819753204, 0.15956507812567847, 0.042279685945394885, 0.846063522918756, -60.36653236033503, 0.15460098980941508, 0.03989345162038728, 0.854644728178087, -63.50494801300068, 0.09219363685420795  …  1.7544965830273826e-6, 3.859859830191884e-14, 2.3715491847858392e-6, 3.371382490501245e-14, 2.1691001202267072e-14, 5.017816291012977e-15, 2.4764634604533462e-14, 3.754197210535139e-15, 5.753581375859663e-14, 1.388351506015963e-14]
+ [-59.88341699007298, 0.1596030003562794, 0.04228879373481496, 0.8459784458177114, -60.364161622578564, 0.15462935081182266, 0.03990494228220349, 0.854592347809542, -63.49922808583145, 0.09223343876543628  …  1.7197552268318054e-6, 3.871124979134038e-14, 2.3245893679513114e-6, 3.380625234331766e-14, 2.1759088777456277e-14, 5.033954795112414e-15, 2.4646007741135976e-14, 3.7553386260841736e-15, 5.777402061598292e-14, 1.3942598917135931e-14]
+ [-59.88178597835909, 0.15963927427590366, 0.04229733587769573, 0.8458966480301874, -60.36181703215181, 0.15465740223748892, 0.03991630920892294, 0.8545405286009824, -63.49350093639927, 0.09227329779774446  …  1.6857017955912327e-6, 3.882602069512483e-14, 2.278559417800553e-6, 3.390047383713686e-14, 2.1827428928421563e-14, 5.050153359750425e-15, 2.4529851016179388e-14, 3.756643950805513e-15, 5.801337471549306e-14, 1.4001972158132273e-14]
+ [-59.880262211608375, 0.1596739403275591, 0.04230532722170923, 0.8458180556040146, -60.35949829832601, 0.15468514745635492, 0.03992755371517982, 0.8544892646760562, -63.48776883100896, 0.09231321361351738  …  1.6523226674791555e-6, 3.8942901912434985e-14, 2.23344092173983e-6, 3.399648023050294e-14, 2.1896022612110495e-14, 5.066412225000173e-15, 2.4416131624139886e-14, 3.75811074601742e-15, 5.825388207000559e-14, 1.4061636374843754e-14]</code></pre><p><code>get_neurons</code> traverses a composite blox (or an array of blox) and returns a flat vector of all the individual neuron blox it contains. This is useful when you want to pass individual neurons to <code>stackplot</code> or other functions that operate on single-neuron blox rather than composite blocks.</p><pre><code class="language-julia hljs">neuron_set = get_neurons([wta1, wta2]) ## extract neurons from a composite blocks
+stackplot(neuron_set,sol)</code></pre><img src="e19185d0.png" alt="Example block output"/><h2 id="Creating-a-single-cortical-superficial-layer-block-by-connecting-multiple-WTA-circuits"><a class="docs-heading-anchor" href="#Creating-a-single-cortical-superficial-layer-block-by-connecting-multiple-WTA-circuits">Creating a single cortical superficial layer block by connecting multiple WTA circuits</a><a id="Creating-a-single-cortical-superficial-layer-block-by-connecting-multiple-WTA-circuits-1"></a><a class="docs-heading-anchor-permalink" href="#Creating-a-single-cortical-superficial-layer-block-by-connecting-multiple-WTA-circuits" title="Permalink"></a></h2><p>This model is SCORT in [1] and looks like this <img src="../../assets/neural_assembly_4.png" alt="fig4"/></p><pre><code class="language-julia hljs">global_namespace=:g
+N_wta=10 ## number of WTA circuits
+# parameters
+N_exci=5   ##number of pyramidal neurons in each lateral inhibition (WTA) circuit
+G_syn_exci=3.0 ##maximal synaptic conductance in glutamatergic (excitatory) synapses
+G_syn_inhi=4.0 ## maximal synaptic conductance in GABAergic (inhibitory) synapses from feedback interneurons
+G_syn_ff_inhi=3.5 ## maximal synaptic conductance in GABAergic (inhibitory) synapses from feedforward interneurons
+I_bg=5.0 ##background input
+density=0.01 ##connection density between WTA circuits
+
+##creating array of WTA ciruits
+wtas = [WinnerTakeAll(;
+                      name=Symbol(&quot;wta$i&quot;),
+                      namespace=global_namespace,
+                      N_exci=N_exci,
+                      G_syn_exci=G_syn_exci,
+                      G_syn_inhi=G_syn_inhi,
+                      I_bg = I_bg
+                      ) for i = 1:N_wta]
+
+##feed-forward interneurons (get input from other pyramidal cells and from the ascending system, largely controls the rhythm)
+n_ff_inhi = HHInhiNeuron(;
+                         name=Symbol(&quot;ff_inhi&quot;),
+                         namespace=global_namespace,
+                         )
+
+g = GraphSystem()
+
+# connecting WTA circuits to each other with given connection density, and feedforward interneuron connects to each WTA circuit
+for i in 1:N_wta
+    for j in 1:N_wta
+        if j != i
+            add_connection!(g, wtas[i], wtas[j], DensityRule(density = density, weight = 1))
+        end
+    end
+    add_connection!(g, n_ff_inhi, wtas[i], DefaultRule(weight = 1, G_syn=G_syn_ff_inhi))
+end
+
+prob = ODEProblem(g, [], (0.0, 1000), [])
+sol = solve(prob, Vern7(), saveat=0.1)
+
+neuron_set = get_neurons(vcat(wtas, n_ff_inhi)) ## extract neurons from a composite blocks
+stackplot(neuron_set, sol)</code></pre><img src="85b5bb60.png" alt="Example block output"/><p>Sugestion : try different connection densities and weights and see how it affects the population activity.</p><h2 id="Connecting-the-cortical-superficial-layer-block-to-an-ascending-system-block"><a class="docs-heading-anchor" href="#Connecting-the-cortical-superficial-layer-block-to-an-ascending-system-block">Connecting the cortical superficial layer block to an ascending system block</a><a id="Connecting-the-cortical-superficial-layer-block-to-an-ascending-system-block-1"></a><a class="docs-heading-anchor-permalink" href="#Connecting-the-cortical-superficial-layer-block-to-an-ascending-system-block" title="Permalink"></a></h2><p>Now we will expand on the SCORT block of the previous section by defining a block representing an <strong>ascending neuromodulatory system</strong> (ASC1 in [1]) and then connecting the two blocks together. &quot;Ascending system&quot; here refers to brainstem and subcortical neuromodulatory inputs (such as those from the locus coeruleus, basal forebrain, or thalamic relay nuclei) that broadcast rhythmic modulation to cortex — not feedforward sensory inputs from lower areas. The <code>NextGenerationEI</code> blox is a next-generation neural mass model (Byrne et al. 2020) that captures the dynamics of a coupled excitatory-inhibitory population and is used here to generate a 16 Hz modulating drive to the cortical block.</p><pre><code class="language-julia hljs">global_namespace=:g
+
+# define ascending system block using a Next Generation Neural Mass model as described in Byrne et. al. 2020.
+# the parameters are fixed to generate a 16 Hz modulating frequency in the cortical neurons
+@named ASC1 = NextGenerationEI(;namespace=global_namespace, Cₑ=2*26,Cᵢ=1*26, Δₑ=0.5, Δᵢ=0.5, η_0ₑ=10.0, η_0ᵢ=0.0, v_synₑₑ=10.0, v_synₑᵢ=-10.0, v_synᵢₑ=10.0, v_synᵢᵢ=-10.0, alpha_invₑₑ=10.0/26, alpha_invₑᵢ=0.8/26, alpha_invᵢₑ=10.0/26, alpha_invᵢᵢ=0.8/26, kₑₑ=0.0*26, kₑᵢ=0.6*26, kᵢₑ=0.6*26, kᵢᵢ=0*26)
+
+# define the superficial layer cortical block using inbuilt function
+# Number if WTA circuits = N_wta=45; number of pyramidal neurons in each WTA circuit = N_exci = 5;
+@named CB = Cortical(N_wta=10, N_exci=5, density=0.01, weight=1, I_bg=7; namespace=global_namespace)
+
+# define graph and connect ASC1-&gt;CB
+g = GraphSystem()
+add_connection!(g, ASC1, CB, DefaultRule(weight = 44))
+
+# solve the system for time 0 to 1000 ms
+
+prob = ODEProblem(g, [], (0.0, 1000), []) ## tspan = (0,1000)
+sol = solve(prob, Vern7(), saveat=0.1);</code></pre><p>plot neuron time series</p><pre><code class="language-julia hljs">neuron_set = get_neurons(CB) ## extract neurons from a composite block like Cortical
+n_neurons = 50 ## set number nof neurons to display in the stackplot
+stackplot(neuron_set[1:n_neurons], sol)</code></pre><img src="a03aca70.png" alt="Example block output"/><p>plot the meanfield of all cortical block neurons (mean membrane voltage)</p><pre><code class="language-julia hljs">mnv = meanfield_timeseries(CB, sol)
+fig = Figure();
+ax = Axis(fig[1,1]; xlabel = &quot;time (ms)&quot;, ylabel = &quot;Meanfield voltage (mv)&quot;)
+lines!(ax, sol.t, mnv)
+fig ## to display the figure</code></pre><img src="d0fcb001.png" alt="Example block output"/><p>plot power spectrum of the meanfield (average over membrane potentials)</p><pre><code class="language-julia hljs">powerspectrumplot(CB, sol)</code></pre><img src="6b866ae4.png" alt="Example block output"/><p>Notice the peak at 16 Hz, representing beta oscillations. Sugestion : try changing parameters of ASC1 to generate different cortical rhythms. See how the peak shifts in the powerspectrum</p><h2 id="Creating-simulation-of-visual-stimulus-response-in-cortical-blocks"><a class="docs-heading-anchor" href="#Creating-simulation-of-visual-stimulus-response-in-cortical-blocks">Creating simulation of visual stimulus response in cortical blocks</a><a id="Creating-simulation-of-visual-stimulus-response-in-cortical-blocks-1"></a><a class="docs-heading-anchor-permalink" href="#Creating-simulation-of-visual-stimulus-response-in-cortical-blocks" title="Permalink"></a></h2><p><img src="../../assets/neural_assembly_5.png" alt="fig5"/> create cortical blocks for visual area cortex (VAC), anterior cortex (AC) and ascending system block (ASC1)</p><pre><code class="language-julia hljs">global_namespace=:g
+# cortical blox
+@named VAC = Cortical(N_wta=10, N_exci=5,  density=0.01, weight=1,I_bg=0; namespace=global_namespace)
+@named AC = Cortical(N_wta=10, N_exci=5, density=0.01, weight=1,I_bg=0; namespace=global_namespace)
+# ascending system blox, modulating frequency set to 16 Hz
+@named ASC1 = NextGenerationEI(;namespace=global_namespace, Cₑ=2*26,Cᵢ=1*26, Δₑ=0.5, Δᵢ=0.5, η_0ₑ=10.0, η_0ᵢ=0.0, v_synₑₑ=10.0, v_synₑᵢ=-10.0, v_synᵢₑ=10.0, v_synᵢᵢ=-10.0, alpha_invₑₑ=10.0/26, alpha_invₑᵢ=0.8/26, alpha_invᵢₑ=10.0/26, alpha_invᵢᵢ=0.8/26, kₑₑ=0.0*26, kₑᵢ=0.6*26, kᵢₑ=0.6*26, kᵢᵢ=0*26)</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">NGNMM_theta(:ASC1, :g, @NamedTuple{Cₑ, Cᵢ, Δₑ, Δᵢ, η_0ₑ, η_0ᵢ, v_synₑₑ, v_synₑᵢ, v_synᵢₑ, v_synᵢᵢ, alpha_invₑₑ, alpha_invₑᵢ, alpha_invᵢₑ, alpha_invᵢᵢ, kₑₑ, kₑᵢ, kᵢₑ, kᵢᵢ}((52.0, 26.0, 0.5, 0.5, 10.0, 0.0, 10.0, -10.0, 10.0, -10.0, 0.38461538461538464, 0.03076923076923077, 0.38461538461538464, 0.03076923076923077, 0.0, 15.6, 15.6, 0.0)), Dict{Symbol, Any}())</code></pre><p>create an image source block which takes image data from a .csv file and gives input to visual cortex</p><pre><code class="language-julia hljs">image_set = CSV.read(Downloads.download(&quot;raw.githubusercontent.com/Neuroblox/NeurobloxDocsHost/refs/heads/main/data/image_example.csv&quot;), StructArray) ## reading data into CSV file format
+image_sample = 2 ## set which image to input (from 1 to 1000)
+
+# define stimulus source blox
+# t_stimulus: how long the stimulus is on (in msec)
+# t_pause : how long th estimulus is off (in msec)
+@named stim = ImageStimulus(image_set[[image_sample]]; namespace=global_namespace, t_stimulus=1000, t_pause=0);</code></pre><p>plot the image that the visual cortex &#39;sees&#39;</p><pre><code class="language-julia hljs">pixels = collect(image_set[image_sample])[1:end-1] ## access the desired image sample from respective row
+pixels = reshape(pixels, 15, 15)## reshape into 15 X 15 square image matrix
+heatmap(pixels,colormap = :gray1) #input image matrix seen as heatmap</code></pre><img src="517cf051.png" alt="Example block output"/><p>assemble the blox into a graph and set connections with their keword arguments like connection weight and connection density</p><pre><code class="language-julia hljs">g = GraphSystem()
+
+add_connection!(g, stim, VAC, DefaultRule(weight = 14))
+add_connection!(g, ASC1, VAC, DefaultRule(weight = 44))
+add_connection!(g, ASC1, AC, DefaultRule(weight = 44))
+add_connection!(g, VAC, AC, HypergeometricRule(density = 0.08, weight = 3))
+
+# define system and solve
+
+prob = ODEProblem(g, [], (0.0, 1000), []) ## tspan = (0,1000)
+sol = solve(prob, Vern7(), saveat=0.1);</code></pre><p>Let us now plot neuron potentials, meanfield activity and powerspectrums for the VAC and AC blox. First we show the stackplot of voltage potentials from the first 10 neurons of VAC</p><pre><code class="language-julia hljs">VAC_neuron_set = get_neurons(VAC) ## extract neurons from VAC
+n_neurons = 40 ##number of neurons displayed. You can try incresing it.
+stackplot(VAC_neuron_set[1:n_neurons],sol)</code></pre><img src="e439d6b0.png" alt="Example block output"/><p>then we plot the meanfield potential out of all neurons within VAC</p><pre><code class="language-julia hljs">mnv = meanfield_timeseries(VAC, sol)
+
+fig = Figure();
+ax = Axis(fig[1,1]; xlabel = &quot;time (ms)&quot;, ylabel = &quot;Voltage (mv)&quot;)
+lines!(ax, sol.t, mnv)
+fig ## to display the figure</code></pre><img src="7d82b596.png" alt="Example block output"/><p>Here is the powerspectrum from all neurons within VAC</p><pre><code class="language-julia hljs">powerspectrumplot(VAC, sol)</code></pre><img src="3f4f3f28.png" alt="Example block output"/><p>Moving on to the AC blox, we first plot the voltage potential of its neurons</p><pre><code class="language-julia hljs">AC_neuron_set = get_neurons(AC) ## extract neurons from VAC
+n_neurons = 40
+stackplot(AC_neuron_set[1:n_neurons], sol)</code></pre><img src="cc5d9893.png" alt="Example block output"/><p>followed by the meanfield activity</p><pre><code class="language-julia hljs">mnv = meanfield_timeseries(AC, sol)
+fig = Figure();
+ax = Axis(fig[1,1]; xlabel = &quot;time (ms)&quot;, ylabel = &quot;Voltage (mv)&quot;)
+lines!(ax, sol.t, mnv)
+fig ## to display the figure</code></pre><img src="491703f5.png" alt="Example block output"/><p>and finally the AC powerspectrum</p><pre><code class="language-julia hljs">powerspectrumplot(AC, sol)</code></pre><img src="5956c61a.png" alt="Example block output"/><p>Sugestion : Try changing the image samples and notice the change in the spatial firing patterns in VAC and AC neurons. One can make multiple cortical blocks simillar to AC and connect them in various connection topologies. All of them can directly or indirectly get input from VAC.</p><h2 id="References"><a class="docs-heading-anchor" href="#References">References</a><a id="References-1"></a><a class="docs-heading-anchor-permalink" href="#References" title="Permalink"></a></h2><p>[1] Pathak, A., Brincat, S.L., Organtzidis, H. et al. Biomimetic model of corticostriatal micro-assemblies discovers a neural code. Nat Commun (2025). https://doi.org/10.1038/s41467-025-67076-x</p><hr/><p><em>This page was generated using <a href="https://github.com/fredrikekre/Literate.jl">Literate.jl</a>.</em></p></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../basal_ganglia/">« Basal Ganglia Model and Parkinson&#39;s Disease Simulation</a><a class="docs-footer-nextpage" href="../../tutorials/receptors/">Receptor Dynamics and Interventions »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.17.0 on <span class="colophon-date" title="Monday 29 June 2026 18:30">Monday 29 June 2026</span>. Using Julia version 1.12.6.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
