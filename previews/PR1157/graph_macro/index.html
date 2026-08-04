@@ -27,7 +27,22 @@ end</code></pre><p>Build a <code>GraphSystem</code> from a list of nodes corresp
         nn2 =&gt; nn3, (weight = 1)
         nn3 =&gt; nn1, (weight = 0.2)
     end
-end</code></pre><p>The <code>name</code> kwarg of the nodes will be set equal to the variable they&#39;re assigned to, and their <code>namespace</code> equal to the <code>name</code> of the outer graph (default <code>nothing</code>).</p><h2 id="Node-metadata"><a class="docs-heading-anchor" href="#Node-metadata">Node metadata</a><a id="Node-metadata-1"></a><a class="docs-heading-anchor-permalink" href="#Node-metadata" title="Permalink"></a></h2><p>Arbitrary metadata can be attached to a node by appending a tuple of keyword arguments after the constructor call:</p><pre><code class="language-julia hljs">@graph begin
+end</code></pre><p>The <code>name</code> kwarg of the nodes will be set equal to the variable they&#39;re assigned to, and their <code>namespace</code> equal to the <code>name</code> of the outer graph (default <code>nothing</code>).</p><h2 id="Shorthands-for-single-block-graphs"><a class="docs-heading-anchor" href="#Shorthands-for-single-block-graphs">Shorthands for single-block graphs</a><a id="Shorthands-for-single-block-graphs-1"></a><a class="docs-heading-anchor-permalink" href="#Shorthands-for-single-block-graphs" title="Permalink"></a></h2><p>When a graph body contains only a <code>@nodes</code> or only a <code>@connections</code> block, the block can be elided with the <code>@nodes</code>/<code>@connections</code> macros:</p><pre><code class="language-julia hljs">@nodes g begin
+    nn1 = HHExciNeuron(I_bg=3)
+    nn2 = HHExciNeuron(I_bg=2)
+end</code></pre><p>is equivalent to</p><pre><code class="language-julia hljs">@graph g begin
+    @nodes begin
+        nn1 = HHExciNeuron(I_bg=3)
+        nn2 = HHExciNeuron(I_bg=2)
+    end
+end</code></pre><p>The mutating variants <code>@nodes!</code> and <code>@connections!</code> take an existing graph instead of a name, and add to it — the counterpart of <code>@graph!</code>:</p><pre><code class="language-julia hljs">@nodes! g begin
+    nn3 = HHInhiNeuron(I_bg=2)
+end
+
+@connections! g begin
+    nn1 =&gt; nn2, (weight = 1)
+    nn2 =&gt; nn3, (weight = 1)
+end</code></pre><h2 id="Node-metadata"><a class="docs-heading-anchor" href="#Node-metadata">Node metadata</a><a id="Node-metadata-1"></a><a class="docs-heading-anchor-permalink" href="#Node-metadata" title="Permalink"></a></h2><p>Arbitrary metadata can be attached to a node by appending a tuple of keyword arguments after the constructor call:</p><pre><code class="language-julia hljs">@graph begin
     @nodes begin
         nn1 = HHExciNeuron(I_bg=3), (position = (1, 2))
         nn2 = HHExciNeuron(I_bg=2), (position = (3, 4), layer = 2)
@@ -109,4 +124,4 @@ end</code></pre><p>to manually pick the names assigned to the inhibitory neurons
             n1 =&gt; n2, (weight = 1)
         end
     end
-end</code></pre></article><nav class="docs-footer"><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.17.0 on <span class="colophon-date" title="Monday 3 August 2026 13:39">Monday 3 August 2026</span>. Using Julia version 1.12.6.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
+end</code></pre></article><nav class="docs-footer"><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.17.0 on <span class="colophon-date" title="Tuesday 4 August 2026 16:21">Tuesday 4 August 2026</span>. Using Julia version 1.12.6.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
