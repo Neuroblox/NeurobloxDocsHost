@@ -2,7 +2,7 @@
 
 julia_version = "1.12.6"
 manifest_format = "2.0"
-project_hash = "224dade841d5876fc69ce00d9c57233f16544e56"
+project_hash = "e75449bf800760f678d3af1328a12454d43fe479"
 
 [[deps.ADTypes]]
 deps = ["PrecompileTools"]
@@ -1155,7 +1155,7 @@ version = "2.88.3+0"
 deps = ["Accessors", "ConstructionBase", "DiffEqBase", "FieldViews", "OhMyThreads", "OrderedCollections", "Polyester", "RecursiveArrayTools", "SciMLBase", "SparseArrays", "SymbolicIndexingInterface"]
 path = "GraphDynamics"
 uuid = "bcd5d0fe-e6b7-4ef1-9848-780c183c7f4c"
-version = "0.7.0"
+version = "1.0.0"
 weakdeps = ["Latexify", "Symbolics"]
 
     [deps.GraphDynamics.extensions]
@@ -1970,13 +1970,13 @@ version = "1.3.0"
 deps = ["NeurobloxBase", "NeurobloxBasics", "NeurobloxDBS", "NeurobloxDBSPrivate", "NeurobloxOptimization", "NeurobloxPharma", "NeurobloxPharmaPrivate", "Reexport"]
 path = "."
 uuid = "769b91e5-4c60-41ee-bfae-153c84203cb2"
-version = "0.9.0"
+version = "1.0.0"
 
 [[deps.NeurobloxBase]]
 deps = ["Accessors", "ComponentArrays", "DSP", "DiffEqCallbacks", "Distributions", "ExproniconLite", "GraphDynamics", "InteractiveUtils", "Interpolations", "JLD2", "LinearAlgebra", "MLStyle", "OhMyThreads", "OrderedCollections", "Peaks", "Preferences", "Random", "RecursiveArrayTools", "Reexport", "SciMLBase", "SparseArrays", "Statistics", "StatsBase", "SymbolicIndexingInterface"]
 path = "NeurobloxBase"
 uuid = "c1a47a78-a13f-4f42-9de5-c5b922306e53"
-version = "0.2.0"
+version = "1.0.0"
 weakdeps = ["CairoMakie", "Colors", "Latexify", "Makie", "Symbolics"]
 
     [deps.NeurobloxBase.extensions]
@@ -1987,19 +1987,19 @@ weakdeps = ["CairoMakie", "Colors", "Latexify", "Makie", "Symbolics"]
 deps = ["Accessors", "DiffEqCallbacks", "Distributions", "GraphDynamics", "NeurobloxBase", "Random", "RecursiveArrayTools", "Reexport", "SciMLBase", "SparseArrays", "StatsBase", "SymbolicIndexingInterface"]
 path = "NeurobloxBasics"
 uuid = "6341abd9-5539-449d-87b3-7e81c4d50fb5"
-version = "0.2.0"
+version = "1.0.0"
 
 [[deps.NeurobloxDBS]]
 deps = ["Accessors", "DiffEqCallbacks", "Distributions", "GraphDynamics", "NeurobloxBase", "Random", "RecursiveArrayTools", "Reexport", "SciMLBase", "SparseArrays", "StatsBase"]
 path = "NeurobloxDBS"
 uuid = "d34949e2-e824-4448-b7f9-1a74e4d2565a"
-version = "0.2.0"
+version = "1.0.0"
 
 [[deps.NeurobloxDBSPrivate]]
 deps = ["Accessors", "DiffEqBase", "GraphDynamics", "NeurobloxBase", "NeurobloxDBS", "OrderedCollections", "OrdinaryDiffEqRosenbrock", "OrdinaryDiffEqTsit5", "Reexport", "SciMLBase", "StochasticDiffEq", "YAML"]
 path = "NeurobloxDBSPrivate"
 uuid = "bdfd818c-c048-435e-9abc-ef02bd9abebf"
-version = "0.2.0"
+version = "1.0.0"
 weakdeps = ["CairoMakie"]
 
     [deps.NeurobloxDBSPrivate.extensions]
@@ -2009,13 +2009,13 @@ weakdeps = ["CairoMakie"]
 deps = ["ComponentArrays", "NeurobloxBase", "Optimization", "Reexport", "SciMLBase", "Tables"]
 path = "NeurobloxOptimization"
 uuid = "ab626939-f7b3-490a-83e4-d10713376e3a"
-version = "0.1.0"
+version = "1.0.0"
 
 [[deps.NeurobloxPharma]]
 deps = ["Accessors", "CSV", "DiffEqCallbacks", "Distributions", "GraphDynamics", "LogExpFunctions", "NaNMath", "NeurobloxBase", "ProgressMeter", "Random", "RecursiveArrayTools", "Reexport", "SciMLBase", "SparseArrays", "StatsBase", "StructArrays", "Tables"]
 path = "NeurobloxPharma"
 uuid = "6d6291d7-c437-44bd-acf4-438a4f54bfaa"
-version = "0.2.1-DEV"
+version = "1.0.0"
 weakdeps = ["UnicodePlots"]
 
     [deps.NeurobloxPharma.extensions]
@@ -2025,7 +2025,7 @@ weakdeps = ["UnicodePlots"]
 deps = ["Accessors", "CSV", "DiffEqCallbacks", "Distributions", "GraphDynamics", "LogExpFunctions", "NaNMath", "NeurobloxBase", "NeurobloxPharma", "OrderedCollections", "ProgressMeter", "Random", "RecursiveArrayTools", "Reexport", "SciMLBase", "SparseArrays", "StatsBase"]
 path = "NeurobloxPharmaPrivate"
 uuid = "58ac089b-67af-4add-8f86-e409aa08e46d"
-version = "0.2.0"
+version = "1.0.0"
 
 [[deps.NonlinearSolve]]
 deps = ["ADTypes", "ArrayInterface", "BracketingNonlinearSolve", "CommonSolve", "ConcreteStructs", "DifferentiationInterface", "FastClosures", "FiniteDiff", "ForwardDiff", "LineSearch", "LinearAlgebra", "LinearSolve", "NonlinearSolveBase", "NonlinearSolveFirstOrder", "NonlinearSolveQuasiNewton", "NonlinearSolveSpectralMethods", "PrecompileTools", "Preferences", "Reexport", "SciMLBase", "Setfield", "SimpleNonlinearSolve", "StaticArraysCore", "SymbolicIndexingInterface"]
