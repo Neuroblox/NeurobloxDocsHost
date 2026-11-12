@@ -116,9 +116,9 @@ version = "0.4.2"
 
 [[deps.Aqua]]
 deps = ["Compat", "Pkg", "Test"]
-git-tree-sha1 = "dcef9d014ddd0904947ccc0bec8f5c14f8b8add1"
+git-tree-sha1 = "4096262296646ab75ff2316c47798f8c2a92f641"
 uuid = "4c88cf16-eb10-579e-8560-4a9242c79595"
-version = "0.8.19"
+version = "0.8.18"
 
 [[deps.ArgTools]]
 uuid = "0dad84c5-d112-42e6-8d28-ef12dabb789f"
