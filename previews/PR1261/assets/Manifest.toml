@@ -833,9 +833,9 @@ version = "2.2.9"
 
 [[deps.Expat_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl"]
-git-tree-sha1 = "f2659a735f9360fedfa29925812380f322679e93"
+git-tree-sha1 = "30fbbf8fb9d4e5d3264b4eb10c04f8a9ebaf9381"
 uuid = "2e619515-83b5-522b-bb60-26c02a35a201"
-version = "2.10.0+0"
+version = "2.11.0+0"
 
 [[deps.ExprTools]]
 git-tree-sha1 = "d2e49e7efd29719d6f28b891b0e0e159daa9d2b4"
@@ -1707,10 +1707,10 @@ uuid = "37e2e46d-f89d-539d-b4ee-838fcccc9c8e"
 version = "1.12.0"
 
 [[deps.LinearSolve]]
-deps = ["AMD", "ArrayInterface", "ConcreteStructs", "DocStringExtensions", "EnumX", "GPUArraysCore", "InteractiveUtils", "Krylov", "LHLFactorization", "Libdl", "LinearAlgebra", "MKL_jll", "Markdown", "OpenBLAS_jll", "PrecompileTools", "Preferences", "PureKLU", "RecursiveArrayTools", "Reexport", "SciMLBase", "SciMLLogging", "SciMLOperators", "SciMLStructures", "Setfield", "SparseArrays", "SparseColumnPivotedQR", "StaticArraysCore"]
-git-tree-sha1 = "e3e84c5c330ea65568a85aef00031e2b870b0e99"
+deps = ["AMD", "ArrayInterface", "ConcreteStructs", "DocStringExtensions", "EnumX", "GPUArraysCore", "InteractiveUtils", "Krylov", "LHLFactorization", "Libdl", "LinearAlgebra", "MKL_jll", "Markdown", "OpenBLAS_jll", "PrecompileTools", "Preferences", "PureKLU", "RecursiveArrayTools", "Reexport", "SciMLBase", "SciMLLogging", "SciMLOperators", "SciMLStructures", "Setfield", "SparseArrays", "SparseColumnPivotedQR", "SpecializedDeepcopy", "StaticArraysCore"]
+git-tree-sha1 = "435442a14ffc8987828baa17080d8103d4c9e02e"
 uuid = "7ed4a6bd-45f5-4d41-b270-4a48e9bafcae"
-version = "5.18.3"
+version = "5.19.0"
 
     [deps.LinearSolve.extensions]
     LinearSolveAMDGPUExt = "AMDGPU"
@@ -2183,9 +2183,9 @@ version = "0.3.3"
 
 [[deps.OpenEXR_jll]]
 deps = ["Artifacts", "Imath_jll", "JLLWrappers", "Libdl", "OpenJPH_jll", "Zlib_jll", "Zstd_jll", "libdeflate_jll"]
-git-tree-sha1 = "db5f91397090eab5dc6899a61f20d54505b49995"
+git-tree-sha1 = "f830016dd5ff36dd0b70e57c5b1563cc8559b4db"
 uuid = "18a262bb-aa17-5467-a713-aee519bc75cb"
-version = "3.5.4+0"
+version = "3.5.5+0"
 
 [[deps.OpenJPH_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl", "Libtiff_jll"]
@@ -3060,6 +3060,18 @@ weakdeps = ["ChainRulesCore"]
     [deps.SpecialFunctions.extensions]
     SpecialFunctionsChainRulesCoreExt = "ChainRulesCore"
 
+[[deps.SpecializedDeepcopy]]
+git-tree-sha1 = "83c49ada5de4528ed636619317bbe4646542095b"
+uuid = "d9f839d0-568b-4a2d-afd8-98575451154f"
+version = "0.2.2"
+weakdeps = ["FunctionWrappers", "PreallocationTools", "SharedArrays", "SparseArrays"]
+
+    [deps.SpecializedDeepcopy.extensions]
+    SpecializedDeepcopyFunctionWrappersExt = "FunctionWrappers"
+    SpecializedDeepcopyPreallocationToolsExt = "PreallocationTools"
+    SpecializedDeepcopySharedArraysExt = "SharedArrays"
+    SpecializedDeepcopySparseArraysExt = "SparseArrays"
+
 [[deps.StableRNGs]]
 deps = ["Random"]
 git-tree-sha1 = "448c4447d4e21ad257d862afec062b66d4f639eb"
@@ -3619,9 +3631,9 @@ version = "1.3.1+2"
 
 [[deps.Zstd_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl"]
-git-tree-sha1 = "576e03404e47aaeb64557d3054d5daef9de85dc2"
+git-tree-sha1 = "d8ddbe9d8bcde5bde9aa55c26020e6f53683fba6"
 uuid = "3161d3a3-bdf6-5164-811a-617609db77b4"
-version = "1.5.7+2"
+version = "1.6.0+1"
 
 [[deps.isoband_jll]]
 deps = ["Artifacts", "JLLWrappers", "Libdl"]
